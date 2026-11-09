@@ -25,6 +25,7 @@ class GoldView:
     abstain: bool
     anchors: tuple[str, ...]
     scored: bool
+    mode: str = "spans"
 
 
 def anchors_covered(anchors: tuple[str, ...], shown: str) -> bool:
@@ -41,9 +42,12 @@ def anchors_covered(anchors: tuple[str, ...], shown: str) -> bool:
 def metric_for(gold: GoldView, shown: str) -> str:
     if not gold.scored:
         return "unscored"
+    if gold.mode == "stale":
+        return "correct" if shown.startswith("Stale") else "wrong"
     abstained = shown.startswith(NOT_FOUND)
     if gold.abstain or not gold.anchors:
         return "correct" if abstained else "false_accept"
+    # summary uses the same citation check as spans. The answer line may be a paraphrase.
     if anchors_covered(gold.anchors, shown):
         return "correct"
     if abstained:

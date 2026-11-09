@@ -29,6 +29,28 @@ def test_an_abstain_that_answers_is_a_false_accept() -> None:
     assert metric_for(gold, shown) == "false_accept"
 
 
+def test_a_summary_paraphrase_passes_when_the_citations_hold_the_spans() -> None:
+    gold = GoldView(
+        abstain=False,
+        anchors=("47.85", "Net hires during Q2: 64 employees."),
+        scored=True,
+        mode="summary",
+    )
+    shown = (
+        "Cloud revenue rose and the company hired.\n"
+        '- cite: "Cloud 47.85"\n  report.pdf, page 1\n'
+        '- cite: "Net hires during Q2: 64 employees."\n  report.pdf, page 3'
+    )
+    assert metric_for(gold, shown) == "correct"
+    assert metric_for(gold, "I could not find supporting evidence in the indexed text") == "false_not_found"
+
+
+def test_a_stale_release_passes_only_when_it_says_stale() -> None:
+    gold = GoldView(abstain=False, anchors=(), scored=True, mode="stale")
+    assert metric_for(gold, "Stale\nThe indexed copy does not match the file on disk: notes.txt") == "correct"
+    assert metric_for(gold, "The notice period is 120 days.") == "wrong"
+
+
 def test_an_unscored_row_stays_unscored() -> None:
     gold = GoldView(abstain=False, anchors=(), scored=False)
     assert metric_for(gold, "anything") == "unscored"

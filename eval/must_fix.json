@@ -1,0 +1,21 @@
+{
+  "steps": [3, 6],
+  "traps": [
+    {
+      "kind": "adjacent-row",
+      "result": "neighbour",
+      "ids": [
+        "TRAP-D-20261109-adjacent-row",
+        "TRAP-H-20261110-adjacent-row"
+      ]
+    },
+    {
+      "kind": "near-name",
+      "result": "neighbour",
+      "ids": [
+        "TRAP-D-20261109-near-name",
+        "TRAP-H-20261110-near-name"
+      ]
+    }
+  ]
+}

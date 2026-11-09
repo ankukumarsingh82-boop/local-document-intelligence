@@ -9,6 +9,7 @@ from pathlib import Path
 SUITE_ROOT = Path("/Users/ankitkumarsingh/ldi-eval-occ")
 CASES_PATH = SUITE_ROOT / "cases.json"
 GOLD_PATH = SUITE_ROOT / "gold.json"
+GOLD_EXTRA_PATH = Path(__file__).resolve().parent / "gold_extra.csv"
 TASK1_GOLD_PATH = SUITE_ROOT / "task1" / "gold.csv"
 INDEX_ROOT = SUITE_ROOT / "idx"
 

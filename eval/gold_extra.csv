@@ -1,0 +1,20 @@
+id,tag,mode,anchors,files,source
+DOCX-01,answerable,spans,"[""Employees accrue 21 days of paid annual leave per year.""]","[""employee_handbook.docx""]",added-step0.5
+DOCX-02,answerable,spans,"[""Carry-forward | 5 days maximum""]","[""employee_handbook.docx""]",added-step0.5
+DOCX-03,answerable,spans,"[""Parental leave | 26 weeks""]","[""employee_handbook.docx""]",added-step0.5
+DOCX-04,answerable,spans,"[""Submit the request 45 days before parental leave starts.""]","[""employee_handbook.docx""]",added-step0.5
+DOCX-05,answerable,spans,"[""Domestic travel claims must be filed within 30 days of return.""]","[""employee_handbook.docx""]",added-step0.5
+DOCX-06,compare,spans,"[""Employees accrue 21 days of paid annual leave per year."", ""Section 2.1 Annual leave: Employees accrue 21 days of paid annual leave per year.""]","[""employee_handbook.docx"", ""hr_leave_policy_v2_current.pdf""]",added-step0.5
+XLSX-01,table_cell,spans,"[""Headcount!B3 64""]","[""budget_headcount.xlsx""]",added-step0.5
+XLSX-02,table_cell,spans,"[""Budget!B3 1250000""]","[""budget_headcount.xlsx""]",added-step0.5
+XLSX-03,table_cell,spans,"[""Budget!D3 70000""]","[""budget_headcount.xlsx""]",added-step0.5
+XLSX-04,table_cell,spans,"[""Headcount!B4 1244""]","[""budget_headcount.xlsx""]",added-step0.5
+VER-01,version,spans,"[""Employees accrue 18 days of paid annual leave per year."", ""Employees accrue 21 days of paid annual leave per year."", ""Requests must be submitted 30 days before leave starts."", ""Requests must be submitted 45 days before leave starts.""]","[""hr_leave_policy_v1_superseded.pdf"", ""hr_leave_policy_v2_current.pdf""]",added-step0.5
+VER-02,answerable,spans,"[""Employees accrue 21 days of paid annual leave per year.""]","[""hr_leave_policy_v2_current.pdf""]",added-step0.5
+SUM-01,summary,summary,"[""47.85"", ""Operating margin for Q2 FY26 was 14.2%*."", ""Net hires during Q2: 64 employees.""]","[""finance_report_q3.pdf""]",added-step0.5
+SUM-02,summary,summary,"[""Employees accrue 21 days of paid annual leave per year."", ""A maximum of 5 unused days may be carried forward."", ""Primary caregivers receive 26 weeks of paid leave."", ""Requests must be submitted 45 days before leave starts.""]","[""hr_leave_policy_v2_current.pdf""]",added-step0.5
+DUP-01,conflict,spans,"[""Annual fee is INR 2,40,00,000 payable quarterly."", ""Kestrel Logistics annual fee: INR 2,60,00,000.""]","[""vendor_contract.pdf"", ""board_note_vendor_commitments.pdf""]",added-step0.5
+CON-03,conflict,spans,"[""Annual service fee billed: INR 2,60,00,000."", ""Annual fee is INR 2,40,00,000 payable quarterly.""]","[""vendor_invoice_conflicting.pdf"", ""vendor_contract.pdf""]",added-step0.5
+STALE-01,answerable,spans,"[""The notice period is 90 days.""]","[""docs/policy.txt""]",added-step0.5
+STALE-03,stale,stale,"[]","[""docs/policy.txt""]",added-step0.5
+UNI-01,unicode,spans,"[""Résumé screening vendor: Zoë Ångström-Iyer Consulting LLP.""]","[""unicode_names.pdf""]",added-step0.5
