@@ -67,8 +67,13 @@ def setup_ocr() -> None:
 
 
 def recognize(scans: list[Scan]) -> list[str]:
-    """Read every scan with one model load. The caller unloads the chat model first."""
+    """Read every scan with one model load. The caller unloads the chat model first.
+
+    `recognize.confidence` is one list of per-line scores per page. A missing
+    PaddleOCR line score is None, which later counts as low confidence.
+    """
     if not scans:
+        recognize.confidence = []
         return []
     spec = OCR_MODELS["ocr"]
     local = local_snapshot(spec.repo)
@@ -116,12 +121,30 @@ def recognize(scans: list[Scan]) -> list[str]:
         try:
             parsed = json.loads(result_path.read_text())
             texts = parsed["pages"]
+            scores = parsed.get("confidence")
         except (OSError, json.JSONDecodeError, KeyError, TypeError) as exc:
             raise GuardError("The OCR process returned nothing readable.") from exc
     if not isinstance(texts, list) or len(texts) != len(scans):
         raise GuardError("The OCR process returned nothing readable.")
+    if not isinstance(scores, list) or len(scores) != len(texts):
+        scores = [None] * len(texts)
+    recognize.confidence = [_score_row(row) for row in scores]
     print("The OCR model is unloaded.")
     return [str(item).strip() for item in texts]
+
+
+def _score_row(row: object) -> list[float | None] | None:
+    if not isinstance(row, list):
+        return None
+    scores: list[float | None] = []
+    for item in row:
+        if item is None:
+            scores.append(None)
+            continue
+        if isinstance(item, bool) or not isinstance(item, (int, float)):
+            return None
+        scores.append(float(item))
+    return scores
 
 
 def _ensure_environment() -> None:

@@ -22,8 +22,9 @@ from ldi.config import (
     project_root,
 )
 from ldi.ocr import Scan, classify_page, image_count, recognize
+from ldi.pdftable import extract_tables, text_layer_empty
 from ldi.spans import build_spans
-from ldi.store import Index, sha256_file
+from ldi.store import Index, sha256_file, stored_file
 
 
 @dataclass(frozen=True)
@@ -114,7 +115,16 @@ def _drop_text(index: Index, stored: str, reason: str) -> None:
     index.replace_gaps(stored, [(None, reason)])
 
 
-def _commit(index: Index, item: tuple) -> int:
+def _pdf_file(stored: str) -> Path:
+    return stored_file(stored, project_root())
+
+
+def _commit(
+    index: Index,
+    item: tuple,
+    confidences: list | None = None,
+    page_sources: list[str] | None = None,
+) -> int:
     *head, merges = item if len(item) == 8 else (*item, [])
     stored, stat, digest, suffix, pages, extra_gaps, _scans = head
     chunks: list[tuple[int | None, str]] = []
@@ -130,7 +140,20 @@ def _commit(index: Index, item: tuple) -> int:
     index.replace_file(stored, stat.st_mtime_ns, stat.st_size, chunks, digest)
     index.replace_gaps(stored, gaps)
     kind = "ocr" if suffix in IMAGE_SUFFIXES else "text"
-    spans, passages = build_spans(pages, digest, kind, stored, merges)
+    pdf = _pdf_file(stored) if suffix in PDF_SUFFIXES else None
+    if pdf is not None and text_layer_empty(pdf):
+        kind = "ocr"
+    tables = [] if pdf is None else [table for table in extract_tables(pdf) if not table.empty]
+    spans, passages = build_spans(
+        pages,
+        digest,
+        kind,
+        stored,
+        merges,
+        tables,
+        confidences,
+        page_sources,
+    )
     index.replace_spans(stored, spans, passages)
     return len(chunks)
 
@@ -139,6 +162,7 @@ def _recognize_deferred(index: Index, deferred: list[tuple]) -> dict[str, int]:
     scans = [scan for item in deferred for scan in item[6]]
     try:
         texts = recognize(scans)
+        confidence = getattr(recognize, "confidence", None)
     except Exception as exc:
         for item in deferred:
             _skip(f"Skipped {Path(item[0]).name}: {exc}")
@@ -151,15 +175,24 @@ def _recognize_deferred(index: Index, deferred: list[tuple]) -> dict[str, int]:
         stored, stat, digest, suffix, pages, extra_gaps, item_scans = item[:7]
         page_text = list(pages)
         gaps = list(extra_gaps)
-        for scan, text in zip(item_scans, texts[cursor : cursor + len(item_scans)]):
+        sources = ["text"] * len(page_text)
+        scores: list = [None] * len(page_text)
+        for offset, (scan, text) in enumerate(zip(item_scans, texts[cursor : cursor + len(item_scans)])):
             if text:
                 page_text.append((scan.page, text))
+                sources.append("ocr")
+                page_scores = None
+                if confidence is not None and cursor + offset < len(confidence):
+                    page_scores = confidence[cursor + offset]
+                scores.append(page_scores)
             else:
                 gaps.append((scan.page, "extraction_incomplete"))
         cursor += len(item_scans)
         chunks += _commit(
             index,
             (stored, stat, digest, suffix, page_text, gaps, []),
+            scores,
+            sources,
         )
         files += 1
     return {"files": files, "chunks": chunks}

@@ -1,11 +1,11 @@
 {
   "by_index": {
     "main": {
-      "text": 123,
-      "table": 59,
-      "ocr": 8,
+      "text": 116,
+      "table": 74,
+      "ocr": 15,
       "instruction_like": 1,
-      "low_confidence_ocr": 0
+      "low_confidence_ocr": 15
     },
     "stale1": {
       "text": 1,
@@ -22,18 +22,87 @@
       "low_confidence_ocr": 0
     },
     "task1": {
-      "text": 18637,
-      "table": 60,
-      "ocr": 0,
+      "text": 18536,
+      "table": 2424,
+      "ocr": 101,
       "instruction_like": 0,
-      "low_confidence_ocr": 0
+      "low_confidence_ocr": 101
     }
   },
   "totals": {
-    "text": 18762,
-    "table": 119,
-    "ocr": 8,
+    "text": 18654,
+    "table": 2498,
+    "ocr": 116,
     "instruction_like": 1,
-    "low_confidence_ocr": 0
-  }
+    "low_confidence_ocr": 116
+  },
+  "task1_tables": [
+    {
+      "doc": "bindal_hr_policy.pdf",
+      "table_spans": 100,
+      "pdf_cells": 100
+    },
+    {
+      "doc": "calpoly_travel_claim_2026.xlsx",
+      "table_spans": 54,
+      "pdf_cells": 0
+    },
+    {
+      "doc": "csir_da_2023_42.pdf",
+      "table_spans": 6,
+      "pdf_cells": 0
+    },
+    {
+      "doc": "da_2023_46_puducherry.pdf",
+      "table_spans": 10,
+      "pdf_cells": 10
+    },
+    {
+      "doc": "da_2024_50_dae.pdf",
+      "table_spans": 0,
+      "pdf_cells": 0
+    },
+    {
+      "doc": "da_2024_53_puducherry.pdf",
+      "table_spans": 0,
+      "pdf_cells": 0
+    },
+    {
+      "doc": "dae_allowances_2024.pdf",
+      "table_spans": 186,
+      "pdf_cells": 186
+    },
+    {
+      "doc": "iitk_faculty_leave_2026.pdf",
+      "table_spans": 0,
+      "pdf_cells": 0
+    },
+    {
+      "doc": "iitk_hss_leave_form.pdf",
+      "table_spans": 3,
+      "pdf_cells": 3
+    },
+    {
+      "doc": "iitk_leave_form.pdf",
+      "table_spans": 0,
+      "pdf_cells": 0
+    },
+    {
+      "doc": "iitk_pg_manual_2026.pdf",
+      "table_spans": 885,
+      "pdf_cells": 885
+    },
+    {
+      "doc": "iitk_phd_leave_undated.pdf",
+      "table_spans": 0,
+      "pdf_cells": 0
+    },
+    {
+      "doc": "iitk_statutes.pdf",
+      "table_spans": 1180,
+      "pdf_cells": 1180
+    }
+  ],
+  "visible_tables_with_no_cells": [],
+  "ocr_low_confidence_below": 0.5
 }

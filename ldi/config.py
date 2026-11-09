@@ -36,8 +36,26 @@ SUPPORTED_SUFFIXES = TEXT_SUFFIXES | PDF_SUFFIXES | DOCX_SUFFIXES | XLSX_SUFFIXE
 OCR_PIXELS = 1280 * 28 * 28
 OCR_PROMPT = "OCR:"
 EXTRACTOR_VERSION = "1"
-# A stored OCR span below this confidence is counted as low-confidence.
+# A stored OCR span below this confidence is low-confidence.
+# A null confidence is also low-confidence: the line is ineligible for a
+# number, date, or ID slot until a later step checks it against the image.
 OCR_LOW_CONFIDENCE = 0.5
+# PDF table geometry, in PDF points. Word spaces sit under the cap.
+# A column gap is at least the multiple of that space, and at least the floor.
+TABLE_WORD_GAP_CAP = 20.0
+TABLE_GAP_MULTIPLE = 3.0
+TABLE_MIN_COLUMN_GAP = 18.0
+TABLE_COLUMN_TOLERANCE = 12.0
+TABLE_MIN_ROWS = 3
+TABLE_MIN_COLUMNS = 2
+TABLE_LINE_Y_TOLERANCE = 2.4
+TABLE_RULE_TOLERANCE = 2.0
+TABLE_MIN_HLINE = 24.0
+TABLE_MIN_VLINE = 12.0
+TABLE_MAX_RULE_THICKNESS = 1.8
+TABLE_MIN_ROW_GAP = 6.0
+TABLE_MAX_ROW_GAP = 72.0
+TABLE_MIN_RULE_OVERLAP = 30.0
 # Phrases addressed to an assistant. Ordinary obligations are not in this list.
 INSTRUCTION_PHRASES = (
     "ignore previous",

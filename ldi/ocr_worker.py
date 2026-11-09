@@ -32,10 +32,12 @@ def main() -> int:
     model = None
     try:
         model, processor = load(job["model"], trust_remote_code=True)
-        pages = [
+        read = [
             _read(generate, model, processor, _image(item, pixels), pixels)
             for item in job["items"]
         ]
+        pages = [text for text, _scores in read]
+        confidence = [scores for _text, scores in read]
     except Exception as exc:
         print(f"The OCR model stopped. {exc}", file=sys.stderr)
         return 1
@@ -47,7 +49,9 @@ def main() -> int:
         )
         if clear is not None:
             clear()
-    Path(job["result"]).write_text(json.dumps({"pages": pages}))
+    Path(job["result"]).write_text(
+        json.dumps({"pages": pages, "confidence": confidence})
+    )
     return 0
 
 
@@ -98,7 +102,7 @@ def _fit(image, pixels: int):
     return image.resize(resized)
 
 
-def _read(generate, model, processor, image, pixels: int) -> str:
+def _read(generate, model, processor, image, pixels: int) -> tuple[str, list[float | None]]:
     prompt = _prompt(processor, model)
     fitted = _fit(image, pixels)
     with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as handle:
@@ -117,6 +121,12 @@ def _read(generate, model, processor, image, pixels: int) -> str:
         )
     finally:
         image_path.unlink(missing_ok=True)
+    text = _result_text(result)
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    return text, _line_confidence(result, len(lines))
+
+
+def _result_text(result) -> str:
     if isinstance(result, str):
         return result.strip()
     for name in ("text", "output"):
@@ -124,6 +134,25 @@ def _read(generate, model, processor, image, pixels: int) -> str:
         if isinstance(value, str):
             return value.strip()
     return str(result).strip()
+
+
+def _line_confidence(result, count: int) -> list[float | None]:
+    """PaddleOCR-VL on MLX returns text, not a detection score. Missing scores stay null."""
+    for name in ("line_confidences", "confidences"):
+        value = getattr(result, name, None)
+        if not isinstance(value, list) or len(value) != count:
+            continue
+        scores: list[float | None] = []
+        for item in value:
+            if item is None:
+                scores.append(None)
+            elif isinstance(item, (int, float)) and not isinstance(item, bool):
+                scores.append(float(item))
+            else:
+                break
+        else:
+            return scores
+    return [None] * count
 
 
 def _prompt(processor, model) -> str:

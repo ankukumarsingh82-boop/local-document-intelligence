@@ -1,4 +1,11 @@
-"""Stable span ids stored beside the full-text index. Search does not read them."""
+"""Stable span ids stored beside the full-text index. Search does not read them.
+
+Ids are path-keyed. The document key is the first 8 hex digits of the SHA-256
+of the stored path. Renaming or moving the file changes every span id from
+that file. The file's content hash stays on the files row and is not part of
+the id. Two copies of the same line stay distinct because of the occurrence
+index.
+"""
 
 from __future__ import annotations
 
@@ -7,7 +14,12 @@ import re
 import unicodedata
 from dataclasses import dataclass
 
-from ldi.config import EXTRACTOR_VERSION, INSTRUCTION_PHRASES, PASSAGE_CHARS
+from ldi.config import (
+    EXTRACTOR_VERSION,
+    INSTRUCTION_PHRASES,
+    OCR_LOW_CONFIDENCE,
+    PASSAGE_CHARS,
+)
 
 _CELL = re.compile(r"^(?P<sheet>[^!\n]+)!(?P<col>[A-Z]+)(?P<row>\d+) (?P<value>.*)$")
 _UNIT = re.compile(
@@ -157,10 +169,19 @@ def period_of(value: str) -> str:
 
 
 def document_key(path: str, digest: str) -> str:
-    """Eight hex chars that stay put when one line in the file changes."""
+    """Eight hex chars of the stored path. A rename changes this key and every id."""
     if path:
         return hashlib.sha256(path.encode()).hexdigest()[:8]
     return digest[:8]
+
+
+def ocr_low_confidence(source_type: str, confidence: float | None) -> bool:
+    """Null OCR confidence is low confidence, so the line cannot fill a number, date, or ID slot later."""
+    if source_type != "ocr":
+        return False
+    if confidence is None:
+        return True
+    return confidence < OCR_LOW_CONFIDENCE
 
 
 def build_spans(
@@ -169,12 +190,29 @@ def build_spans(
     source_type: str = "text",
     path: str = "",
     merges: list[tuple[str, int, int, int, int]] | None = None,
+    tables: list | None = None,
+    confidences: list[list[float | None] | None] | None = None,
+    page_sources: list[str] | None = None,
 ) -> tuple[list[SpanRecord], list[PassageRecord]]:
     drafts: list[_Draft] = []
-    for page, text in pages:
+    for index, (page, text) in enumerate(pages):
+        scores = None
+        if confidences is not None and index < len(confidences):
+            scores = confidences[index]
+        kind = source_type
+        if page_sources is not None and index < len(page_sources):
+            kind = page_sources[index]
         drafts.extend(
-            _drafts_for_page(page, text, source_type, len(drafts), merges or [])
+            _drafts_for_page(
+                page,
+                text,
+                kind,
+                len(drafts),
+                merges or [],
+                scores,
+            )
         )
+    drafts.extend(drafts_from_tables(tables or []))
     spans = _identify(drafts, document_key(path, digest))
     return spans, _passages(spans)
 
@@ -183,12 +221,36 @@ def span_is_fresh(span: SpanRecord) -> bool:
     return span.span_id == span_id(span.text, span.doc_sha8, span.occurrence)
 
 
+def drafts_from_tables(tables: list) -> list[_Draft]:
+    """Turn detected PDF cells into table drafts. The full-text chunks stay untouched."""
+    drafts: list[_Draft] = []
+    for table in tables:
+        if table.empty or not table.cells:
+            continue
+        cells = [
+            (cell.row, cell.col, _column_letters(cell.col), cell.text)
+            for cell in table.cells
+        ]
+        drafts.extend(
+            _table_drafts(
+                table.page,
+                table.table_id,
+                cells,
+                "text",
+                len(drafts),
+                caption=table.caption,
+            )
+        )
+    return drafts
+
+
 def _drafts_for_page(
     page: int | None,
     text: str,
     source_type: str,
     block_base: int,
     merges: list[tuple[str, int, int, int, int]],
+    confidences: list[float | None] | None = None,
 ) -> list[_Draft]:
     lines = [line.strip() for line in text.splitlines()]
     cells = [_CELL.fullmatch(line) for line in lines if line]
@@ -206,6 +268,7 @@ def _drafts_for_page(
     index = 0
     kept = [line for line in lines if line]
     caption = ""
+    scores = iter(confidences or [])
     while index < len(kept):
         if "|" in kept[index]:
             run = []
@@ -218,6 +281,7 @@ def _drafts_for_page(
             caption = ""
             continue
         caption = kept[index]
+        score = next(scores, None) if source_type == "ocr" else None
         drafts.append(
             _Draft(
                 text=kept[index],
@@ -225,6 +289,7 @@ def _drafts_for_page(
                 page=page,
                 block=block,
                 line=line_number,
+                confidence=score,
             )
         )
         line_number += 1

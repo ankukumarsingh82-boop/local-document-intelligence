@@ -1,8 +1,10 @@
 """Span ids are stable, and the full-text rows stay put."""
 
+import ldi.spans as spans_module
 from ldi.cli import main
 from ldi.config import index_path
-from ldi.spans import build_spans, cell_type, instruction_like, span_is_fresh
+from ldi.pdftable import extract_tables
+from ldi.spans import build_spans, cell_type, instruction_like, ocr_low_confidence, span_is_fresh
 from ldi.store import Index
 
 
@@ -175,3 +177,137 @@ def test_a_merged_cell_gets_its_own_span_without_a_new_chunk(tmp_path, monkeypat
     assert len(copied) == 2
     assert len({row[4] for row in copied}) == 2
     assert all(row[2] and row[3] == "inr" for row in copied)
+
+
+def test_span_ids_are_path_keyed():
+    assert "path-keyed" in (spans_module.__doc__ or "")
+    assert "Renaming" in (spans_module.__doc__ or "")
+    same = "ab" * 32
+    first, _passages = build_spans([(None, "Alpha stays.")], same, path="notes/a.txt")
+    renamed, _passages = build_spans([(None, "Alpha stays.")], same, path="notes/b.txt")
+    assert first[0].span_id != renamed[0].span_id
+    assert first[0].doc_sha8 != renamed[0].doc_sha8
+
+
+def test_null_ocr_confidence_is_low_and_blocks_a_later_slot():
+    assert ocr_low_confidence("ocr", None) is True
+    assert ocr_low_confidence("ocr", 0.2) is True
+    assert ocr_low_confidence("ocr", 0.9) is False
+    assert ocr_low_confidence("text", None) is False
+    spans, _passages = build_spans(
+        [(1, "1040\n12 March 2024")],
+        "c" * 64,
+        "ocr",
+        "scan.png",
+        confidences=[[None, 0.91]],
+    )
+    assert spans[0].confidence is None
+    assert ocr_low_confidence(spans[0].source_type, spans[0].confidence) is True
+    assert spans[1].confidence == 0.91
+    assert ocr_low_confidence(spans[1].source_type, spans[1].confidence) is False
+
+
+def test_a_positioned_pdf_table_becomes_cells_without_rewriting_the_chunk(tmp_path, monkeypatch):
+    monkeypatch.setenv("LDI_ROOT", str(tmp_path))
+    pdf = tmp_path / "rates.pdf"
+    pdf.write_bytes(_text_table_pdf())
+    assert main(["ingest", str(pdf)]) == 0
+    with Index(index_path()) as index:
+        body = index.db.execute("SELECT body FROM chunks").fetchone()[0]
+        rows = index.db.execute(
+            """
+            SELECT text, header_path, unit, row_key, cell_type, source_type
+            FROM spans WHERE source_type = 'table'
+            ORDER BY line, col
+            """
+        ).fetchall()
+    assert "Fee INR" in body
+    assert "!" not in body
+    assert len(rows) >= 4
+    fee = next(row for row in rows if row[0] == "5")
+    assert fee[1]
+    assert fee[2] == "day"
+    assert fee[3] == "Alpha"
+    assert fee[4] == "num"
+    assert fee[5] == "table"
+
+
+def test_a_ruled_grid_with_no_words_is_a_visible_table_with_no_cells(tmp_path):
+    pdf = tmp_path / "grid.pdf"
+    pdf.write_bytes(_empty_grid_pdf())
+    tables = extract_tables(pdf)
+    assert tables
+    assert any(table.empty and not table.cells for table in tables)
+
+
+def _pdf(objects: list[bytes]) -> bytes:
+    header = b"%PDF-1.4\n"
+    chunks = [header]
+    offsets = [0]
+    cursor = len(header)
+    for number, body in enumerate(objects, start=1):
+        offsets.append(cursor)
+        piece = f"{number} 0 obj\n".encode() + body + b"\nendobj\n"
+        chunks.append(piece)
+        cursor += len(piece)
+    xref = cursor
+    lines = [f"xref\n0 {len(objects) + 1}\n", "0000000000 65535 f \n"]
+    lines.extend(f"{offset:010d} 00000 n \n" for offset in offsets[1:])
+    trailer = (
+        f"trailer\n<< /Size {len(objects) + 1} /Root 1 0 R >>\n"
+        f"startxref\n{xref}\n%%EOF\n"
+    )
+    return b"".join(chunks) + "".join(lines).encode() + trailer.encode()
+
+
+def _text_table_pdf() -> bytes:
+    stream = b"""BT
+/F1 12 Tf
+72 700 Td
+(Fee INR) Tj
+160 0 Td
+(Days) Tj
+-160 -20 Td
+(Alpha) Tj
+160 0 Td
+(5) Tj
+-160 -20 Td
+(Beta) Tj
+160 0 Td
+(9) Tj
+ET
+"""
+    content = (
+        f"<< /Length {len(stream)} >>\nstream\n".encode() + stream + b"endstream"
+    )
+    return _pdf(
+        [
+            b"<< /Type /Catalog /Pages 2 0 R >>",
+            b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+            b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>",
+            content,
+            b"<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+        ]
+    )
+
+
+def _empty_grid_pdf() -> bytes:
+    stream = b"""0.8 w
+72 700 m 300 700 l S
+72 680 m 300 680 l S
+72 660 m 300 660 l S
+72 700 m 72 660 l S
+186 700 m 186 660 l S
+300 700 m 300 660 l S
+"""
+    content = (
+        f"<< /Length {len(stream)} >>\nstream\n".encode() + stream + b"endstream"
+    )
+    return _pdf(
+        [
+            b"<< /Type /Catalog /Pages 2 0 R >>",
+            b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+            b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R >>",
+            content,
+        ]
+    )
