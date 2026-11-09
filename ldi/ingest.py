@@ -22,6 +22,7 @@ from ldi.config import (
     project_root,
 )
 from ldi.ocr import Scan, classify_page, image_count, recognize
+from ldi.spans import build_spans
 from ldi.store import Index, sha256_file
 
 
@@ -76,13 +77,13 @@ def ingest(path: Path, index: Index, *, reset: bool = False) -> IngestReport:
             report = _add(report, unchanged=1)
             continue
         try:
-            pages, extra_gaps, scans = _read_document(file, suffix)
+            pages, extra_gaps, scans, merges = _read_document(file, suffix)
         except Exception as exc:
             _skip(f"Skipped {file.name}: {exc}")
             _drop_text(index, stored, "skipped")
             report = _add(report, skipped=1)
             continue
-        item = (stored, stat, digest, suffix, pages, extra_gaps, scans)
+        item = (stored, stat, digest, suffix, pages, extra_gaps, scans, merges)
         if scans:
             deferred.append(item)
             continue
@@ -114,7 +115,8 @@ def _drop_text(index: Index, stored: str, reason: str) -> None:
 
 
 def _commit(index: Index, item: tuple) -> int:
-    stored, stat, digest, suffix, pages, extra_gaps, _scans = item
+    *head, merges = item if len(item) == 8 else (*item, [])
+    stored, stat, digest, suffix, pages, extra_gaps, _scans = head
     chunks: list[tuple[int | None, str]] = []
     gaps = list(extra_gaps)
     for page, text in pages:
@@ -127,6 +129,9 @@ def _commit(index: Index, item: tuple) -> int:
         gaps.append((None, "extraction_incomplete"))
     index.replace_file(stored, stat.st_mtime_ns, stat.st_size, chunks, digest)
     index.replace_gaps(stored, gaps)
+    kind = "ocr" if suffix in IMAGE_SUFFIXES else "text"
+    spans, passages = build_spans(pages, digest, kind, stored, merges)
+    index.replace_spans(stored, spans, passages)
     return len(chunks)
 
 
@@ -143,7 +148,7 @@ def _recognize_deferred(index: Index, deferred: list[tuple]) -> dict[str, int]:
     files = 0
     chunks = 0
     for item in deferred:
-        stored, stat, digest, suffix, pages, extra_gaps, item_scans = item
+        stored, stat, digest, suffix, pages, extra_gaps, item_scans = item[:7]
         page_text = list(pages)
         gaps = list(extra_gaps)
         for scan, text in zip(item_scans, texts[cursor : cursor + len(item_scans)]):
@@ -201,7 +206,8 @@ def read_file(
     suffix = file.suffix.lower()
     if suffix not in SUPPORTED_SUFFIXES:
         raise ValueError("Attach a .txt, .md, .pdf, or image file.")
-    return _read_document(file, suffix)
+    pages, gaps, scans, _merges = _read_document(file, suffix)
+    return pages, gaps, scans
 
 
 def text_from_upload(name: str, data: bytes) -> str:
@@ -253,22 +259,28 @@ def _pdf_text(data: bytes, name: str) -> str:
 
 def _read_document(
     file: Path, suffix: str
-) -> tuple[list[tuple[int | None, str]], list[tuple[int | None, str]], list[Scan]]:
+) -> tuple[
+    list[tuple[int | None, str]],
+    list[tuple[int | None, str]],
+    list[Scan],
+    list[tuple[str, int, int, int, int]],
+]:
     if suffix in TEXT_SUFFIXES:
         raw = file.read_bytes()
         if b"\x00" in raw[:8192]:
             raise ValueError("the file does not look like text.")
-        return [(None, raw.decode("utf-8", errors="replace"))], [], []
+        return [(None, raw.decode("utf-8", errors="replace"))], [], [], []
     if suffix in PDF_SUFFIXES:
-        return _read_pdf(file)
+        pages, gaps, scans = _read_pdf(file)
+        return pages, gaps, scans, []
     if suffix in DOCX_SUFFIXES:
         pages, gaps = _read_docx(file)
-        return pages, gaps, []
+        return pages, gaps, [], []
     if suffix in XLSX_SUFFIXES:
-        pages, gaps = _read_xlsx(file)
-        return pages, gaps, []
+        pages, gaps, merges = _read_xlsx(file)
+        return pages, gaps, [], merges
     if suffix in IMAGE_SUFFIXES:
-        return [], [], [Scan(file, None)]
+        return [], [], [Scan(file, None)], []
     raise ValueError("the file is not a document this tool indexes.")
 
 
@@ -295,16 +307,31 @@ def _read_docx(
 
 def _read_xlsx(
     file: Path,
-) -> tuple[list[tuple[int | None, str]], list[tuple[int | None, str]]]:
+) -> tuple[
+    list[tuple[int | None, str]],
+    list[tuple[int | None, str]],
+    list[tuple[str, int, int, int, int]],
+]:
     from openpyxl import load_workbook
 
     formulas = load_workbook(file, data_only=False)
     cached = load_workbook(file, data_only=True)
     lines: list[str] = []
     gaps: list[tuple[int | None, str]] = []
+    merges: list[tuple[str, int, int, int, int]] = []
     book = _BookValues(formulas, cached)
     try:
         for sheet in formulas.worksheets:
+            for merged in sheet.merged_cells.ranges:
+                merges.append(
+                    (
+                        sheet.title,
+                        merged.min_row,
+                        merged.min_col,
+                        merged.max_row,
+                        merged.max_col,
+                    )
+                )
             for row in sheet.iter_rows():
                 for cell in row:
                     value = cell.value
@@ -323,8 +350,8 @@ def _read_xlsx(
         formulas.close()
         cached.close()
     if not lines:
-        return [], gaps
-    return [(None, "\n".join(lines))], gaps
+        return [], gaps, merges
+    return [(None, "\n".join(lines))], gaps, merges
 
 
 class _BookValues:

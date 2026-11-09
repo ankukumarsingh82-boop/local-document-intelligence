@@ -1,0 +1,39 @@
+{
+  "by_index": {
+    "main": {
+      "text": 123,
+      "table": 59,
+      "ocr": 8,
+      "instruction_like": 1,
+      "low_confidence_ocr": 0
+    },
+    "stale1": {
+      "text": 1,
+      "table": 0,
+      "ocr": 0,
+      "instruction_like": 0,
+      "low_confidence_ocr": 0
+    },
+    "stale3": {
+      "text": 1,
+      "table": 0,
+      "ocr": 0,
+      "instruction_like": 0,
+      "low_confidence_ocr": 0
+    },
+    "task1": {
+      "text": 18637,
+      "table": 60,
+      "ocr": 0,
+      "instruction_like": 0,
+      "low_confidence_ocr": 0
+    }
+  },
+  "totals": {
+    "text": 18762,
+    "table": 119,
+    "ocr": 8,
+    "instruction_like": 1,
+    "low_confidence_ocr": 0
+  }
+}

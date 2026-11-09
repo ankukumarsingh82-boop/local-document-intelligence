@@ -41,9 +41,40 @@ class Index:
                 body,
                 tokenize = 'porter unicode61'
             );
+            CREATE TABLE IF NOT EXISTS spans (
+                span_id TEXT PRIMARY KEY,
+                path TEXT NOT NULL,
+                doc_sha8 TEXT NOT NULL,
+                content_hash TEXT NOT NULL,
+                extractor_version TEXT NOT NULL,
+                source_type TEXT NOT NULL,
+                page TEXT NOT NULL DEFAULT '',
+                block INTEGER,
+                line INTEGER,
+                table_id TEXT NOT NULL DEFAULT '',
+                row_key TEXT NOT NULL DEFAULT '',
+                col INTEGER,
+                header_path TEXT NOT NULL DEFAULT '',
+                unit TEXT NOT NULL DEFAULT '',
+                occurrence INTEGER NOT NULL,
+                confidence REAL,
+                bbox TEXT NOT NULL DEFAULT '',
+                instruction_like INTEGER NOT NULL DEFAULT 0,
+                cell_type TEXT NOT NULL DEFAULT '',
+                period TEXT NOT NULL DEFAULT '',
+                row_role TEXT NOT NULL DEFAULT '',
+                text TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS passages (
+                passage_id TEXT PRIMARY KEY,
+                path TEXT NOT NULL,
+                span_ids TEXT NOT NULL,
+                text TEXT NOT NULL
+            );
             """
         )
         self._migrate_files()
+        self._migrate_spans()
 
     def close(self) -> None:
         self.db.close()
@@ -59,6 +90,8 @@ class Index:
             self.db.execute("DELETE FROM chunks")
             self.db.execute("DELETE FROM files")
             self.db.execute("DELETE FROM gaps")
+            self.db.execute("DELETE FROM spans")
+            self.db.execute("DELETE FROM passages")
 
     def stats(self) -> tuple[int, int]:
         files = self.db.execute("SELECT COUNT(*) FROM files").fetchone()[0]
@@ -116,10 +149,72 @@ class Index:
                 rows,
             )
 
+    def replace_spans(self, path: str, spans: list, passages: list) -> None:
+        """Write the span table for one file. The full-text chunks stay as they are."""
+        ids = [span.span_id for span in spans]
+        if len(ids) != len(set(ids)):
+            raise RuntimeError(f"Span ids collide inside {path}.")
+        with self.db:
+            for span_id in ids:
+                found = self.db.execute(
+                    "SELECT path FROM spans WHERE span_id = ? AND path != ?",
+                    (span_id, path),
+                ).fetchone()
+                if found is not None:
+                    raise RuntimeError(f"Span id {span_id} already belongs to another document.")
+            self.db.execute("DELETE FROM spans WHERE path = ?", (path,))
+            self.db.execute("DELETE FROM passages WHERE path = ?", (path,))
+            self.db.executemany(
+                """
+                INSERT INTO spans(
+                    span_id, path, doc_sha8, content_hash, extractor_version,
+                    source_type, page, block, line, table_id, row_key, col,
+                    header_path, unit, occurrence, confidence, bbox,
+                    instruction_like, cell_type, period, row_role, text
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                [
+                    (
+                        span.span_id,
+                        path,
+                        span.doc_sha8,
+                        span.content_hash,
+                        span.extractor_version,
+                        span.source_type,
+                        "" if span.page is None else str(span.page),
+                        span.block,
+                        span.line,
+                        span.table_id,
+                        span.row_key,
+                        span.col,
+                        span.header_path,
+                        span.unit,
+                        span.occurrence,
+                        span.confidence,
+                        span.bbox,
+                        1 if span.instruction_like else 0,
+                        span.cell_type,
+                        span.period,
+                        span.row_role,
+                        span.text,
+                    )
+                    for span in spans
+                ],
+            )
+            self.db.executemany(
+                "INSERT INTO passages(passage_id, path, span_ids, text) VALUES (?, ?, ?, ?)",
+                [
+                    (passage.passage_id, path, passage.span_ids, passage.text)
+                    for passage in passages
+                ],
+            )
+
     def forget_text(self, path: str) -> None:
         with self.db:
             self.db.execute("DELETE FROM chunks WHERE path = ?", (path,))
             self.db.execute("DELETE FROM files WHERE path = ?", (path,))
+            self.db.execute("DELETE FROM spans WHERE path = ?", (path,))
+            self.db.execute("DELETE FROM passages WHERE path = ?", (path,))
 
     def replace_gaps(self, path: str, gaps: list[tuple[int | None, str]]) -> None:
         rows = [
@@ -151,6 +246,8 @@ class Index:
                 self.db.execute("DELETE FROM chunks WHERE path = ?", (stored,))
                 self.db.execute("DELETE FROM files WHERE path = ?", (stored,))
                 self.db.execute("DELETE FROM gaps WHERE path = ?", (stored,))
+                self.db.execute("DELETE FROM spans WHERE path = ?", (stored,))
+                self.db.execute("DELETE FROM passages WHERE path = ?", (stored,))
 
     def refresh_labels(self) -> None:
         files = self.db.execute(
@@ -271,6 +368,15 @@ class Index:
             )
         if "duplicate_of" not in columns:
             self.db.execute("ALTER TABLE files ADD COLUMN duplicate_of TEXT")
+
+    def _migrate_spans(self) -> None:
+        columns = {row[1] for row in self.db.execute("PRAGMA table_info(spans)")}
+        if "period" not in columns:
+            self.db.execute("ALTER TABLE spans ADD COLUMN period TEXT NOT NULL DEFAULT ''")
+        if "row_role" not in columns:
+            self.db.execute(
+                "ALTER TABLE spans ADD COLUMN row_role TEXT NOT NULL DEFAULT ''"
+            )
 
     def _file_flags(self) -> dict[str, tuple[bool, str | None]]:
         rows = self.db.execute(

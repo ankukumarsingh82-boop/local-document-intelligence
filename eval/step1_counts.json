@@ -1,0 +1,10 @@
+{
+  "cases": 98,
+  "byte_identical": 98,
+  "differed": [],
+  "floor": 52,
+  "floor_still_passing": 52,
+  "floor_miss": [],
+  "fabrication": 0,
+  "fabricated_ids": []
+}

@@ -35,6 +35,17 @@ IMAGE_SUFFIXES = frozenset({".png", ".jpg", ".jpeg", ".webp"})
 SUPPORTED_SUFFIXES = TEXT_SUFFIXES | PDF_SUFFIXES | DOCX_SUFFIXES | XLSX_SUFFIXES | IMAGE_SUFFIXES
 OCR_PIXELS = 1280 * 28 * 28
 OCR_PROMPT = "OCR:"
+EXTRACTOR_VERSION = "1"
+# A stored OCR span below this confidence is counted as low-confidence.
+OCR_LOW_CONFIDENCE = 0.5
+# Phrases addressed to an assistant. Ordinary obligations are not in this list.
+INSTRUCTION_PHRASES = (
+    "ignore previous",
+    "system prompt",
+    "you are an ai",
+    "respond only with",
+    "disregard the above",
+)
 
 SKIP_DIR_NAMES = frozenset(
     {
