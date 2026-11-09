@@ -64,6 +64,14 @@ INSTRUCTION_PHRASES = (
     "respond only with",
     "disregard the above",
 )
+# Wording that retires an earlier provision. Ordinary duties are not in this list.
+SUPERSESSION_PHRASES = (
+    "supersedes",
+    "in partial modification of",
+    "rescinded",
+)
+# A fiscal year written "FY 2024-25" starts in this month.
+FY_START_MONTH = 4
 
 SKIP_DIR_NAMES = frozenset(
     {

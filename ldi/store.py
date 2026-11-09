@@ -71,6 +71,18 @@ class Index:
                 span_ids TEXT NOT NULL,
                 text TEXT NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS provisions (
+                provision_id TEXT PRIMARY KEY,
+                doc_id TEXT NOT NULL,
+                clause_key TEXT NOT NULL,
+                value_text TEXT NOT NULL,
+                value_span TEXT NOT NULL,
+                effective_from TEXT NOT NULL DEFAULT '',
+                effective_to TEXT NOT NULL DEFAULT '',
+                superseded_by TEXT NOT NULL DEFAULT '',
+                status TEXT NOT NULL,
+                source_span TEXT NOT NULL
+            );
             """
         )
         self._migrate_files()
@@ -92,6 +104,7 @@ class Index:
             self.db.execute("DELETE FROM gaps")
             self.db.execute("DELETE FROM spans")
             self.db.execute("DELETE FROM passages")
+            self.db.execute("DELETE FROM provisions")
 
     def stats(self) -> tuple[int, int]:
         files = self.db.execute("SELECT COUNT(*) FROM files").fetchone()[0]
@@ -209,12 +222,41 @@ class Index:
                 ],
             )
 
+    def replace_provisions(self, doc_id: str, rows: list) -> None:
+        """Replace one document's provision rows. Full-text chunks stay as they are."""
+        with self.db:
+            self.db.execute("DELETE FROM provisions WHERE doc_id = ?", (doc_id,))
+            self.db.executemany(
+                """
+                INSERT INTO provisions(
+                    provision_id, doc_id, clause_key, value_text, value_span,
+                    effective_from, effective_to, superseded_by, status, source_span
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                [
+                    (
+                        row.provision_id,
+                        doc_id,
+                        row.clause_key,
+                        row.value_text,
+                        row.value_span,
+                        row.effective_from,
+                        row.effective_to,
+                        row.superseded_by,
+                        row.status,
+                        row.source_span,
+                    )
+                    for row in rows
+                ],
+            )
+
     def forget_text(self, path: str) -> None:
         with self.db:
             self.db.execute("DELETE FROM chunks WHERE path = ?", (path,))
             self.db.execute("DELETE FROM files WHERE path = ?", (path,))
             self.db.execute("DELETE FROM spans WHERE path = ?", (path,))
             self.db.execute("DELETE FROM passages WHERE path = ?", (path,))
+            self.db.execute("DELETE FROM provisions WHERE doc_id = ?", (path,))
 
     def replace_gaps(self, path: str, gaps: list[tuple[int | None, str]]) -> None:
         rows = [
@@ -248,6 +290,7 @@ class Index:
                 self.db.execute("DELETE FROM gaps WHERE path = ?", (stored,))
                 self.db.execute("DELETE FROM spans WHERE path = ?", (stored,))
                 self.db.execute("DELETE FROM passages WHERE path = ?", (stored,))
+                self.db.execute("DELETE FROM provisions WHERE doc_id = ?", (stored,))
 
     def refresh_labels(self) -> None:
         files = self.db.execute(

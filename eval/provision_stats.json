@@ -1,0 +1,127 @@
+{
+  "per_doc": [
+    {
+      "doc": "bindal_hr_policy.pdf",
+      "provisions": 0,
+      "with_superseded_by": 0
+    },
+    {
+      "doc": "calpoly_travel_claim_2026.xlsx",
+      "provisions": 0,
+      "with_superseded_by": 0
+    },
+    {
+      "doc": "csir_da_2023_42.pdf",
+      "provisions": 0,
+      "with_superseded_by": 0
+    },
+    {
+      "doc": "da_2023_46_puducherry.pdf",
+      "provisions": 4,
+      "with_superseded_by": 2
+    },
+    {
+      "doc": "da_2024_50_dae.pdf",
+      "provisions": 2,
+      "with_superseded_by": 1
+    },
+    {
+      "doc": "da_2024_53_puducherry.pdf",
+      "provisions": 2,
+      "with_superseded_by": 1
+    },
+    {
+      "doc": "dae_allowances_2024.pdf",
+      "provisions": 38,
+      "with_superseded_by": 19
+    },
+    {
+      "doc": "iitk_faculty_leave_2026.pdf",
+      "provisions": 0,
+      "with_superseded_by": 0
+    },
+    {
+      "doc": "iitk_hss_leave_form.pdf",
+      "provisions": 0,
+      "with_superseded_by": 0
+    },
+    {
+      "doc": "iitk_leave_form.pdf",
+      "provisions": 0,
+      "with_superseded_by": 0
+    },
+    {
+      "doc": "iitk_pg_manual_2026.pdf",
+      "provisions": 0,
+      "with_superseded_by": 0
+    },
+    {
+      "doc": "iitk_phd_leave_undated.pdf",
+      "provisions": 0,
+      "with_superseded_by": 0
+    },
+    {
+      "doc": "iitk_statutes.pdf",
+      "provisions": 0,
+      "with_superseded_by": 0
+    }
+  ],
+  "questions": [
+    {
+      "id": "PQA-001",
+      "source_file": "da_2023_46_puducherry.pdf",
+      "old_row": true,
+      "current_row": true,
+      "linked": true
+    },
+    {
+      "id": "PQA-002",
+      "source_file": "da_2024_50_dae.pdf",
+      "old_row": true,
+      "current_row": true,
+      "linked": true
+    },
+    {
+      "id": "PQA-003",
+      "source_file": "da_2024_53_puducherry.pdf",
+      "old_row": true,
+      "current_row": true,
+      "linked": true
+    },
+    {
+      "id": "PQA-004",
+      "source_file": "dae_allowances_2024.pdf",
+      "old_row": true,
+      "current_row": true,
+      "linked": true
+    },
+    {
+      "id": "PQA-005",
+      "source_file": "dae_allowances_2024.pdf",
+      "old_row": true,
+      "current_row": true,
+      "linked": true
+    },
+    {
+      "id": "PQA-006",
+      "source_file": "dae_allowances_2024.pdf",
+      "old_row": true,
+      "current_row": true,
+      "linked": true
+    },
+    {
+      "id": "PQA-007",
+      "source_file": "dae_allowances_2024.pdf",
+      "old_row": true,
+      "current_row": true,
+      "linked": true
+    },
+    {
+      "id": "PQA-008",
+      "source_file": "dae_allowances_2024.pdf",
+      "old_row": true,
+      "current_row": true,
+      "linked": true
+    }
+  ]
+}

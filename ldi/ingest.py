@@ -23,6 +23,7 @@ from ldi.config import (
 )
 from ldi.ocr import Scan, classify_page, image_count, recognize
 from ldi.pdftable import extract_tables, text_layer_empty
+from ldi.provisions import extract_provisions
 from ldi.spans import build_spans
 from ldi.store import Index, sha256_file, stored_file
 
@@ -155,6 +156,7 @@ def _commit(
         page_sources,
     )
     index.replace_spans(stored, spans, passages)
+    index.replace_provisions(stored, extract_provisions(stored, spans))
     return len(chunks)
 
 
