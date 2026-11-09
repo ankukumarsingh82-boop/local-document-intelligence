@@ -1,0 +1,667 @@
+{
+  "hardware": {
+    "machine": "arm64",
+    "processor": "Apple M4",
+    "system": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "ram_bytes": 17179869184,
+    "pressure": 1,
+    "reclaimable_bytes": 7037779968,
+    "swap_used_bytes": 587265474,
+    "on_battery": false
+  },
+  "load_s": 0.649,
+  "passes": 2,
+  "nondeterministic_ids": [],
+  "latency_pass1_cold": {
+    "retrieve_s": {
+      "median": 0.002,
+      "p95": 0.002
+    },
+    "model_s": {
+      "median": 1.8,
+      "p95": 1.8
+    },
+    "render_s": {
+      "median": 0.005,
+      "p95": 0.005
+    }
+  },
+  "latency_pass1_warm": {
+    "retrieve_s": {
+      "median": 0.001,
+      "p95": 0.002
+    },
+    "model_s": {
+      "median": 3.034,
+      "p95": 6.293
+    },
+    "render_s": {
+      "median": 0.005,
+      "p95": 0.019
+    }
+  },
+  "latency_pass2_warm": {
+    "retrieve_s": {
+      "median": 0.001,
+      "p95": 0.002
+    },
+    "model_s": {
+      "median": 3.889,
+      "p95": 7.964
+    },
+    "render_s": {
+      "median": 0.005,
+      "p95": 0.02
+    }
+  },
+  "synthetic_non_ocr": {
+    "total": 67,
+    "claimed_total": 67,
+    "counts": {
+      "correct": 38,
+      "wrong": 7,
+      "false_not_found": 2,
+      "false_accept": 1,
+      "unscored": 19,
+      "fabrication": 0,
+      "invalid_model_output": 4,
+      "timeout": 0
+    },
+    "by_category": {
+      "absent": {
+        "correct": 18,
+        "wrong": 0,
+        "false_not_found": 0,
+        "false_accept": 1,
+        "unscored": 0,
+        "fabrication": 0,
+        "invalid_model_output": 1,
+        "timeout": 0
+      },
+      "compare": {
+        "correct": 0,
+        "wrong": 0,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 1,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      },
+      "conflict": {
+        "correct": 1,
+        "wrong": 1,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 2,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      },
+      "lookup": {
+        "correct": 12,
+        "wrong": 3,
+        "false_not_found": 2,
+        "false_accept": 0,
+        "unscored": 6,
+        "fabrication": 0,
+        "invalid_model_output": 2,
+        "timeout": 0
+      },
+      "summary": {
+        "correct": 0,
+        "wrong": 0,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 2,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      },
+      "table": {
+        "correct": 3,
+        "wrong": 2,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 4,
+        "fabrication": 0,
+        "invalid_model_output": 1,
+        "timeout": 0
+      },
+      "trap": {
+        "correct": 2,
+        "wrong": 0,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 0,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      },
+      "version": {
+        "correct": 2,
+        "wrong": 1,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 4,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      }
+    },
+    "unscored_ids": [
+      "CON-03",
+      "DOCX-01",
+      "DOCX-02",
+      "DOCX-03",
+      "DOCX-04",
+      "DOCX-05",
+      "DOCX-06",
+      "DUP-01",
+      "STALE-01",
+      "STALE-03",
+      "SUM-01",
+      "SUM-02",
+      "UNI-01",
+      "VER-01",
+      "VER-02",
+      "XLSX-01",
+      "XLSX-02",
+      "XLSX-03",
+      "XLSX-04"
+    ],
+    "not_correct_ids": [
+      "CQ-A02",
+      "CQ-A04",
+      "CQ-A05",
+      "CQ-A09",
+      "CQ-A10",
+      "CQ-A19",
+      "CQ-A20",
+      "CQ-A22",
+      "CQ-C02",
+      "CQ-N02"
+    ]
+  },
+  "ocr": {
+    "counts": {
+      "correct": 1,
+      "wrong": 0,
+      "false_not_found": 0,
+      "false_accept": 1,
+      "unscored": 3,
+      "fabrication": 0,
+      "invalid_model_output": 0,
+      "timeout": 0
+    },
+    "ids": [
+      {
+        "id": "CQ-X01",
+        "metric": "false_accept"
+      },
+      {
+        "id": "CQ-X02",
+        "metric": "correct"
+      },
+      {
+        "id": "PNG-01",
+        "metric": "unscored"
+      },
+      {
+        "id": "PNG-02",
+        "metric": "unscored"
+      },
+      {
+        "id": "PNG-03",
+        "metric": "unscored"
+      }
+    ]
+  },
+  "dev": {
+    "counts": {
+      "correct": 26,
+      "wrong": 4,
+      "false_not_found": 0,
+      "false_accept": 2,
+      "unscored": 16,
+      "fabrication": 0,
+      "invalid_model_output": 2,
+      "timeout": 0
+    },
+    "by_category": {
+      "OCR": {
+        "correct": 1,
+        "wrong": 0,
+        "false_not_found": 0,
+        "false_accept": 1,
+        "unscored": 1,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      },
+      "absent": {
+        "correct": 12,
+        "wrong": 0,
+        "false_not_found": 0,
+        "false_accept": 1,
+        "unscored": 0,
+        "fabrication": 0,
+        "invalid_model_output": 1,
+        "timeout": 0
+      },
+      "compare": {
+        "correct": 0,
+        "wrong": 0,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 1,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      },
+      "conflict": {
+        "correct": 1,
+        "wrong": 0,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 2,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      },
+      "lookup": {
+        "correct": 8,
+        "wrong": 2,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 5,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      },
+      "summary": {
+        "correct": 0,
+        "wrong": 0,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 1,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      },
+      "table": {
+        "correct": 2,
+        "wrong": 1,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 3,
+        "fabrication": 0,
+        "invalid_model_output": 1,
+        "timeout": 0
+      },
+      "trap": {
+        "correct": 1,
+        "wrong": 0,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 0,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      },
+      "version": {
+        "correct": 1,
+        "wrong": 1,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 3,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      }
+    }
+  },
+  "heldout": {
+    "counts": {
+      "correct": 13,
+      "wrong": 3,
+      "false_not_found": 2,
+      "false_accept": 0,
+      "unscored": 6,
+      "fabrication": 0,
+      "invalid_model_output": 2,
+      "timeout": 0
+    },
+    "by_category": {
+      "OCR": {
+        "correct": 0,
+        "wrong": 0,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 2,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      },
+      "absent": {
+        "correct": 6,
+        "wrong": 0,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 0,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      },
+      "conflict": {
+        "correct": 0,
+        "wrong": 1,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 0,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      },
+      "lookup": {
+        "correct": 4,
+        "wrong": 1,
+        "false_not_found": 2,
+        "false_accept": 0,
+        "unscored": 1,
+        "fabrication": 0,
+        "invalid_model_output": 2,
+        "timeout": 0
+      },
+      "summary": {
+        "correct": 0,
+        "wrong": 0,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 1,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      },
+      "table": {
+        "correct": 1,
+        "wrong": 1,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 1,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      },
+      "trap": {
+        "correct": 1,
+        "wrong": 0,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 0,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      },
+      "version": {
+        "correct": 1,
+        "wrong": 0,
+        "false_not_found": 0,
+        "false_accept": 0,
+        "unscored": 1,
+        "fabrication": 0,
+        "invalid_model_output": 0,
+        "timeout": 0
+      }
+    }
+  },
+  "task1_open": {
+    "counts": {
+      "correct": 7,
+      "wrong": 3,
+      "false_not_found": 16,
+      "false_accept": 0,
+      "unscored": 0,
+      "fabrication": 0,
+      "invalid_model_output": 11,
+      "timeout": 0
+    },
+    "by_category": {
+      "lookup": {
+        "correct": 4,
+        "wrong": 0,
+        "false_not_found": 6,
+        "false_accept": 0,
+        "unscored": 0,
+        "fabrication": 0,
+        "invalid_model_output": 5,
+        "timeout": 0
+      },
+      "table": {
+        "correct": 1,
+        "wrong": 1,
+        "false_not_found": 6,
+        "false_accept": 0,
+        "unscored": 0,
+        "fabrication": 0,
+        "invalid_model_output": 1,
+        "timeout": 0
+      },
+      "version": {
+        "correct": 2,
+        "wrong": 2,
+        "false_not_found": 4,
+        "false_accept": 0,
+        "unscored": 0,
+        "fabrication": 0,
+        "invalid_model_output": 5,
+        "timeout": 0
+      }
+    },
+    "not_correct_ids": [
+      "PQA-003",
+      "PQA-004",
+      "PQA-005",
+      "PQA-006",
+      "PQA-007",
+      "PQA-008",
+      "PQA-009",
+      "PQA-011",
+      "PQA-012",
+      "PQA-013",
+      "PQA-014",
+      "PQA-015",
+      "PQA-016",
+      "PQA-017",
+      "PQA-018",
+      "PQA-021",
+      "PQA-023",
+      "PQA-025",
+      "PQA-026"
+    ]
+  },
+  "traps": {
+    "dev": {
+      "neighbour": 2,
+      "pass": 11,
+      "abstained": 2,
+      "cases": 15,
+      "acceptable": 13
+    },
+    "heldout": {
+      "neighbour": 2,
+      "pass": 11,
+      "abstained": 2,
+      "cases": 15,
+      "acceptable": 13
+    }
+  },
+  "diagnosis": [
+    {
+      "id": "CQ-A04",
+      "category": "lookup",
+      "stage": "generated",
+      "metric": "wrong"
+    },
+    {
+      "id": "CQ-A09",
+      "category": "version",
+      "stage": "generated",
+      "metric": "wrong"
+    },
+    {
+      "id": "CQ-A10",
+      "category": "lookup",
+      "stage": "generated",
+      "metric": "wrong"
+    },
+    {
+      "id": "CQ-A22",
+      "category": "table",
+      "stage": "generated",
+      "metric": "wrong"
+    },
+    {
+      "id": "CQ-X01",
+      "category": "OCR",
+      "stage": "generated",
+      "metric": "false_accept"
+    },
+    {
+      "id": "CQ-N02",
+      "category": "absent",
+      "stage": "generated",
+      "metric": "false_accept"
+    },
+    {
+      "id": "PQA-003",
+      "category": "version",
+      "stage": "generated",
+      "metric": "false_not_found"
+    },
+    {
+      "id": "PQA-004",
+      "category": "version",
+      "stage": "generated",
+      "metric": "wrong"
+    },
+    {
+      "id": "PQA-005",
+      "category": "version",
+      "stage": "generated",
+      "metric": "false_not_found"
+    },
+    {
+      "id": "PQA-006",
+      "category": "version",
+      "stage": "extraction",
+      "metric": "wrong"
+    },
+    {
+      "id": "PQA-007",
+      "category": "version",
+      "stage": "generated",
+      "metric": "false_not_found"
+    },
+    {
+      "id": "PQA-008",
+      "category": "version",
+      "stage": "extraction",
+      "metric": "false_not_found"
+    },
+    {
+      "id": "PQA-009",
+      "category": "table",
+      "stage": "generated",
+      "metric": "false_not_found"
+    },
+    {
+      "id": "PQA-011",
+      "category": "table",
+      "stage": "generated",
+      "metric": "false_not_found"
+    },
+    {
+      "id": "PQA-012",
+      "category": "table",
+      "stage": "generated",
+      "metric": "wrong"
+    },
+    {
+      "id": "PQA-013",
+      "category": "table",
+      "stage": "generated",
+      "metric": "false_not_found"
+    },
+    {
+      "id": "PQA-014",
+      "category": "table",
+      "stage": "generated",
+      "metric": "false_not_found"
+    },
+    {
+      "id": "PQA-015",
+      "category": "table",
+      "stage": "generated",
+      "metric": "false_not_found"
+    },
+    {
+      "id": "PQA-016",
+      "category": "table",
+      "stage": "generated",
+      "metric": "false_not_found"
+    },
+    {
+      "id": "PQA-017",
+      "category": "lookup",
+      "stage": "generated",
+      "metric": "false_not_found"
+    },
+    {
+      "id": "PQA-018",
+      "category": "lookup",
+      "stage": "generated",
+      "metric": "false_not_found"
+    },
+    {
+      "id": "PQA-021",
+      "category": "lookup",
+      "stage": "generated",
+      "metric": "false_not_found"
+    },
+    {
+      "id": "PQA-023",
+      "category": "lookup",
+      "stage": "gated",
+      "metric": "false_not_found"
+    },
+    {
+      "id": "PQA-025",
+      "category": "lookup",
+      "stage": "retrieval",
+      "metric": "false_not_found"
+    },
+    {
+      "id": "PQA-026",
+      "category": "lookup",
+      "stage": "retrieval",
+      "metric": "false_not_found"
+    }
+  ],
+  "scoring_ids": [],
+  "proposed_false_not_found": {
+    "synthetic_non_ocr": 0,
+    "task1_open": 1,
+    "rule": "The target is the extraction-stage false_not_found count. Retrieval, gated, and generated misses are recoverable."
+  },
+  "claimed": {
+    "non_ocr_correct": 38,
+    "non_ocr_total": 67,
+    "non_ocr_claimed": 60,
+    "non_ocr_reproduced": false,
+    "task1_correct": 7,
+    "task1_total": 26,
+    "task1_claimed": 5,
+    "task1_reproduced": false
+  }
+}

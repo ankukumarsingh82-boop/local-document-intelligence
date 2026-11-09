@@ -1,0 +1,18 @@
+---
+description: Keep document intelligence on this M4 Air, inside its memory and disk limits
+alwaysApply: true
+---
+
+# Local-only on this M4 Air
+
+Compute stays on this MacBook Air (M4, 16 GB unified memory, 256 GB SSD). Document text, prompts, and the index stay on disk. The one network step is `ldi setup`, which downloads weights.
+
+- Runtime is MLX. `ldi ask` and `ldi probe` set the Hugging Face hub offline before loading weights.
+- The default path is a 3B 4-bit first run, then a 7B 4-bit model. `1b` is the allowlisted Granite 4.0 1B 4-bit model. Its catalog cap is 1280 MB from a measured 1.1 GB Metal peak, and it stays at or below the 2 GB ceiling. `bge` is the allowlisted BGE Small English v1.5 8-bit embedding, capped at 512 MB. `ocr` is the allowlisted PaddleOCR-VL 1.6 8-bit model, capped at 2 GB, in its own environment. One model at a time. The embedding loads, encodes, and unloads before a chat model loads. The OCR model loads only while the chat model is unloaded. Do not add 14B, 32B, or an embedding model that stays resident beside the chat model.
+- Retrieval is SQLite full text, so a question loads one model.
+- Before a download, free space after the download stays at or above 25 GB.
+- Load only when memory pressure is green or yellow and reclaimable memory covers the Metal cap (512 MB for BGE, 1280 MB for 1B, 2 GB for OCR, 4 GB for 3B, 7 GB for 7B). A model whose cap is at or below 2 GB may load while swap is in use. Red pressure means the model stays unloaded.
+- Cap Metal with `mx.metal.set_memory_limit`. Keep `max_kv_size` small. A warm chassis is the chip throttling; leave that alone.
+- `ldi search` must keep working with the model unloaded. Text ingest must keep working with the OCR model unloaded. A scanned page may start the OCR process, which exits before a chat model loads.
+
+The machine brief is in `AGENTS.md`. Re-check with `ldi status` before loading weights.

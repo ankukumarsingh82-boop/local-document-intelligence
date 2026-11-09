@@ -1,0 +1,9 @@
+.venv/
+.venv-ocr/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+data/
+eval/results/
+models/
+.DS_Store
