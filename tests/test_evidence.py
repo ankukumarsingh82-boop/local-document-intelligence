@@ -6,9 +6,11 @@ from decimal import Decimal
 from ldi.ask import retry_instruction, settle_answer
 from ldi.evidence import (
     Evidence,
+    _polarity_conflict,
     build_evidence,
     conflicting,
     evaluate_expression,
+    fallback_release,
     format_evidence,
     integer_values,
     release_from_evidence,
@@ -777,3 +779,163 @@ def test_pinned_source_lines_survive_the_twelve_line_cap():
     assert all(item.text in lines for item in items)
     assert all("span s" in item.locator for item in items)
     assert all(":" not in item.text for item in items)
+
+
+def _source_hit(path: str, lines: list[str], pinned: int = 0, prefix: str = "s") -> Hit:
+    ids = tuple(f"{prefix}{number}" for number in range(len(lines)))
+    return Hit(
+        path,
+        1,
+        lines[0],
+        span_ids=" ".join(ids),
+        source_lines=tuple(lines),
+        source_span_ids=ids,
+        pinned_span_ids=ids[:pinned],
+    )
+
+
+def test_every_hit_shares_one_evidence_budget():
+    from ldi.config import EVIDENCE_BUDGET
+
+    hits = [
+        _source_hit(f"doc{doc}.md", [f"Doc {doc} rule {number} applies." for number in range(20)], pinned=20)
+        for doc in range(4)
+    ]
+    items = build_evidence("Which rule applies?", hits)
+    assert len(items) <= EVIDENCE_BUDGET
+    assert {item.path for item in items} == {f"doc{doc}.md" for doc in range(4)}
+    assert all(item.text.endswith(".") for item in items)
+
+
+def test_a_fallback_hit_keeps_its_best_sentence_beside_pinned_source_hits():
+    fallback = Hit("memo.md", None, "The pump is ready. Harbour dues are 3-5 percent of cargo value.")
+    crowded = [
+        _source_hit(f"board{doc}.md", [f"Board {doc} line {number} is noted." for number in range(30)], pinned=30)
+        for doc in range(3)
+    ]
+    items = build_evidence("What are the harbour dues?", [fallback, *crowded])
+    assert any("Harbour dues are 3-5 percent" in item.text for item in items)
+
+
+def test_a_digit_run_pins_its_line_and_a_word_inside_another_word_does_not():
+    from types import SimpleNamespace
+
+    from ldi.evidence import attach_source
+
+    texts = [
+        "1.2 Leave rules",
+        "This leave was formerly called casual leave.",
+        "A request needs 3-5 days of notice.",
+        "Payroll closes on the last Friday.",
+    ]
+    spans = [
+        SimpleNamespace(span_id=f"c{number}", table_id="", block=0, line=number, col=0, text=text)
+        for number, text in enumerate(texts)
+    ]
+    hit = Hit("rules.md", None, texts[2], span_id="c2", span_ids="c2")
+    numbers = attach_source("Is 3-5 days enough?", [hit], lambda _path: spans)[0]
+    assert "c2" in numbers.pinned_span_ids
+    form = attach_source("Which form applies?", [hit], lambda _path: spans)[0]
+    assert "c1" not in form.pinned_span_ids
+
+
+def test_a_cut_line_brings_its_continuation():
+    lines = [
+        "Unrelated opening sentence.",
+        "Members may claim harbour dues for each vessel that berths after",
+        "midnight on a working day.",
+        "Closing sentence.",
+    ]
+    items = build_evidence("Can members claim harbour dues?", [_source_hit("dues.md", lines)], limit=2)
+    assert [item.text for item in items] == lines[1:3]
+
+
+_LEAD = "For MSc students in every department, absence from all academic activities for more than "
+
+
+def _fragments() -> list[Evidence]:
+    from dataclasses import replace
+
+    from ldi.spans import build_spans
+
+    place = "handbook.pdf, page 3, span "
+    items = [
+        Evidence("E1", "handbook.pdf", place + "a1", _LEAD + "20 working days (not necessarily"),
+        Evidence("E2", "handbook.pdf", place + "a2", "contiguous) will lead to cancellation of registration."),
+        Evidence("E3", "handbook.pdf", place + "a3", _LEAD + "30 working days contiguously in a"),
+        Evidence("E4", "handbook.pdf", place + "a4", "semester will lead to termination of the programme."),
+    ]
+    spans, _ = build_spans([(3, "\n".join(item.text for item in items))], "digest")
+    return [replace(item, span=span) for item, span in zip(items, spans, strict=True)]
+
+
+def test_fragments_with_one_lead_in_are_not_a_conflict():
+    items = _fragments()
+    assert items[0].text[:80] == items[2].text[:80]
+    question = "After how many working days of absence is the registration of an MSc student cancelled?"
+    assert conflicting(question, items) is None
+    released = release_from_evidence(
+        '{"status":"answered","evidence":["E1","E2"],"answer":"20 working days"}',
+        items,
+        question,
+    )
+    assert released.kind == "answer"
+    assert "20 working days" in released.text
+    assert "30 working days" not in released.text
+
+
+def test_a_question_verb_missing_from_the_chosen_line_is_released():
+    items = [
+        Evidence(
+            "E1",
+            "guide.pdf",
+            "guide.pdf, page 2",
+            "The hostel transfer forms need two signed warden letters.",
+        )
+    ]
+    question = "Which hostel transfer forms include warden letters?"
+    released = release_from_evidence(
+        '{"status":"answered","evidence":["E1"],"answer":"two signed warden letters"}',
+        items,
+        question,
+    )
+    assert released.kind == "answer"
+    assert '- cite: "The hostel transfer forms need two signed warden letters."' in released.text
+    assert fallback_release(question, items).kind == "not_found"
+
+
+def test_a_negated_word_conflicts_only_when_the_answer_says_it():
+    contiguous = [
+        Evidence(
+            "E1",
+            "handbook.pdf",
+            "handbook.pdf, page 1",
+            "Absence for more than 20 working days (not necessarily contiguous) cancels registration.",
+        )
+    ]
+    assert not _polarity_conflict("Registration is cancelled after 20 working days of absence.", contiguous)
+    covered = [Evidence("E1", "policy.md", "policy.md", "Sabbatical is not covered.")]
+    assert _polarity_conflict("Sabbatical is covered.", covered)
+
+
+def test_after_two_abstentions_a_derived_word_is_not_a_match():
+    hits = [
+        Hit("finance.pdf", 2, "Salary advance requests need approval from the Managing Director."),
+    ]
+
+    def generate(_reason: str) -> str:
+        return '{"status":"not_found","evidence":[],"answer":""}'
+
+    _reply, released = settle_answer(generate, hits, "Who approved the manager's salary advance?")
+    assert released.kind == "not_found"
+    assert released.text == NOT_FOUND
+    governed = [
+        Hit(
+            "contract.pdf",
+            1,
+            "Clause 12.1 Governing law: This agreement is governed by the laws of India.",
+        )
+    ]
+    _reply, quoted = settle_answer(generate, governed, "Which law governs the agreement?")
+    assert quoted.kind == "answer"
+    assert "governed by the laws of India" in quoted.text

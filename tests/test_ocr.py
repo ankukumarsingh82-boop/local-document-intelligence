@@ -75,6 +75,47 @@ def test_an_image_only_page_is_queued(tmp_path, monkeypatch):
     assert seen[0][0].page == 1
 
 
+class _NeedsPillow:
+    """pypdf's lazy image list raises when it decodes an inline image without Pillow."""
+
+    def __len__(self) -> int:
+        raise ImportError("pillow is required to do image extraction")
+
+
+def _without_pillow(monkeypatch) -> None:
+    monkeypatch.setattr("pypdf._page.PageObject.images", property(lambda _page: _NeedsPillow()))
+
+
+def test_a_text_pdf_is_indexed_when_image_decoding_needs_pillow(tmp_path, monkeypatch):
+    monkeypatch.setenv("LDI_ROOT", str(tmp_path))
+    _without_pillow(monkeypatch)
+    pdf = tmp_path / "circular.pdf"
+    pdf.write_bytes(_pdf_with_text("Dearness allowance is revised to 50 percent."))
+    from ldi.config import index_path
+    from ldi.ingest import ingest
+    from ldi.store import Index
+
+    with Index(index_path()) as index:
+        report = ingest(pdf, index, ocr=False)
+        gaps = index.list_gaps()
+        found = index.search_question("dearness allowance", limit=4)
+    assert report.coverage[0].status == "indexed"
+    assert all("skipped" not in reason for _path, _page, reason in gaps)
+    assert found and "50 percent" in found[0].text
+
+
+def test_an_xobject_image_is_a_scan_and_an_empty_page_is_blank(monkeypatch):
+    from pypdf import PdfReader
+
+    from ldi.ocr import image_count
+
+    _without_pillow(monkeypatch)
+    scan = PdfReader(BytesIO(_pdf_with_image())).pages[0]
+    blank = PdfReader(BytesIO(_pdf_with_text(""))).pages[0]
+    assert classify_page("", image_count(scan)) == "scan"
+    assert classify_page("", image_count(blank)) == "blank"
+
+
 def test_attach_unloads_ocr_then_restores_the_chat_model(monkeypatch):
     desk = Desk()
     desk.model = object()

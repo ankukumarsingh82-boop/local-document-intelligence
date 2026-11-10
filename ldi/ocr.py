@@ -42,13 +42,38 @@ def classify_page(text: str, image_count: int) -> str:
 
 
 def image_count(page: object) -> int:
+    """Count image XObjects without decoding them. A failure here never skips the file."""
+    found = _xobject_images(page, depth=0)
+    if found:
+        return found
+    # pypdf decodes inline images here and raises ImportError when Pillow is absent.
     try:
-        images = page.images  # type: ignore[attr-defined]
+        return len(page.images)  # type: ignore[attr-defined]
     except Exception:
         return 0
+
+
+_FORM_DEPTH = 2
+
+
+def _xobject_images(holder: object, depth: int) -> int:
     try:
-        return len(images)
-    except TypeError:
+        resources = holder.get("/Resources")  # type: ignore[attr-defined]
+        if resources is None:
+            return 0
+        xobjects = resources.get_object().get("/XObject")
+        if xobjects is None:
+            return 0
+        count = 0
+        for reference in xobjects.get_object().values():
+            item = reference.get_object()
+            subtype = item.get("/Subtype")
+            if subtype == "/Image":
+                count += 1
+            elif subtype == "/Form" and depth < _FORM_DEPTH:
+                count += _xobject_images(item, depth + 1)
+        return count
+    except Exception:
         return 0
 
 

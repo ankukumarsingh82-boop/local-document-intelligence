@@ -82,6 +82,14 @@ def test_aliases_expand_the_or_list_only():
     assert "national" not in frame.required
 
 
+def test_a_near_name_cannot_cross_a_word_boundary():
+    from ldi.query import _near_name
+
+    assert not _near_name("indian", "india no")
+    assert _near_name("meera iyengar", "meera iyengr")
+    assert _near_name("india no", "india no")
+
+
 def test_a_near_name_is_classified_and_not_rewritten():
     frame = parse_question("file of Ravi Kumari", indexed_names=("ravi kumar",))
     assert "ravi kumari" in frame.names

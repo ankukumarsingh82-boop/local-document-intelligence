@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 from ldi.config import PREVIEW_CHARS
-from ldi.evidence import build_evidence, format_evidence
+from ldi.evidence import Evidence, build_evidence, format_evidence
 from ldi.store import Hit
 from ldi.verify import conflict_banner
 
@@ -61,8 +61,11 @@ def _where(hit: Hit) -> str:
     return place
 
 
-def build_messages(question: str, hits: list[Hit]) -> list[dict[str, str]]:
-    items = build_evidence(question, hits)
+def build_messages(
+    question: str, hits: list[Hit], *, items: list[Evidence] | None = None
+) -> list[dict[str, str]]:
+    if items is None:
+        items = build_evidence(question, hits)
     user = format_evidence(items) + f"\n\nQuestion: {question.strip()}"
     return [
         {"role": "system", "content": ASK_SYSTEM},

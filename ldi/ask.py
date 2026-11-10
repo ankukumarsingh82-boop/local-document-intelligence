@@ -17,18 +17,19 @@ from ldi.config import (
     project_root,
 )
 from ldi.evidence import (
+    Evidence,
     attach_source,
     build_evidence,
-    conflicting,
+    conflict_release,
     fallback_release,
-    format_conflict,
     format_evidence,
+    release_from_evidence,
 )
 from ldi.grammar import json_processor
 from ldi.guard import GuardError, assess_load, machine_snapshot
 from ldi.prompt import build_messages
 from ldi.store import Hit, Index, sha256_file, stored_file
-from ldi.verify import Release, format_not_found, release_answer
+from ldi.verify import NOT_FOUND, Release, format_not_found
 from ldi.weights import local_snapshot
 
 
@@ -74,7 +75,7 @@ def answer(question: str, model_key: str, top: int) -> None:
         )
     snap = machine_snapshot()
     assess_load(spec, snap.pressure, snap.reclaimable, snap.swap_used)
-    _generate(spec, local, question, hits, gaps)
+    _generate(spec, local, question, hits, gaps, items)
 
 
 def format_stale(paths: list[str]) -> str:
@@ -95,24 +96,21 @@ def stale_paths(hits: list[Hit]) -> list[str]:
     return found
 
 
-def settle_answer(generate, hits: list[Hit], question: str = "") -> tuple[str, Release]:
+def settle_answer(
+    generate, hits: list[Hit], question: str = "", *, items: list[Evidence] | None = None
+) -> tuple[str, Release]:
     """Generate once, and once more when the citation check withholds the answer."""
-    items = build_evidence(question, hits)
+    if items is None:
+        items = build_evidence(question, hits)
+    if not items:
+        return "", Release("not_found", NOT_FOUND)
     reply = generate("")
-    released = release_answer(reply, hits, question)
+    released = release_from_evidence(reply, items, question)
     if released.kind == "retry":
         reply = generate(released.reason)
-        released = release_answer(reply, hits, question)
+        released = release_from_evidence(reply, items, question)
         if released.kind == "retry":
-            pair = conflicting(question, items)
-            if pair is not None:
-                released = Release(
-                    "conflict",
-                    format_conflict(pair[0], pair[1]),
-                    paths=(pair[0].path, pair[1].path),
-                )
-            else:
-                released = fallback_release(question, items)
+            released = conflict_release(question, items) or fallback_release(question, items)
     return reply, released
 
 
@@ -152,6 +150,7 @@ def _generate(
     question: str,
     hits: list[Hit],
     gaps: list[tuple[str, int | None, str]],
+    items: list[Evidence],
 ) -> None:
     # stream_generate raises the Metal wired limit. Stay on generate_step and
     # keep the allocator under the cap for this model.
@@ -191,12 +190,13 @@ def _generate(
                     question,
                     hits,
                     reason,
+                    items=items,
                 )
             except RuntimeError as exc:
                 _raise_if_memory(exc, spec)
                 raise
 
-        _reply, released = settle_answer(generate, hits, question)
+        _reply, released = settle_answer(generate, hits, question, items=items)
         if released.paths:
             cited = stale_paths([Hit(path, None, "") for path in released.paths])
             if cited:
@@ -241,8 +241,12 @@ def _print_released(
     print(released.text)
 
 
-def _complete(mx, generate_step, model, tokenizer, sampler, question, hits, reason: str) -> str:
-    messages = build_messages(question, hits)
+def _complete(
+    mx, generate_step, model, tokenizer, sampler, question, hits, reason: str, *, items=None
+) -> str:
+    if items is None:
+        items = build_evidence(question, hits)
+    messages = build_messages(question, hits, items=items)
     if reason:
         messages = [
             {
@@ -257,7 +261,6 @@ def _complete(mx, generate_step, model, tokenizer, sampler, question, hits, reas
         tokenize=False,
     )
     prompt = _encode(tokenizer, templated)
-    items = build_evidence(question, hits)
     eos_ids = list(getattr(tokenizer, "eos_token_ids", None) or [])
     if not eos_ids and getattr(tokenizer, "eos_token_id", None) is not None:
         eos_ids = [tokenizer.eos_token_id]

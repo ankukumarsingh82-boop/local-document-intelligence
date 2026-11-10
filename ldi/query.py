@@ -7,6 +7,7 @@ import re
 import unicodedata
 from dataclasses import dataclass
 from datetime import date
+from pathlib import Path
 
 from ldi.config import (
     CURRENCY_FOLDS,
@@ -39,6 +40,16 @@ _ROMAN = re.compile(
 _ACRONYM = re.compile(r"\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\s+\(([A-Z][A-Z0-9]{2,})\)")
 _POSSESSIVE = re.compile(r"^[A-Z][a-z]+['’]s?$")
 _NUMBER = re.compile(r"^\d+(?:\.\d+)*$")
+_CELL_FORMULA = re.compile(
+    r"\b[A-Z]{1,3}[1-9]\d{0,6}(?:\s*[-+*/]\s*[A-Z]{1,3}[1-9]\d{0,6})+(?![\w/.-])",
+    re.IGNORECASE,
+)
+COMPARISON = re.compile(
+    r"\b(?:compare|both|match(?:es)?|agree|differ(?:s|ence)?|versus|vs|between|"
+    r"chang(?:e|ed|es)|reconcil(?:e|ed|es)|same (?:as|in)|original|restated)\b",
+    re.IGNORECASE,
+)
+_VERSIONED_FILE = re.compile(r"^(.+?)[ _-]+v?(\d+\.\d+(?:\.\d+)*)$", re.IGNORECASE)
 
 
 @dataclass(frozen=True)
@@ -133,6 +144,8 @@ def parse_question(
     indexed_names: tuple[str, ...] = (),
 ) -> QueryFrame:
     masked, phrases = _mask_phrases(question)
+    if re.search(r"\b(?:formula|sheet|cell)\b", masked, re.IGNORECASE):
+        masked = _CELL_FORMULA.sub(" ", masked)
     raw = tokenize(masked)
     intent = _intent(raw)
     names = _names(raw, indexed_names)
@@ -215,9 +228,16 @@ def slot_supported(frame: QueryFrame, text: str) -> bool:
         if ident not in words:
             return False
     for name in frame.names:
-        if name not in folded:
+        if f" {name} " not in f" {folded} ":
             return False
     return True
+
+
+def document_version(path: str) -> tuple[str, tuple[int, ...]] | None:
+    match = _VERSIONED_FILE.fullmatch(Path(path).stem)
+    if match is None:
+        return None
+    return match[1].casefold(), tuple(map(int, match[2].split(".")))
 
 
 def _normal(raw: str) -> str:
@@ -354,6 +374,9 @@ def _near_name(surface: str, known: str) -> bool:
     """Edit distance may only classify a mention. It does not rewrite the name."""
     if surface == known:
         return True
+    # "indian" is not the name "india no": an edit may not cross a word boundary.
+    if len(surface.split()) != len(known.split()):
+        return False
     return _distance(surface, known) <= NAME_EDIT_DISTANCE
 
 

@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from ldi.query import acronyms_in, fold_for_fts, names_in
+from ldi.spans import SpanRecord
 
 
 @dataclass(frozen=True)
@@ -25,6 +26,10 @@ class Hit:
     source_lines: tuple[str, ...] = ()
     source_span_ids: tuple[str, ...] = ()
     pinned_span_ids: tuple[str, ...] = ()
+    source_spans: tuple[SpanRecord, ...] = ()
+    required_entities: tuple[str, ...] = ()
+    comparison_sources: tuple[str, ...] = ()
+    required_source: str = ""
 
 
 class Index:
@@ -652,6 +657,28 @@ class Index:
                 LIMIT ?
                 """,
                 (heading_weight, body_weight, match, limit),
+            ).fetchall()
+        except sqlite3.OperationalError:
+            return []
+        return [(str(passage_id), float(score)) for passage_id, score in rows]
+
+    def lexical_ids_in(
+        self, match: str, path: str, limit: int, heading_weight: float, body_weight: float
+    ) -> list[tuple[str, float]]:
+        """The same bm25 query, restricted to the passages of one file."""
+        if not match.strip():
+            return []
+        try:
+            rows = self.db.execute(
+                """
+                SELECT passages_fts.passage_id, bm25(passages_fts, ?, ?) AS score
+                FROM passages_fts
+                JOIN passage_keys ON passage_keys.passage_id = passages_fts.passage_id
+                WHERE passages_fts MATCH ? AND passage_keys.path = ?
+                ORDER BY score
+                LIMIT ?
+                """,
+                (heading_weight, body_weight, match, path, limit),
             ).fetchall()
         except sqlite3.OperationalError:
             return []

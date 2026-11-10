@@ -91,12 +91,16 @@ RRF_WEIGHT_DENSE_TABLE = 0.5
 BM25_HEADING_WEIGHT = 2.0
 BM25_BODY_WEIGHT = 1.0
 AND_COVERAGE_RANK_BONUS = 3
+# A file the question names by two adjacent words of its file name. bm25 is scaled by up to 1.5.
+NAME_BOOST = 0.5
 # A four-term question that matches one term stays above this. Tuned on dev only.
 LEXICAL_COVERAGE_FLOOR = 0.15
 MAX_QUERY_TOKENS = 20
 LONG_DIGIT_MIN = 5
 NAME_EDIT_DISTANCE = 2
 DENSE_ENABLED = False
+# The document-first route is enabled in replay until its scan cases clear the release gate.
+DOCUMENT_FIRST_RECONCILIATION = False
 REDUCED_RETRIEVAL_MODE = "reduced retrieval mode"
 # Floor fixes. Defaults are the fixed product. A measurement arm turns a later fix off.
 # Fix 1. A finished prose cut does not pack its tail a second time.
@@ -111,6 +115,10 @@ COVER_EVERY_LINE = True
 EVIDENCE_MATCHED_ROWS = 3
 # A table whose original lines fit this limit is quoted whole.
 TABLE_EVIDENCE_CHARS = 1400
+# Source lines shared by every hit of one question. Hits take turns, best hit first.
+EVIDENCE_BUDGET = 24
+# A cut line at least this long also brings the next line of its hit.
+CONTINUATION_MIN_CHARS = 40
 
 # One-character tokens are kept after these words.
 STRUCTURAL_NOUNS = frozenset(
