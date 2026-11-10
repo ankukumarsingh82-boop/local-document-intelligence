@@ -1,0 +1,132 @@
+{
+  "documents": [
+    {
+      "name": "clauses.md",
+      "text": "Clause 12.1 A berth change needs 14 days of written notice.\nNotice v2.0 was posted on the harbour gate.\nThe posted fee is Rs. 480.\nNo. 4 is the night watch.\nA delay, i.e. a late tide, is logged once.\nRead clause 12.1.\nThe harbour master signs the slip.\nClause 4.2 The draft limit is 3.5 metres.\n"
+    },
+    {
+      "name": "dues.md",
+      "text": "| Harbour dues | Harbour dues |\n| Craft | Fee |\n| Skiff | 75 |\n| Ketch | 140 |\n"
+    },
+    {
+      "name": "roster.md",
+      "text": "| Berth | Watch | Lamps |\n| B01 | evening watch | 4 lamps |\n| B02 | evening watch | 5 lamps |\n| B03 | evening watch | 6 lamps |\n| B04 | evening watch | 7 lamps |\n| B05 | evening watch | 8 lamps |\n| B06 | evening watch | 9 lamps |\n| B07 | evening watch | 10 lamps |\n| B08 | evening watch | 11 lamps |\n| B09 | evening watch | 12 lamps |\n| B10 | evening watch | 13 lamps |\n| B11 | evening watch | 14 lamps |\n| B12 | evening watch | 15 lamps |\n| B13 | evening watch | 16 lamps |\n| B14 | evening watch | 17 lamps |\n| B15 | evening watch | 18 lamps |\n| B16 | evening watch | 19 lamps |\n| B17 | evening watch | 20 lamps |\n| B18 | evening watch | 21 lamps |\n| B19 | evening watch | 22 lamps |\n| B20 | evening watch | 23 lamps |\n| B21 | evening watch | 24 lamps |\n| B22 | evening watch | 25 lamps |\n| B23 | evening watch | 26 lamps |\n| B24 | evening watch | 27 lamps |\n| B25 | evening watch | 28 lamps |\n| B26 | evening watch | 29 lamps |\n| B27 | evening watch | 30 lamps |\n| B28 | evening watch | 31 lamps |\n| B29 | evening watch | 32 lamps |\n| B30 | evening watch | 33 lamps |\n| B31 | evening watch | 34 lamps |\n| B32 | evening watch | 35 lamps |\n| B33 | evening watch | 36 lamps |\n| B34 | evening watch | 37 lamps |\n| B35 | evening watch | 38 lamps |\n| B36 | evening watch | 39 lamps |\n| B37 | evening watch | 40 lamps |\n| B38 | evening watch | 41 lamps |\n| B39 | evening watch | 42 lamps |\n| B40 | evening watch | 43 lamps |\n| B41 | evening watch | 44 lamps |\n| B42 | evening watch | 45 lamps |\n| B43 | evening watch | 46 lamps |\n| B44 | evening watch | 47 lamps |\n| B45 | evening watch | 48 lamps |\n| B46 | evening watch | 49 lamps |\n| B47 | evening watch | 50 lamps |\n| B48 | evening watch | 51 lamps |\n"
+    },
+    {
+      "name": "lamps.md",
+      "text": "The red lamp means the channel is shut.\nThe red lamp means the channel is open.\n"
+    },
+    {
+      "name": "existing_board.md",
+      "text": "Existing board\n| Lane | Boats |\n| North | 41 |\n| South | 8 |\n\nExisting board\n| Lane | Boats |\n| North | 41 |\n| South | 8 |\n"
+    },
+    {
+      "name": "revised_board.md",
+      "text": "Revised board\n| Lane | Boats |\n| North | 19 |\n| South | 8 |\n"
+    }
+  ],
+  "cases": [
+    {
+      "id": "U01",
+      "question": "How many days of written notice does clause 12.1 require for a berth change?",
+      "anchors": [
+        "Clause 12.1 A berth change needs 14 days of written notice."
+      ],
+      "abstain": false
+    },
+    {
+      "id": "U02",
+      "question": "Which notice version was posted on the harbour gate?",
+      "anchors": [
+        "Notice v2.0 was posted on the harbour gate."
+      ],
+      "abstain": false
+    },
+    {
+      "id": "U03",
+      "question": "What posted fee is written with Rs.?",
+      "anchors": [
+        "The posted fee is Rs. 480."
+      ],
+      "abstain": false
+    },
+    {
+      "id": "U04",
+      "question": "Which item is the night watch?",
+      "anchors": [
+        "No. 4 is the night watch."
+      ],
+      "abstain": false
+    },
+    {
+      "id": "U05",
+      "question": "What example does the delay rule give after i.e.?",
+      "anchors": [
+        "A delay, i.e. a late tide, is logged once."
+      ],
+      "abstain": false
+    },
+    {
+      "id": "U06",
+      "question": "Who signs the slip after clause 12.1?",
+      "anchors": [
+        "The harbour master signs the slip."
+      ],
+      "abstain": false
+    },
+    {
+      "id": "U07",
+      "question": "What is the fee for a Skiff in the harbour dues table?",
+      "anchors": [
+        "75"
+      ],
+      "abstain": false
+    },
+    {
+      "id": "U08",
+      "question": "How many lamps does berth B40 list?",
+      "anchors": [
+        "43 lamps"
+      ],
+      "abstain": false
+    },
+    {
+      "id": "U09",
+      "question": "What does the red lamp mean when the channel is shut?",
+      "anchors": [
+        "The red lamp means the channel is shut."
+      ],
+      "abstain": false
+    },
+    {
+      "id": "U10",
+      "question": "How many boats does the revised board list for the North lane?",
+      "anchors": [
+        "19"
+      ],
+      "abstain": false
+    },
+    {
+      "id": "U11",
+      "question": "How many boats does the existing board list for the North lane?",
+      "anchors": [
+        "41"
+      ],
+      "abstain": false
+    },
+    {
+      "id": "U12",
+      "question": "What draft limit does clause 4.2 state?",
+      "anchors": [
+        "Clause 4.2 The draft limit is 3.5 metres."
+      ],
+      "abstain": false
+    },
+    {
+      "id": "U13",
+      "question": "What is the submarine complement?",
+      "anchors": [],
+      "abstain": true
+    }
+  ]
+}

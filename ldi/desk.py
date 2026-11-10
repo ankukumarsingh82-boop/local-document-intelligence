@@ -13,9 +13,11 @@ from ldi.ask import _cap_metal, _encode, _raise_if_memory
 from ldi.chat import CHAT_HISTORY, CHAT_MAX_TOKENS, SYSTEM, trim_history
 from ldi.config import (
     CHAT_MODEL,
+    DENSE_ENABLED,
     MAX_KV_TOKENS,
     MODELS,
     PREFILL_STEP,
+    REDUCED_RETRIEVAL_MODE,
     SUPPORTED_SUFFIXES,
     TEXT_SUFFIXES,
     ModelSpec,
@@ -228,6 +230,7 @@ class Desk:
             "messages": list(self.history),
             "generation": self.generation.as_dict(),
             "memory": pressure_label(snap.pressure),
+            "retrieval_mode": "" if DENSE_ENABLED else REDUCED_RETRIEVAL_MODE,
             "models": self._models(snap),
         }
 

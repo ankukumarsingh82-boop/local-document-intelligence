@@ -11,11 +11,13 @@ from ldi.ask import ModelNotReady, answer
 from ldi.chat import chat
 from ldi.config import (
     CHAT_MODEL,
+    DENSE_ENABLED,
     DEFAULT_MODEL,
     EMBEDDINGS,
     MAX_TOP_CHUNKS,
     MODELS,
     OCR_MODELS,
+    REDUCED_RETRIEVAL_MODE,
     RESERVE_BYTES,
     TOP_CHUNKS,
     gb,
@@ -30,9 +32,10 @@ from ldi.guard import (
     machine_snapshot,
     pressure_label,
 )
-from ldi.ingest import ingest
+from ldi.ingest import format_coverage, ingest
 from ldi.probe import probe
 from ldi.prompt import format_passages
+from ldi.retrieve import retrieve
 from ldi.store import Index
 from ldi.verify import format_not_found
 from ldi.weights import download, local_snapshot
@@ -156,6 +159,9 @@ def _ingest(path: Path, *, reset: bool) -> None:
         f"Indexed {report.files} {files}, {report.chunks} {chunks}. "
         f"Left {report.unchanged} unchanged."
     )
+    printed = format_coverage(report)
+    if printed:
+        print(printed)
 
 
 def _search(question: str, top: int) -> None:
@@ -163,12 +169,14 @@ def _search(question: str, top: int) -> None:
     if not path.exists():
         raise ValueError("The index is empty. Run ldi ingest on a folder of documents.")
     with Index(path) as index:
-        hits = index.search_question(question, limit=top)
+        found = retrieve(index, question, limit=top)
         gaps = index.list_gaps()
-    if not hits:
+    if not found.hits:
         print(format_not_found(gaps))
-        return
-    print(format_passages(hits))
+    else:
+        print(format_passages(found.hits))
+    if not DENSE_ENABLED:
+        print(REDUCED_RETRIEVAL_MODE)
 
 
 def _status() -> None:

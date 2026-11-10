@@ -42,6 +42,23 @@ def test_a_blank_pdf_does_not_start_the_worker(tmp_path, monkeypatch):
     assert called == []
 
 
+def test_ocr_can_stay_pending(tmp_path, monkeypatch):
+    monkeypatch.setenv("LDI_ROOT", str(tmp_path))
+    called = []
+    monkeypatch.setattr("ldi.ingest.recognize", lambda scans: called.append(scans))
+    pdf = tmp_path / "scan.pdf"
+    pdf.write_bytes(_pdf_with_image())
+    from ldi.config import index_path
+    from ldi.ingest import format_coverage, ingest
+    from ldi.store import Index
+
+    with Index(index_path()) as index:
+        report = ingest(pdf, index, ocr=False)
+    assert called == []
+    assert report.coverage[0].status == "ocr_pending"
+    assert "scan.pdf\tocr_pending" in format_coverage(report)
+
+
 def test_an_image_only_page_is_queued(tmp_path, monkeypatch):
     monkeypatch.setenv("LDI_ROOT", str(tmp_path))
     seen = []

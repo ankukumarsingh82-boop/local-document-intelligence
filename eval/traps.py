@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import random
 from dataclasses import dataclass
 
 from eval.config import TRAP_DEV_SEED, TRAP_HELD_SEED
@@ -259,6 +260,20 @@ def build_traps(split: str, seed: int) -> list[Trap]:
     if tuple(kinds) != KINDS:
         raise RuntimeError("trap kinds drifted from the fixed list")
     return traps
+
+
+def near_id_pair(seed: int) -> tuple[str, str]:
+    """Two long digit strings that differ by a transposition. The prefix is not fixed."""
+    rng = random.Random(seed)
+    left = str(100000 + rng.randrange(900000))
+    chars = list(left)
+    for index in range(len(chars) - 1):
+        if chars[index] == chars[index + 1]:
+            continue
+        chars[index], chars[index + 1] = chars[index + 1], chars[index]
+        return left, "".join(chars)
+    chars[-1] = str((int(chars[-1]) + 1) % 10)
+    return left, "".join(chars)
 
 
 def all_traps() -> list[Trap]:

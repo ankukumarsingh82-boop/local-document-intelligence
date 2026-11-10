@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from pathlib import Path
 
 from ldi.config import PREVIEW_CHARS
 from ldi.evidence import build_evidence, format_evidence
@@ -53,7 +54,10 @@ def format_passages(hits: list[Hit]) -> str:
 def _where(hit: Hit) -> str:
     place = hit.path if hit.page is None else f"{hit.path}, page {hit.page}"
     if hit.superseded:
-        return f"{place} [superseded]"
+        place = f"{place} [superseded]"
+    if hit.also_found_in:
+        names = ", ".join(Path(path).name for path in hit.also_found_in)
+        place = f"{place} also found in {names}"
     return place
 
 

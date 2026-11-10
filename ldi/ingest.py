@@ -29,14 +29,35 @@ from ldi.store import Index, sha256_file, stored_file
 
 
 @dataclass(frozen=True)
+class FileCoverage:
+    path: str
+    status: str
+    reason: str = ""
+
+
+@dataclass(frozen=True)
 class IngestReport:
     files: int = 0
     chunks: int = 0
     unchanged: int = 0
     skipped: int = 0
+    coverage: tuple[FileCoverage, ...] = ()
 
 
-def ingest(path: Path, index: Index, *, reset: bool = False) -> IngestReport:
+def format_coverage(report: IngestReport) -> str:
+    """One corpus file per line: indexed, ocr_pending, or failed(reason)."""
+    lines = []
+    for item in report.coverage:
+        name = Path(item.path).name
+        if item.status == "failed":
+            reason = " ".join(item.reason.split())
+            lines.append(f"{name}\tfailed({reason})")
+        else:
+            lines.append(f"{name}\t{item.status}")
+    return "\n".join(lines)
+
+
+def ingest(path: Path, index: Index, *, reset: bool = False, ocr: bool = True) -> IngestReport:
     if not path.exists():
         raise ValueError(f"Nothing is at {path}.")
     if path.is_file() and path.suffix.lower() not in SUPPORTED_SUFFIXES:
@@ -55,6 +76,7 @@ def ingest(path: Path, index: Index, *, reset: bool = False) -> IngestReport:
     directory = folder.is_dir()
     seen: set[str] = set()
     deferred: list[tuple] = []
+    coverage: list[FileCoverage] = []
     for file in _iter_files(path):
         suffix = file.suffix.lower()
         if suffix not in SUPPORTED_SUFFIXES:
@@ -67,15 +89,19 @@ def ingest(path: Path, index: Index, *, reset: bool = False) -> IngestReport:
         except OSError as exc:
             _skip(f"Skipped {file.name}: {exc}")
             _drop_text(index, stored, "skipped")
+            coverage.append(FileCoverage(stored, "failed", str(exc)))
             report = _add(report, skipped=1)
             continue
         if stat.st_size > MAX_FILE_BYTES:
-            _skip(f"Skipped {file.name}: larger than 32 MB.")
+            reason = "larger than 32 MB"
+            _skip(f"Skipped {file.name}: {reason}.")
             _drop_text(index, stored, "skipped")
+            coverage.append(FileCoverage(stored, "failed", reason))
             report = _add(report, skipped=1)
             continue
         digest = sha256_file(file)
         if index.is_unchanged(stored, stat.st_mtime_ns, stat.st_size, digest):
+            coverage.append(FileCoverage(stored, "indexed"))
             report = _add(report, unchanged=1)
             continue
         try:
@@ -83,19 +109,38 @@ def ingest(path: Path, index: Index, *, reset: bool = False) -> IngestReport:
         except Exception as exc:
             _skip(f"Skipped {file.name}: {exc}")
             _drop_text(index, stored, "skipped")
+            coverage.append(FileCoverage(stored, "failed", str(exc)))
             report = _add(report, skipped=1)
             continue
         item = (stored, stat, digest, suffix, pages, extra_gaps, scans, merges)
+        if scans and not ocr:
+            if pages:
+                report = _add(report, files=1, chunks=_commit(index, item))
+            else:
+                _drop_text(index, stored, "ocr_pending")
+                report = _add(report, skipped=1)
+            coverage.append(FileCoverage(stored, "ocr_pending", f"{len(scans)} scanned pages"))
+            continue
         if scans:
             deferred.append(item)
             continue
         report = _add(report, files=1, chunks=_commit(index, item))
+        coverage.append(FileCoverage(stored, "indexed"))
     if deferred:
-        report = _add(report, **_recognize_deferred(index, deferred))
+        added, deferred_coverage = _recognize_deferred(index, deferred)
+        report = _add(report, **added)
+        coverage.extend(deferred_coverage)
     if directory:
         index.purge_absent(seen, folder, root)
     index.refresh_labels()
-    return report
+    index.dedupe_passages()
+    return IngestReport(
+        report.files,
+        report.chunks,
+        report.unchanged,
+        report.skipped,
+        tuple(sorted(coverage, key=lambda item: Path(item.path).name)),
+    )
 
 
 def _add(report: IngestReport, **counts: int) -> IngestReport:
@@ -155,24 +200,31 @@ def _commit(
         confidences,
         page_sources,
     )
+    from ldi.chunker import uncovered_lines
+
+    for line in uncovered_lines(spans, passages):
+        print(line, file=sys.stderr)
     index.replace_spans(stored, spans, passages)
     index.replace_provisions(stored, extract_provisions(stored, spans))
     return len(chunks)
 
 
-def _recognize_deferred(index: Index, deferred: list[tuple]) -> dict[str, int]:
+def _recognize_deferred(index: Index, deferred: list[tuple]) -> tuple[dict[str, int], list[FileCoverage]]:
     scans = [scan for item in deferred for scan in item[6]]
     try:
         texts = recognize(scans)
         confidence = getattr(recognize, "confidence", None)
     except Exception as exc:
+        covered = []
         for item in deferred:
             _skip(f"Skipped {Path(item[0]).name}: {exc}")
             _drop_text(index, item[0], "skipped")
-        return {"skipped": len(deferred)}
+            covered.append(FileCoverage(item[0], "failed", str(exc)))
+        return {"skipped": len(deferred)}, covered
     cursor = 0
     files = 0
     chunks = 0
+    covered = []
     for item in deferred:
         stored, stat, digest, suffix, pages, extra_gaps, item_scans = item[:7]
         page_text = list(pages)
@@ -197,7 +249,8 @@ def _recognize_deferred(index: Index, deferred: list[tuple]) -> dict[str, int]:
             sources,
         )
         files += 1
-    return {"files": files, "chunks": chunks}
+        covered.append(FileCoverage(stored, "indexed"))
+    return {"files": files, "chunks": chunks}, covered
 
 
 def _has_incomplete(gaps: list[tuple[int | None, str]]) -> bool:

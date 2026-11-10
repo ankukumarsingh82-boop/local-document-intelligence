@@ -16,7 +16,14 @@ from ldi.config import (
     index_path,
     project_root,
 )
-from ldi.evidence import build_evidence, conflicting, fallback_release, format_conflict, format_evidence
+from ldi.evidence import (
+    attach_source,
+    build_evidence,
+    conflicting,
+    fallback_release,
+    format_conflict,
+    format_evidence,
+)
 from ldi.grammar import json_processor
 from ldi.guard import GuardError, assess_load, machine_snapshot
 from ldi.prompt import build_messages
@@ -122,7 +129,21 @@ def _hits(question: str, top: int) -> list[Hit]:
     if not path.exists():
         raise ValueError("The index is empty. Run ldi ingest on a folder of documents.")
     with Index(path) as index:
-        return index.search_question(question, limit=top)
+        from ldi import config
+
+        if not config.SOURCE_EVIDENCE:
+            return index.search_question(question, limit=top)
+        from ldi.retrieve import retrieve
+
+        found = retrieve(index, question, limit=top)
+        cache: dict[str, list] = {}
+
+        def load(name: str):
+            if name not in cache:
+                cache[name] = index.spans_for(name)
+            return cache[name]
+
+        return attach_source(question, found.hits, load)
 
 
 def _generate(

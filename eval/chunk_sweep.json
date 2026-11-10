@@ -1,0 +1,47 @@
+{
+  "dev": {
+    "500": {
+      "cases": 48,
+      "correct_at_5": 36,
+      "correct_at_10": 37,
+      "recall_at_5": 0.75,
+      "recall_at_10": 0.7708,
+      "duplicate_rate_top5": 0.3292,
+      "mean_prompt_tokens": 496.3
+    },
+    "800": {
+      "cases": 48,
+      "correct_at_5": 36,
+      "correct_at_10": 37,
+      "recall_at_5": 0.75,
+      "recall_at_10": 0.7708,
+      "duplicate_rate_top5": 0.3333,
+      "mean_prompt_tokens": 647.7
+    },
+    "1200": {
+      "cases": 48,
+      "correct_at_5": 37,
+      "correct_at_10": 38,
+      "recall_at_5": 0.7708,
+      "recall_at_10": 0.7917,
+      "duplicate_rate_top5": 0.3375,
+      "mean_prompt_tokens": 793.1
+    }
+  },
+  "choice": {
+    "target": 1200,
+    "hard_max": 1400,
+    "rule": "Highest dev Recall@10, then Recall@5, then a lower duplicate rate, then fewer prompt tokens."
+  },
+  "heldout": {
+    "1200": {
+      "cases": 23,
+      "correct_at_5": 17,
+      "correct_at_10": 18,
+      "recall_at_5": 0.7391,
+      "recall_at_10": 0.7826,
+      "duplicate_rate_top5": 0.2522,
+      "mean_prompt_tokens": 836.6
+    }
+  }
+}

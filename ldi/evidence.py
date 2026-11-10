@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 import unicodedata
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
@@ -82,6 +82,8 @@ class Evidence:
 
 def build_evidence(question: str, hits: list[Hit], limit: int = EVIDENCE_LIMIT) -> list[Evidence]:
     """Split current passages into short items and keep the ones the question names."""
+    if any(hit.source_lines for hit in hits):
+        return _evidence_from_source(question, hits, limit)
     drafts: list[tuple[str, str, str]] = []
     for hit in hits:
         if hit.superseded:
@@ -97,6 +99,216 @@ def build_evidence(question: str, hits: list[Hit], limit: int = EVIDENCE_LIMIT) 
         Evidence(f"E{number}", path, locator, text)
         for number, (path, locator, text) in enumerate(chosen, start=1)
     ]
+
+
+_CLAUSE_HEADING = re.compile(
+    r"^(?:(?:clause|section)\s+)?(?:\d+(?:\.\d+)+|annexure\s+\S+|schedule\s+\S+)\b",
+    re.IGNORECASE,
+)
+
+
+def attach_source(question: str, hits: list[Hit], load_spans) -> list[Hit]:
+    """Replace each hit's evidence lines with the original source spans."""
+    attached = []
+    for hit in hits:
+        lines, ids, pinned = _unit_for_hit(question, hit, load_spans(hit.path))
+        attached.append(
+            replace(
+                hit,
+                source_lines=tuple(lines),
+                source_span_ids=tuple(ids),
+                pinned_span_ids=tuple(pinned),
+            )
+        )
+    return attached
+
+
+def _evidence_from_source(question: str, hits: list[Hit], limit: int) -> list[Evidence]:
+    """Quote source lines. Pinned rows stay even when they pass the line cap."""
+    terms = {term.casefold() for term in content_terms(question)}
+    pinned: list[tuple[str, str, str]] = []
+    rest: list[tuple[str, str, str]] = []
+    seen: set[tuple[str, str]] = set()
+    for hit in hits:
+        if hit.superseded:
+            continue
+        if not hit.source_lines:
+            for text, locator in _pieces(hit):
+                key = (hit.path, locator)
+                if key in seen:
+                    continue
+                seen.add(key)
+                rest.append((hit.path, locator, text))
+            continue
+        pin_ids = set(hit.pinned_span_ids)
+        for text, span_id in zip(hit.source_lines, hit.source_span_ids):
+            key = (hit.path, span_id)
+            if key in seen:
+                continue
+            seen.add(key)
+            row = (hit.path, _span_place(hit, span_id), text)
+            if span_id in pin_ids:
+                pinned.append(row)
+            else:
+                rest.append(row)
+    room = limit - len(pinned)
+    if room < 0:
+        chosen = pinned
+    else:
+        order = sorted(range(len(rest)), key=lambda index: (-_overlap(terms, rest[index][2]), index))
+        chosen = pinned + [rest[index] for index in sorted(order[:room])]
+    return [
+        Evidence(f"E{number}", path, locator, text)
+        for number, (path, locator, text) in enumerate(chosen, start=1)
+    ]
+
+
+def _span_place(hit: Hit, span_id: str) -> str:
+    place = hit.path if hit.page is None else f"{hit.path}, page {hit.page}"
+    return f"{place}, span {span_id}"
+
+
+def _unit_for_hit(question: str, hit: Hit, spans) -> tuple[list[str], list[str], list[str]]:
+    wanted = {item for item in f"{hit.span_ids} {hit.span_id}".split() if item}
+    chosen = [span for span in spans if span.span_id in wanted]
+    if not chosen:
+        return [], [], []
+    table_ids = {span.table_id for span in chosen if span.table_id}
+    if table_ids:
+        return _table_unit(question, [span for span in spans if span.table_id in table_ids])
+    return _clause_unit(question, spans, chosen)
+
+
+def _table_unit(question: str, cells) -> tuple[list[str], list[str], list[str]]:
+    from ldi import config
+    from ldi.spans import table_header_lines
+
+    by_line: dict[int, list] = {}
+    for cell in cells:
+        by_line.setdefault(cell.line, []).append(cell)
+    ordered = []
+    meta = []
+    for line in sorted(by_line):
+        row = sorted(by_line[line], key=lambda cell: (cell.col or 0, cell.span_id))
+        ordered.append(row)
+        meta.append((line, [(cell.text, cell.cell_type or "text") for cell in row]))
+    titles, headers = table_header_lines(meta)
+    title_set, header_set = set(titles), set(headers)
+    title_rows, header_rows, body_rows = [], [], []
+    for row in ordered:
+        line = row[0].line
+        if line in title_set:
+            title_rows.append(row)
+        elif line in header_set:
+            header_rows.append(row)
+        else:
+            body_rows.append(row)
+    terms = [term.casefold() for term in content_terms(question)]
+    matched = _best_rows(body_rows, terms, config.EVIDENCE_MATCHED_ROWS)
+    whole = "\n".join(cell.text for row in ordered for cell in row)
+    use = ordered if len(whole) <= config.TABLE_EVIDENCE_CHARS else title_rows + header_rows + matched
+    pin_ids = {cell.span_id for row in header_rows + matched for cell in row}
+    return _span_lines(use, pin_ids)
+
+
+def _best_rows(rows: list, terms: list[str], limit: int) -> list:
+    """Up to `limit` body rows, preferring a term that is rare inside the table."""
+    if limit <= 0 or not rows:
+        return []
+    folded = [" ".join(cell.text for cell in row).casefold() for row in rows]
+    rarity = {
+        term: 1.0 / (1 + sum(term in text for text in folded))
+        for term in terms
+    }
+    scored = []
+    for index, text in enumerate(folded):
+        score = sum(rarity[term] for term in terms if term in text)
+        if score > 0:
+            scored.append((score, index))
+    scored.sort(key=lambda item: (-item[0], item[1]))
+    chosen = sorted(index for _score, index in scored[:limit])
+    return [rows[index] for index in chosen]
+
+
+def _clause_unit(question: str, spans, chosen) -> tuple[list[str], list[str], list[str]]:
+    prose = [span for span in spans if not span.table_id]
+    prose.sort(key=lambda span: (span.block, span.line, span.col or 0, span.span_id))
+    positions = {span.span_id: index for index, span in enumerate(prose)}
+    indexes = [positions[span.span_id] for span in chosen if span.span_id in positions]
+    if not indexes:
+        return _span_lines([chosen], {span.span_id for span in chosen})
+    start = min(indexes)
+    while start > 0 and _clause_level(prose[start].text) is None:
+        start -= 1
+    if _clause_level(prose[start].text) is None:
+        # No enclosing heading. Quote the retrieved lines, not the whole document.
+        window = [prose[index] for index in range(min(indexes), max(indexes) + 1)]
+    else:
+        level = _clause_level(prose[start].text) or 0
+        end = max(indexes) + 1
+        while end < len(prose):
+            later = _clause_level(prose[end].text)
+            if later is not None and level and later <= level:
+                break
+            end += 1
+        window = prose[start:end]
+    terms = [term.casefold() for term in content_terms(question)]
+    hit_ids = {span.span_id for span in chosen}
+
+    def overlap(span) -> int:
+        folded = span.text.casefold()
+        return sum(1 for term in terms if term in folded)
+
+    ranked = sorted(window, key=lambda span: (-overlap(span), prose.index(span)))
+    pinned: list[str] = []
+
+    def take(span) -> None:
+        if span.span_id in pinned or len(pinned) >= EVIDENCE_LIMIT:
+            return
+        pinned.append(span.span_id)
+
+    if window and _clause_level(window[0].text) is not None:
+        take(window[0])
+    for span in ranked:
+        if span.span_id in hit_ids and overlap(span) > 0:
+            take(span)
+    for span in ranked:
+        if overlap(span) > 0:
+            take(span)
+    if not pinned:
+        for span in chosen:
+            take(span)
+    return _span_lines([window], set(pinned))
+
+
+def _clause_level(text: str) -> int | None:
+    if _CLAUSE_HEADING.match(text.strip()) is None:
+        return None
+    numbers = re.match(
+        r"^(?:(?:clause|section)\s+)?(\d+(?:\.\d+)+)",
+        text.strip(),
+        re.IGNORECASE,
+    )
+    if numbers:
+        return numbers.group(1).count(".") + 1
+    return 1
+
+
+def _span_lines(rows: list, pinned: set[str]) -> tuple[list[str], list[str], list[str]]:
+    lines: list[str] = []
+    ids: list[str] = []
+    kept: list[str] = []
+    seen: set[str] = set()
+    for row in rows:
+        for span in row:
+            if span.span_id in seen:
+                continue
+            seen.add(span.span_id)
+            lines.append(span.text)
+            ids.append(span.span_id)
+            if span.span_id in pinned:
+                kept.append(span.span_id)
+    return lines, ids, kept
 
 
 def format_evidence(items: list[Evidence]) -> str:

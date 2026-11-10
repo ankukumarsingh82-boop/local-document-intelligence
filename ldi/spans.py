@@ -14,12 +14,7 @@ import re
 import unicodedata
 from dataclasses import dataclass
 
-from ldi.config import (
-    EXTRACTOR_VERSION,
-    INSTRUCTION_PHRASES,
-    OCR_LOW_CONFIDENCE,
-    PASSAGE_CHARS,
-)
+from ldi.config import EXTRACTOR_VERSION, INSTRUCTION_PHRASES, OCR_LOW_CONFIDENCE
 
 _CELL = re.compile(r"^(?P<sheet>[^!\n]+)!(?P<col>[A-Z]+)(?P<row>\d+) (?P<value>.*)$")
 _UNIT = re.compile(
@@ -75,6 +70,7 @@ class SpanRecord:
     period: str
     row_role: str
     text: str
+    blank_before: bool = False
 
 
 @dataclass(frozen=True)
@@ -82,6 +78,19 @@ class PassageRecord:
     passage_id: str
     span_ids: str
     text: str
+    doc_sha: str = ""
+    page_start: int | None = None
+    page_end: int | None = None
+    sheet: str = ""
+    row_start: int | None = None
+    row_end: int | None = None
+    heading_path: str = ""
+    source_type: str = ""
+    passage_hash: str = ""
+    chunker_version: str = ""
+    label: str = ""
+    logs: tuple = ()
+    aliases: str = ""
 
 
 @dataclass(frozen=True)
@@ -102,6 +111,7 @@ class _Draft:
     period: str = ""
     row_role: str = ""
     row: int = 0
+    blank_before: bool = False
 
 
 def normalise_span(text: str) -> str:
@@ -214,7 +224,9 @@ def build_spans(
         )
     drafts.extend(drafts_from_tables(tables or []))
     spans = _identify(drafts, document_key(path, digest))
-    return spans, _passages(spans)
+    from ldi.chunker import pack_passages
+
+    return spans, pack_passages(spans, digest=digest, path=path)
 
 
 def span_is_fresh(span: SpanRecord) -> bool:
@@ -266,32 +278,39 @@ def _drafts_for_page(
     block = block_base
     line_number = 0
     index = 0
-    kept = [line for line in lines if line]
     caption = ""
     scores = iter(confidences or [])
-    while index < len(kept):
-        if "|" in kept[index]:
+    pending_blank = False
+    while index < len(lines):
+        if not lines[index]:
+            pending_blank = True
+            index += 1
+            continue
+        if "|" in lines[index]:
             run = []
-            while index < len(kept) and "|" in kept[index]:
-                run.append(kept[index])
+            while index < len(lines) and lines[index] and "|" in lines[index]:
+                run.append(lines[index])
                 index += 1
             drafts.extend(_pipe_drafts(page, run, source_type, block, line_number, caption))
             line_number += len(run)
             block += 1
             caption = ""
+            pending_blank = False
             continue
-        caption = kept[index]
+        caption = lines[index]
         score = next(scores, None) if source_type == "ocr" else None
         drafts.append(
             _Draft(
-                text=kept[index],
+                text=lines[index],
                 source_type=source_type,
                 page=page,
                 block=block,
                 line=line_number,
                 confidence=score,
+                blank_before=pending_blank,
             )
         )
+        pending_blank = False
         line_number += 1
         index += 1
         block += 1
@@ -378,7 +397,11 @@ def _table_drafts(
     caption: str = "",
 ) -> list[_Draft]:
     header_row = _header_row(cells)
-    headers = {column: value for row, column, _letters, value in cells if row == header_row}
+    headers = {
+        column: value
+        for row, column, _letters, value in cells
+        if header_row >= 0 and row == header_row
+    }
     keys = {row: value for row, column, _letters, value in cells if column == 1}
     roles = _row_roles(cells)
     drafts: list[_Draft] = []
@@ -428,13 +451,66 @@ def _row_roles(cells: list[tuple[int, int, str, str]]) -> dict[int, str]:
     return roles
 
 
+def table_header_lines(
+    rows: list[tuple[int, list[tuple[str, str]]]],
+) -> tuple[list[int], list[int]]:
+    """Return title lines and header lines.
+
+    A merged title has one distinct text label and a later row that is wider
+    or that names two columns. That title is not a header. Following rows
+    whose cells are all text are the header, including a second header row.
+    The last of those is the column header.
+    """
+    ordered = sorted(rows, key=lambda item: item[0])
+    parsed = []
+    for line, cells in ordered:
+        labels = [text.strip() for text, kind in cells if kind == "text" and text.strip()]
+        nonempty = [(text, kind) for text, kind in cells if text.strip()]
+        parsed.append((line, labels, nonempty, len(nonempty)))
+    titles: list[int] = []
+    headers: list[int] = []
+    for index, (line, labels, nonempty, width) in enumerate(parsed):
+        if not nonempty:
+            continue
+        all_text = all(kind == "text" for _text, kind in nonempty)
+        distinct = len(set(labels))
+        later = parsed[index + 1 :]
+        later_wider = any(item[3] > width for item in later)
+        later_header = any(
+            len(set(item[1])) >= 2 and all(kind == "text" for _text, kind in item[2])
+            for item in later
+        )
+        if all_text and distinct <= 1 and (later_wider or later_header):
+            titles.append(line)
+            continue
+        if all_text and (distinct >= 2 or not headers):
+            # A second header row may name the columns. A later row with a
+            # digit is a body row, even when every cell is text.
+            has_digit = any(any(char.isdigit() for char in text) for text, _kind in nonempty)
+            if headers and (has_digit or len(headers) >= 2):
+                break
+            headers.append(line)
+            continue
+        break
+    return titles, headers
+
+
 def _header_row(cells: list[tuple[int, int, str, str]]) -> int:
+    from ldi import config
+
+    if config.SOURCE_EVIDENCE:
+        grouped: dict[int, list[tuple[str, str]]] = {}
+        for row, _column, _letters, value in cells:
+            grouped.setdefault(row, []).append((value, cell_type(value)))
+        _titles, headers = table_header_lines(list(grouped.items()))
+        return headers[-1] if headers else -1
     by_row: dict[int, list[str]] = {}
     for row, _column, _letters, value in cells:
         by_row.setdefault(row, []).append(value)
     for row in sorted(by_row):
-        labels = [value for value in by_row[row] if cell_type(value) == "text"]
-        if len(labels) >= 2:
+        labels = [value.strip() for value in by_row[row] if cell_type(value) == "text" and value.strip()]
+        # A title repeated across a merged row is not a header.
+        if len(set(labels)) >= 2:
             return row
     return min(row for row, _column, _letters, _value in cells)
 
@@ -470,56 +546,13 @@ def _identify(drafts: list[_Draft], sha8: str) -> list[SpanRecord]:
                 cell_type=draft.cell_type,
                 period=draft.period,
                 row_role=draft.row_role,
-                text=draft.text,
+                text=unicodedata.normalize("NFC", draft.text),
+                blank_before=draft.blank_before,
             )
         )
     if len({record.span_id for record in records}) != len(records):
         raise RuntimeError("Span ids collide inside one document.")
     return records
-
-
-def _passages(spans: list[SpanRecord]) -> list[PassageRecord]:
-    passages: list[PassageRecord] = []
-    text_run: list[SpanRecord] = []
-
-    def flush() -> None:
-        if not text_run:
-            return
-        passages.append(_passage(text_run))
-        text_run.clear()
-
-    row: list[SpanRecord] = []
-    row_key = None
-    for span in spans:
-        if span.source_type != "table":
-            if row:
-                passages.append(_passage(row))
-                row = []
-                row_key = None
-            text_run.append(span)
-            if sum(len(item.text) + 1 for item in text_run) >= PASSAGE_CHARS:
-                flush()
-            continue
-        flush()
-        key = (span.table_id, span.line)
-        if row and key != row_key:
-            passages.append(_passage(row))
-            row = []
-        row.append(span)
-        row_key = key
-    if row:
-        passages.append(_passage(row))
-    flush()
-    return passages
-
-
-def _passage(spans: list[SpanRecord]) -> PassageRecord:
-    joined = " ".join(span.span_id for span in spans)
-    return PassageRecord(
-        passage_id=hashlib.sha256(joined.encode()).hexdigest(),
-        span_ids=joined,
-        text=" ".join(span.text for span in spans),
-    )
 
 
 def _column_index(letters: str) -> int:

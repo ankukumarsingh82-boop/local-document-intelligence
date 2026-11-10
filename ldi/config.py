@@ -11,6 +11,14 @@ MAX_FILE_BYTES = 32 * 1024**2
 CHUNK_CHARS = 1200
 CHUNK_OVERLAP = 200
 PASSAGE_CHARS = 900
+# The passage packer. Full-text search still uses CHUNK_CHARS above.
+CHUNKER_VERSION = "1"
+# Chosen on the dev split in eval/chunk_sweep.json. Hard max is the target plus 200.
+PASSAGE_TARGET_CHARS = 1200
+PASSAGE_MAX_CHARS = 1400
+PASSAGE_OVERLAP_CHARS = 200
+PASSAGE_MIN_CHARS = 30
+PASSAGE_MAX_TOKENS = 384
 PREVIEW_CHARS = 180
 TOP_CHUNKS = 4
 MAX_TOP_CHUNKS = 6
@@ -72,6 +80,117 @@ SUPERSESSION_PHRASES = (
 )
 # A fiscal year written "FY 2024-25" starts in this month.
 FY_START_MONTH = 4
+
+# Passage retrieval. ldi ask reads these passages when SOURCE_EVIDENCE is on.
+RETRIEVAL_DEPTH = 40
+POINTER_LIMIT = 8
+RRF_K = 60
+RRF_WEIGHT_LEXICAL = 1.0
+RRF_WEIGHT_DENSE = 1.0
+RRF_WEIGHT_DENSE_TABLE = 0.5
+BM25_HEADING_WEIGHT = 2.0
+BM25_BODY_WEIGHT = 1.0
+AND_COVERAGE_RANK_BONUS = 3
+# A four-term question that matches one term stays above this. Tuned on dev only.
+LEXICAL_COVERAGE_FLOOR = 0.15
+MAX_QUERY_TOKENS = 20
+LONG_DIGIT_MIN = 5
+NAME_EDIT_DISTANCE = 2
+DENSE_ENABLED = False
+REDUCED_RETRIEVAL_MODE = "reduced retrieval mode"
+# Floor fixes. Defaults are the fixed product. A measurement arm turns a later fix off.
+# Fix 1. A finished prose cut does not pack its tail a second time.
+CARRY_AFTER_FINAL_CUT = False
+# Fix 2. A sentence end needs whitespace or the end of the text after it.
+SENTENCE_NEEDS_BOUNDARY = True
+# Fix 3. Rank on passage text plus rule-built aliases, and quote source lines.
+SOURCE_EVIDENCE = True
+# Fix 4. Keep every non-repeated source line in a passage or a table context line.
+COVER_EVERY_LINE = True
+# How many question-matched table rows the evidence unit may add.
+EVIDENCE_MATCHED_ROWS = 3
+# A table whose original lines fit this limit is quoted whole.
+TABLE_EVIDENCE_CHARS = 1400
+
+# One-character tokens are kept after these words.
+STRUCTURAL_NOUNS = frozenset(
+    {
+        "annexure",
+        "schedule",
+        "clause",
+        "section",
+        "table",
+        "part",
+        "form",
+        "appendix",
+    }
+)
+INTENT_CURRENT = frozenset({"current", "latest", "still"})
+INTENT_REVISED = frozenset({"revised"})
+INTENT_HISTORICAL = frozenset({"earlier", "old"})
+# Multi-word phrases are lifted first. Single words are not required match terms.
+QUALIFIER_PHRASES = (
+    "subject to",
+    "provided that",
+    "other than",
+    "up to",
+    "at least",
+)
+QUALIFIER_WORDS = frozenset({"not", "no", "except", "unless", "only"})
+NEGATIONS = frozenset({"not", "no"})
+# Function words. and, or, not, and near stay in the query so they can be quoted.
+QUERY_STOPWORDS = frozenset(
+    """
+    a an the is are was were be been being
+    of to for in on at by with from as
+    what which who whom whose when where why how
+    this that these those it its do does did
+    can could has have had will would should
+    if then than into about your you we they their
+    there here but so any all each per via
+    """.split()
+)
+# OR and dense queries only. Required coverage does not see these.
+SEARCH_ALIASES = {
+    "year": "annual",
+    "yearly": "annual",
+    "pay": "fee",
+    "payable": "fee",
+}
+CURRENCY_FOLDS = {
+    "rs": "inr",
+    "inr": "inr",
+    "rupee": "inr",
+    "rupees": "inr",
+}
+UNIT_FOLDS = {
+    "lakh": "lakh",
+    "lakhs": "lakh",
+    "lac": "lakh",
+    "crore": "crore",
+    "crores": "crore",
+    "cr": "crore",
+}
+HONORIFICS = frozenset({"mr", "mrs", "ms", "miss", "dr", "shri", "smt", "prof", "sri"})
+MONTHS = frozenset(
+    {
+        "january",
+        "february",
+        "march",
+        "april",
+        "may",
+        "june",
+        "july",
+        "august",
+        "september",
+        "october",
+        "november",
+        "december",
+    }
+)
+TABLE_CUES = frozenset(
+    {"table", "total", "sum", "average", "column", "row", "percent", "percentage"}
+)
 
 SKIP_DIR_NAMES = frozenset(
     {

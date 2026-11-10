@@ -106,7 +106,7 @@ _PAGE = """<!DOCTYPE html>
 <header>
   <p class="eyebrow">On this Mac</p>
   <h1>Local chat</h1>
-  <p id="status">Reading models on this Mac…</p>
+  <p id="status">Reading models on this Mac… reduced retrieval mode</p>
 </header>
 <main>
   <div id="models" class="models"></div>
@@ -190,9 +190,10 @@ const sendButton = document.querySelector("#send");
 
 function render(state) {
   const loaded = state.models.find((model) => model.loaded);
+  const mode = state.retrieval_mode ? ` ${state.retrieval_mode}.` : "";
   status.textContent = loaded
-    ? `Loaded ${loaded.label}. Memory pressure: ${state.memory}.`
-    : `No model is loaded. Memory pressure: ${state.memory}.`;
+    ? `Loaded ${loaded.label}. Memory pressure: ${state.memory}.${mode}`
+    : `No model is loaded. Memory pressure: ${state.memory}.${mode}`;
   if (document.activeElement !== base) base.value = state.base;
   rendered.textContent = state.rendered;
   templateNote.textContent = state.template_note;

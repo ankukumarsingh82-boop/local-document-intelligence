@@ -722,3 +722,58 @@ def test_a_superseded_id_is_rejected_and_the_retry_has_no_example():
     reason = retry_instruction(released.reason)
     assert not re.search(r"\d", reason)
     assert "exact words from the file" not in reason
+
+
+def test_a_headingless_document_stays_inside_the_line_cap():
+    from types import SimpleNamespace
+
+    from ldi.evidence import attach_source
+
+    spans = [
+        SimpleNamespace(
+            span_id=f"s{number}",
+            table_id="",
+            block=0,
+            line=number,
+            col=0,
+            text=f"Line {number} mentions harbour dues today.",
+        )
+        for number in range(200)
+    ]
+    hit = Hit(
+        "note.md",
+        None,
+        spans[10].text,
+        span_id=spans[10].span_id,
+        span_ids=spans[10].span_id,
+    )
+    attached = attach_source("What are the harbour dues?", [hit], lambda _path: spans)
+    items = build_evidence("What are the harbour dues?", attached, limit=12)
+    assert len(items) <= 12
+    assert any("Line 10" in item.text for item in items)
+    assert all(item.text == spans[int(item.text.split()[1])].text for item in items)
+
+
+def test_pinned_source_lines_survive_the_twelve_line_cap():
+    lines = tuple(f"line {number}" for number in range(20))
+    ids = tuple(f"s{number}" for number in range(20))
+    hit = Hit(
+        "board.md",
+        None,
+        "packed form that must not be quoted",
+        span_ids=" ".join(ids),
+        source_lines=lines,
+        source_span_ids=ids,
+        pinned_span_ids=("s17", "s18", "s19"),
+    )
+    items = build_evidence("berth", [hit], limit=12)
+    quoted = [item.text for item in items]
+    assert quoted[-3:] == ["line 17", "line 18", "line 19"] or {
+        "line 17",
+        "line 18",
+        "line 19",
+    } <= set(quoted)
+    assert "packed form that must not be quoted" not in quoted
+    assert all(item.text in lines for item in items)
+    assert all("span s" in item.locator for item in items)
+    assert all(":" not in item.text for item in items)

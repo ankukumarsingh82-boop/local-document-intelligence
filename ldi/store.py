@@ -5,8 +5,11 @@ from __future__ import annotations
 import hashlib
 import re
 import sqlite3
+import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
+
+from ldi.query import acronyms_in, fold_for_fts, names_in
 
 
 @dataclass(frozen=True)
@@ -15,6 +18,13 @@ class Hit:
     page: int | None
     text: str
     superseded: bool = False
+    also_found_in: tuple[str, ...] = ()
+    passage_hash: str = ""
+    span_id: str = ""
+    span_ids: str = ""
+    source_lines: tuple[str, ...] = ()
+    source_span_ids: tuple[str, ...] = ()
+    pinned_span_ids: tuple[str, ...] = ()
 
 
 class Index:
@@ -69,7 +79,27 @@ class Index:
                 passage_id TEXT PRIMARY KEY,
                 path TEXT NOT NULL,
                 span_ids TEXT NOT NULL,
-                text TEXT NOT NULL
+                text TEXT NOT NULL,
+                doc_sha TEXT NOT NULL DEFAULT '',
+                page_start TEXT NOT NULL DEFAULT '',
+                page_end TEXT NOT NULL DEFAULT '',
+                sheet TEXT NOT NULL DEFAULT '',
+                row_start TEXT NOT NULL DEFAULT '',
+                row_end TEXT NOT NULL DEFAULT '',
+                heading_path TEXT NOT NULL DEFAULT '',
+                source_type TEXT NOT NULL DEFAULT '',
+                passage_hash TEXT NOT NULL DEFAULT '',
+                chunker_version TEXT NOT NULL DEFAULT '',
+                label TEXT NOT NULL DEFAULT '',
+                aliases TEXT NOT NULL DEFAULT '',
+                also_in TEXT NOT NULL DEFAULT '',
+                duplicate_of TEXT NOT NULL DEFAULT ''
+            );
+            CREATE TABLE IF NOT EXISTS chunk_log (
+                path TEXT NOT NULL,
+                passage_id TEXT NOT NULL,
+                kind TEXT NOT NULL,
+                detail TEXT NOT NULL
             );
             CREATE TABLE IF NOT EXISTS provisions (
                 provision_id TEXT PRIMARY KEY,
@@ -83,10 +113,48 @@ class Index:
                 status TEXT NOT NULL,
                 source_span TEXT NOT NULL
             );
+            CREATE VIRTUAL TABLE IF NOT EXISTS passages_fts USING fts5(
+                passage_id UNINDEXED,
+                heading,
+                body,
+                tokenize = 'porter unicode61'
+            );
+            CREATE VIRTUAL TABLE IF NOT EXISTS passages_exact USING fts5(
+                passage_id UNINDEXED,
+                body,
+                tokenize = "unicode61 tokenchars '-_./'"
+            );
+            CREATE TABLE IF NOT EXISTS passage_keys (
+                passage_id TEXT PRIMARY KEY,
+                path TEXT NOT NULL,
+                passage_hash TEXT NOT NULL DEFAULT '',
+                span_ids TEXT NOT NULL DEFAULT '',
+                page TEXT NOT NULL DEFAULT '',
+                heading_path TEXT NOT NULL DEFAULT '',
+                body TEXT NOT NULL DEFAULT '',
+                fallback INTEGER NOT NULL DEFAULT 0
+            );
+            CREATE TABLE IF NOT EXISTS term_aliases (
+                path TEXT NOT NULL,
+                alias TEXT NOT NULL,
+                expansion TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS indexed_names (
+                path TEXT NOT NULL,
+                name TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS embeddings (
+                passage_hash TEXT NOT NULL,
+                model_id TEXT NOT NULL,
+                chunker_version TEXT NOT NULL,
+                vector BLOB NOT NULL DEFAULT X'',
+                PRIMARY KEY (passage_hash, model_id, chunker_version)
+            );
             """
         )
         self._migrate_files()
         self._migrate_spans()
+        self._migrate_passages()
 
     def close(self) -> None:
         self.db.close()
@@ -104,7 +172,14 @@ class Index:
             self.db.execute("DELETE FROM gaps")
             self.db.execute("DELETE FROM spans")
             self.db.execute("DELETE FROM passages")
+            self.db.execute("DELETE FROM chunk_log")
             self.db.execute("DELETE FROM provisions")
+            self.db.execute("DELETE FROM passages_fts")
+            self.db.execute("DELETE FROM passages_exact")
+            self.db.execute("DELETE FROM passage_keys")
+            self.db.execute("DELETE FROM term_aliases")
+            self.db.execute("DELETE FROM indexed_names")
+            self.db.execute("DELETE FROM embeddings")
 
     def stats(self) -> tuple[int, int]:
         files = self.db.execute("SELECT COUNT(*) FROM files").fetchone()[0]
@@ -177,6 +252,7 @@ class Index:
                     raise RuntimeError(f"Span id {span_id} already belongs to another document.")
             self.db.execute("DELETE FROM spans WHERE path = ?", (path,))
             self.db.execute("DELETE FROM passages WHERE path = ?", (path,))
+            self.db.execute("DELETE FROM chunk_log WHERE path = ?", (path,))
             self.db.executemany(
                 """
                 INSERT INTO spans(
@@ -215,12 +291,49 @@ class Index:
                 ],
             )
             self.db.executemany(
-                "INSERT INTO passages(passage_id, path, span_ids, text) VALUES (?, ?, ?, ?)",
+                """
+                INSERT INTO passages(
+                    passage_id, path, span_ids, text, doc_sha, page_start, page_end,
+                    sheet, row_start, row_end, heading_path, source_type,
+                    passage_hash, chunker_version, label, aliases, also_in, duplicate_of
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
                 [
-                    (passage.passage_id, path, passage.span_ids, passage.text)
+                    (
+                        passage.passage_id,
+                        path,
+                        passage.span_ids,
+                        passage.text,
+                        passage.doc_sha,
+                        "" if passage.page_start is None else str(passage.page_start),
+                        "" if passage.page_end is None else str(passage.page_end),
+                        passage.sheet,
+                        "" if passage.row_start is None else str(passage.row_start),
+                        "" if passage.row_end is None else str(passage.row_end),
+                        passage.heading_path,
+                        passage.source_type,
+                        passage.passage_hash,
+                        passage.chunker_version,
+                        passage.label,
+                        passage.aliases,
+                        "",
+                        "",
+                    )
                     for passage in passages
                 ],
             )
+            self.db.executemany(
+                """
+                INSERT INTO chunk_log(path, passage_id, kind, detail)
+                VALUES (?, ?, ?, ?)
+                """,
+                [
+                    (path, passage.passage_id, log.kind, log.detail)
+                    for passage in passages
+                    for log in passage.logs
+                ],
+            )
+            self._index_passages(path, passages)
 
     def replace_provisions(self, doc_id: str, rows: list) -> None:
         """Replace one document's provision rows. Full-text chunks stay as they are."""
@@ -252,10 +365,12 @@ class Index:
 
     def forget_text(self, path: str) -> None:
         with self.db:
+            self._delete_passage_index(path)
             self.db.execute("DELETE FROM chunks WHERE path = ?", (path,))
             self.db.execute("DELETE FROM files WHERE path = ?", (path,))
             self.db.execute("DELETE FROM spans WHERE path = ?", (path,))
             self.db.execute("DELETE FROM passages WHERE path = ?", (path,))
+            self.db.execute("DELETE FROM chunk_log WHERE path = ?", (path,))
             self.db.execute("DELETE FROM provisions WHERE doc_id = ?", (path,))
 
     def replace_gaps(self, path: str, gaps: list[tuple[int | None, str]]) -> None:
@@ -285,11 +400,13 @@ class Index:
             for stored in sorted(paths):
                 if stored in seen or not _is_under(stored, root_resolved, project):
                     continue
+                self._delete_passage_index(stored)
                 self.db.execute("DELETE FROM chunks WHERE path = ?", (stored,))
                 self.db.execute("DELETE FROM files WHERE path = ?", (stored,))
                 self.db.execute("DELETE FROM gaps WHERE path = ?", (stored,))
                 self.db.execute("DELETE FROM spans WHERE path = ?", (stored,))
                 self.db.execute("DELETE FROM passages WHERE path = ?", (stored,))
+                self.db.execute("DELETE FROM chunk_log WHERE path = ?", (stored,))
                 self.db.execute("DELETE FROM provisions WHERE doc_id = ?", (stored,))
 
     def refresh_labels(self) -> None:
@@ -341,6 +458,55 @@ class Index:
                         path,
                     ),
                 )
+
+    def dedupe_passages(self) -> None:
+        """Collapse the same passage text across files. Copies inside one file stay."""
+        rows = self.db.execute(
+            "SELECT passage_id, path, text FROM passages"
+        ).fetchall()
+        groups: dict[str, list[tuple[str, str]]] = {}
+        for passage_id, path, text in rows:
+            if not str(text).strip():
+                continue
+            key = hashlib.sha256(
+                unicodedata.normalize("NFC", str(text)).encode()
+            ).hexdigest()
+            groups.setdefault(key, []).append((str(passage_id), str(path)))
+        with self.db:
+            self.db.execute("UPDATE passages SET also_in = '', duplicate_of = ''")
+            for items in groups.values():
+                paths = {path for _passage_id, path in items}
+                if len(paths) < 2:
+                    continue
+                survivor = sorted(paths, key=lambda path: (_looks_like_copy(path), path))[0]
+                others = sorted(path for path in paths if path != survivor)
+                also = "\n".join(others)
+                survivor_ids = [
+                    passage_id for passage_id, path in items if path == survivor
+                ]
+                for passage_id, path in items:
+                    if path == survivor:
+                        self.db.execute(
+                            "UPDATE passages SET also_in = ? WHERE passage_id = ?",
+                            (also, passage_id),
+                        )
+                        continue
+                    self.db.execute(
+                        "UPDATE passages SET duplicate_of = ? WHERE passage_id = ?",
+                        (survivor_ids[0], passage_id),
+                    )
+                    self.db.execute(
+                        "DELETE FROM passages_fts WHERE passage_id = ?",
+                        (passage_id,),
+                    )
+                    self.db.execute(
+                        "DELETE FROM passages_exact WHERE passage_id = ?",
+                        (passage_id,),
+                    )
+                    self.db.execute(
+                        "DELETE FROM passage_keys WHERE passage_id = ?",
+                        (passage_id,),
+                    )
 
     def search(self, match: str, limit: int) -> list[Hit]:
         window = max(limit, limit * 8)
@@ -401,6 +567,254 @@ class Index:
                 break
         return _prefer_named_files(merged, terms)
 
+    def file_flags(self) -> dict[str, tuple[bool, str | None]]:
+        return self._file_flags()
+
+    def passage_count(self) -> int:
+        row = self.db.execute("SELECT COUNT(*) FROM passage_keys").fetchone()
+        return int(row[0]) if row else 0
+
+    def document_frequency(self, token: str) -> int:
+        from ldi.query import quote_token
+
+        if not token:
+            return 0
+        try:
+            row = self.db.execute(
+                "SELECT count(*) FROM passages_fts WHERE passages_fts MATCH ?",
+                (quote_token(token),),
+            ).fetchone()
+        except sqlite3.OperationalError:
+            return 0
+        return int(row[0]) if row else 0
+
+    def frequencies(self, tokens: tuple[str, ...]) -> dict[str, int]:
+        return {token: self.document_frequency(token) for token in tokens}
+
+    def alias_rows(self) -> tuple[tuple[str, str], ...]:
+        rows = self.db.execute(
+            "SELECT alias, expansion FROM term_aliases ORDER BY alias, expansion"
+        ).fetchall()
+        return tuple((str(alias), str(expansion)) for alias, expansion in rows)
+
+    def indexed_names(self) -> tuple[str, ...]:
+        rows = self.db.execute(
+            "SELECT DISTINCT name FROM indexed_names ORDER BY name"
+        ).fetchall()
+        return tuple(str(row[0]) for row in rows)
+
+    def provisions_for(self, path: str) -> list:
+        from ldi.provisions import Provision
+
+        rows = self.db.execute(
+            """
+            SELECT provision_id, doc_id, clause_key, value_text, value_span,
+                   effective_from, effective_to, superseded_by, status, source_span
+            FROM provisions
+            WHERE doc_id = ?
+            ORDER BY provision_id
+            """,
+            (path,),
+        ).fetchall()
+        return [Provision(*row) for row in rows]
+
+    def passage_row(self, passage_id: str) -> tuple | None:
+        stored = self.db.execute(
+            """
+            SELECT path, span_ids, text, page_start, heading_path, passage_hash
+            FROM passages
+            WHERE passage_id = ?
+            """,
+            (passage_id,),
+        ).fetchone()
+        if stored is not None:
+            return stored
+        fallback = self.db.execute(
+            """
+            SELECT path, span_ids, body, page, heading_path, passage_hash
+            FROM passage_keys
+            WHERE passage_id = ? AND fallback = 1
+            """,
+            (passage_id,),
+        ).fetchone()
+        return fallback
+
+    def lexical_ids(self, match: str, limit: int, heading_weight: float, body_weight: float) -> list[tuple[str, float]]:
+        if not match.strip():
+            return []
+        try:
+            rows = self.db.execute(
+                """
+                SELECT passage_id, bm25(passages_fts, ?, ?) AS score
+                FROM passages_fts
+                WHERE passages_fts MATCH ?
+                ORDER BY score
+                LIMIT ?
+                """,
+                (heading_weight, body_weight, match, limit),
+            ).fetchall()
+        except sqlite3.OperationalError:
+            return []
+        return [(str(passage_id), float(score)) for passage_id, score in rows]
+
+    def exact_ids(self, match: str, limit: int) -> list[str]:
+        if not match.strip():
+            return []
+        try:
+            rows = self.db.execute(
+                """
+                SELECT passage_id
+                FROM passages_exact
+                WHERE passages_exact MATCH ?
+                LIMIT ?
+                """,
+                (match, limit),
+            ).fetchall()
+        except sqlite3.OperationalError:
+            return []
+        return [str(row[0]) for row in rows]
+
+    def _index_passages(self, path: str, passages: list) -> None:
+        self._delete_passage_index(path)
+        rows = list(passages)
+        for passage in rows:
+            self._add_passage_index(path, passage, False)
+        uncovered = self._uncovered_chunks(path, rows)
+        for passage in uncovered:
+            self._add_passage_index(path, passage, True)
+        text = "\n".join(passage.text for passage in [*rows, *uncovered])
+        self.db.executemany(
+            "INSERT INTO term_aliases(path, alias, expansion) VALUES (?, ?, ?)",
+            [(path, alias, expansion) for alias, expansion in acronyms_in(text)],
+        )
+        self.db.executemany(
+            "INSERT INTO indexed_names(path, name) VALUES (?, ?)",
+            [(path, name) for name in names_in(text)],
+        )
+
+    def spans_for(self, path: str):
+        """Source lines for one document, in read order."""
+        from ldi.spans import SpanRecord
+
+        rows = self.db.execute(
+            """
+            SELECT span_id, doc_sha8, content_hash, extractor_version, source_type,
+                   page, block, line, table_id, row_key, col, header_path, unit,
+                   occurrence, confidence, bbox, instruction_like, cell_type,
+                   period, row_role, text
+            FROM spans WHERE path = ?
+            ORDER BY block, line, col, span_id
+            """,
+            (path,),
+        ).fetchall()
+        found = []
+        for row in rows:
+            page = row[5]
+            found.append(
+                SpanRecord(
+                    span_id=row[0],
+                    doc_sha8=row[1],
+                    content_hash=row[2],
+                    extractor_version=row[3],
+                    source_type=row[4],
+                    page=int(page) if page else None,
+                    block=int(row[6] or 0),
+                    line=int(row[7] or 0),
+                    table_id=row[8] or "",
+                    row_key=row[9] or "",
+                    col=None if row[10] is None else int(row[10]),
+                    header_path=row[11] or "",
+                    unit=row[12] or "",
+                    occurrence=int(row[13] or 0),
+                    confidence=row[14],
+                    bbox=row[15] or "",
+                    instruction_like=bool(row[16]),
+                    cell_type=row[17] or "",
+                    period=row[18] or "",
+                    row_role=row[19] or "",
+                    text=row[20],
+                )
+            )
+        return found
+
+    def _uncovered_chunks(self, path: str, passages: list) -> list:
+        from ldi.spans import PassageRecord
+
+        covered = "\n".join(passage.text for passage in passages)
+        found = []
+        chunks = self.db.execute(
+            "SELECT page, body FROM chunks WHERE path = ? ORDER BY rowid",
+            (path,),
+        ).fetchall()
+        for page, body in chunks:
+            lines = [line.strip() for line in str(body).splitlines() if line.strip()]
+            if lines and all(line in covered for line in lines):
+                continue
+            if not str(body).strip():
+                continue
+            digest = hashlib.sha256(f"{path}\n{page}\n{body}".encode()).hexdigest()
+            found.append(
+                PassageRecord(
+                    passage_id=digest,
+                    span_ids="",
+                    text=str(body),
+                    page_start=int(page) if page else None,
+                    passage_hash=hashlib.sha256(str(body).encode()).hexdigest(),
+                )
+            )
+        return found
+
+    def _add_passage_index(self, path: str, passage, fallback: bool) -> None:
+        heading = fold_for_fts(passage.heading_path)
+        body = _indexed_body(passage)
+        stored_fallback = 1 if fallback else 0
+        page = "" if passage.page_start is None else str(passage.page_start)
+        self.db.execute(
+            """
+            INSERT INTO passage_keys(
+                passage_id, path, passage_hash, span_ids, page, heading_path, body, fallback
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                passage.passage_id,
+                path,
+                passage.passage_hash,
+                passage.span_ids,
+                page,
+                passage.heading_path,
+                passage.text if stored_fallback else "",
+                stored_fallback,
+            ),
+        )
+        self.db.execute(
+            "INSERT INTO passages_fts(passage_id, heading, body) VALUES (?, ?, ?)",
+            (passage.passage_id, heading, body),
+        )
+        self.db.execute(
+            "INSERT INTO passages_exact(passage_id, body) VALUES (?, ?)",
+            (passage.passage_id, _indexed_body(passage, heading=passage.heading_path)),
+        )
+
+    def _delete_passage_index(self, path: str) -> None:
+        rows = self.db.execute(
+            "SELECT passage_id, passage_hash FROM passage_keys WHERE path = ?",
+            (path,),
+        ).fetchall()
+        for passage_id, passage_hash in rows:
+            self.db.execute("DELETE FROM passages_fts WHERE passage_id = ?", (passage_id,))
+            self.db.execute(
+                "DELETE FROM passages_exact WHERE passage_id = ?",
+                (passage_id,),
+            )
+            if passage_hash:
+                self.db.execute(
+                    "DELETE FROM embeddings WHERE passage_hash = ?",
+                    (passage_hash,),
+                )
+        self.db.execute("DELETE FROM passage_keys WHERE path = ?", (path,))
+        self.db.execute("DELETE FROM term_aliases WHERE path = ?", (path,))
+        self.db.execute("DELETE FROM indexed_names WHERE path = ?", (path,))
+
     def _migrate_files(self) -> None:
         columns = {row[1] for row in self.db.execute("PRAGMA table_info(files)")}
         if "sha256" not in columns:
@@ -411,6 +825,40 @@ class Index:
             )
         if "duplicate_of" not in columns:
             self.db.execute("ALTER TABLE files ADD COLUMN duplicate_of TEXT")
+
+    def _migrate_passages(self) -> None:
+        columns = {row[1] for row in self.db.execute("PRAGMA table_info(passages)")}
+        additions = (
+            "doc_sha",
+            "page_start",
+            "page_end",
+            "sheet",
+            "row_start",
+            "row_end",
+            "heading_path",
+            "source_type",
+            "passage_hash",
+            "chunker_version",
+            "label",
+            "aliases",
+            "also_in",
+            "duplicate_of",
+        )
+        for name in additions:
+            if name not in columns:
+                self.db.execute(
+                    f"ALTER TABLE passages ADD COLUMN {name} TEXT NOT NULL DEFAULT ''"
+                )
+        self.db.execute(
+            """
+            CREATE TABLE IF NOT EXISTS chunk_log (
+                path TEXT NOT NULL,
+                passage_id TEXT NOT NULL,
+                kind TEXT NOT NULL,
+                detail TEXT NOT NULL
+            )
+            """
+        )
 
     def _migrate_spans(self) -> None:
         columns = {row[1] for row in self.db.execute("PRAGMA table_info(spans)")}
@@ -495,6 +943,21 @@ def _is_under(stored: str, root: Path, project: Path) -> bool:
 
 # "each year" and "pay" retrieve an annual fee. "paid" does not.
 _SEARCH_ALIAS = {"year": "annual", "yearly": "annual", "pay": "fee", "payable": "fee"}
+
+
+def _indexed_body(passage, heading: str = "") -> str:
+    """Fold the passage, and its lookup aliases when source evidence is on.
+
+    The stored passage text stays the original line. Aliases are not quoted.
+    """
+    from ldi import config
+
+    text = passage.text
+    if heading:
+        text = f"{heading}\n{text}"
+    if config.SOURCE_EVIDENCE and getattr(passage, "aliases", ""):
+        text = f"{text}\n{passage.aliases}"
+    return fold_for_fts(text)
 
 
 def _with_aliases(terms: list[str]) -> list[str]:

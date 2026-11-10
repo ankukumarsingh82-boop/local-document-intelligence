@@ -36,6 +36,7 @@ def test_page_has_no_network_assets():
     assert SYSTEM in html
     assert "http://" not in html
     assert "https://" not in html
+    assert "reduced retrieval mode" in html
 
 
 def test_system_text_reads_the_granite_system_role():

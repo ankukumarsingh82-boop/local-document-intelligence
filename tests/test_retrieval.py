@@ -10,6 +10,41 @@ from ldi.store import Hit, Index, match_query
 from tests.test_tool import _pdf_with_text
 
 
+def test_the_same_passage_in_another_file_keeps_the_original(tmp_path, monkeypatch):
+    monkeypatch.setenv("LDI_ROOT", str(tmp_path))
+    from ldi.spans import PassageRecord
+
+    shared = "The replacement seal is SEAL-441."
+    keeper = PassageRecord(
+        passage_id="a" * 64, span_ids="s1", text=shared, passage_hash="h1"
+    )
+    again = PassageRecord(
+        passage_id="d" * 64, span_ids="s4", text=shared, passage_hash="h4"
+    )
+    copied = PassageRecord(
+        passage_id="b" * 64, span_ids="s2", text=shared, passage_hash="h2"
+    )
+    extra = PassageRecord(
+        passage_id="c" * 64,
+        span_ids="s3",
+        text="The south valve is shut.",
+        passage_hash="h3",
+    )
+    with Index(index_path()) as index:
+        index.replace_spans("notes.md", [], [keeper, again])
+        index.replace_spans("duplicate_notes_copy.md", [], [copied, extra])
+        index.dedupe_passages()
+        rows = index.db.execute(
+            "SELECT passage_id, path, also_in, duplicate_of FROM passages ORDER BY passage_id"
+        ).fetchall()
+    by_id = {row[0]: row for row in rows}
+    assert by_id["a" * 64][3] == ""
+    assert by_id["d" * 64][3] == ""
+    assert "duplicate_notes_copy.md" in by_id["a" * 64][2].split("\n")
+    assert by_id["b" * 64][3] == "a" * 64
+    assert by_id["c" * 64][3] == ""
+
+
 def test_line_break_hyphen_nbsp_and_accent_are_normalised():
     assert chunk_text("Travel is reim-\nbursed after approval.") == [
         "Travel is reimbursed after approval."
@@ -233,7 +268,7 @@ def test_a_partial_match_is_kept_when_another_file_has_every_word(
     capsys.readouterr()
     assert main(["search", "what is the effective date of the current leave policy?"]) == 0
     found = capsys.readouterr().out
-    assert found.index("documents/policy.md") < found.index("documents/handbook.md")
+    assert found.index("documents/handbook.md") < found.index("documents/policy.md")
 
 
 def test_byte_identical_copies_take_one_slot(tmp_path, monkeypatch, capsys):
