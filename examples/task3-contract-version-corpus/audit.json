@@ -1,0 +1,17 @@
+{
+  "gold_cases": 40,
+  "distribution": {
+    "changed-scope-or-wording": 16,
+    "unchanged": 16,
+    "not-in-corpus": 8
+  },
+  "two_sided_quote_cases": 32,
+  "quote_checks": 64,
+  "quote_checks_passed": 64,
+  "absence_scope_cases": 8,
+  "source_documents": 2,
+  "physical_pages": 13,
+  "all_pages_rendered": true,
+  "semantic_review": "Curator textual review; no independent legal reviewer or QA-model evaluation",
+  "no_model_execution": true
+}

@@ -1,0 +1,42 @@
+6.2.3!A1: 'Swami Keshvanand Institute of Technology, \nManagement and Gramothan, Jaipur'
+6.2.3!A2: '6.2.3 Implementation of e-governance in areas of operation (4)\n 1. Administration, 2. Finance and Accounts, 3. Student Admission and Support, 4. Examination'
+6.2.3!A3: 'Areas of e governance'
+6.2.3!B3: 'Year of implementation'
+6.2.3!A4: '1. Administration '
+6.2.3!A5: '(i) ERP: Tata Consultancy Services Limited, Mumbai (022-67789595)'
+6.2.3!B5: 2015
+6.2.3!A6: '(ii) ERP: Infotvarit'
+6.2.3!B6: 2018
+6.2.3!A7: '(iii) CCTV Camera: Vertex Automation System Ltd. (8373915916)'
+6.2.3!B7: 2013
+6.2.3!A8: '(iv) Biometric System : (iBizz Technologies,Jaipur- 0141-2283611, \nGoyal Technocrate, Jaipur- 0141-2376056)'
+6.2.3!B8: 2014
+6.2.3!A9: '2. Finance and Accounts'
+6.2.3!A10: '(i) Tally TSS Gold: Compusys, Jaipur (9352626759)'
+6.2.3!B10: 2004
+6.2.3!A11: '(ii) ERP: Tata Consultancy Services Limited, Mumbai (022-67789595)'
+6.2.3!B11: 2015
+6.2.3!A12: '(iii) ERP: Infotvarit'
+6.2.3!B12: 2018
+6.2.3!A13: '3. Student Admission and Support '
+6.2.3!A14: '(i) ERP: Tata Consultancy Services Limited, Mumbai (022-67789595)'
+6.2.3!B14: 2015
+6.2.3!A15: '(ii) ERP: Infotvarit'
+6.2.3!B15: 2018
+6.2.3!A16: '(iii) Rajasthan Engineering Admission Process (REAP) Portal'
+6.2.3!B16: 2018
+6.2.3!A17: '(iv) e-SLATE (in house)'
+6.2.3!B17: 2020
+6.2.3!A18: '(v) Cloud Meeting (Cisco Webex Platform): Syndrome Technologies Pvt. Ltd. (022-40332255)'
+6.2.3!B18: 2020
+6.2.3!A19: '(vi) LSEase Software: Libsys Coorporation , Info-Tek Pvt Ltd. Delhi (011-26171161)'
+6.2.3!B19: 2005
+6.2.3!A20: '(vii) Koha Library Software: Open Source'
+6.2.3!B20: 2021
+6.2.3!A21: '4. Examination '
+6.2.3!A22: '(i) ERP: Tata Consultancy Services Limited, Mumbai (022-67789595)'
+6.2.3!B22: 2015
+6.2.3!A23: '(ii) ERP: Infotvarit'
+6.2.3!B23: 2018
+6.2.3!A24: '(iii) Online examination form and marks submission  portal, through RTU, Kota (0744-2473861)'
+6.2.3!B24: 2010

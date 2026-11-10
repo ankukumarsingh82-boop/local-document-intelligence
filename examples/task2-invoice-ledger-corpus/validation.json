@@ -1,0 +1,782 @@
+[
+ {
+  "filename": "lib_2016-17_delnet.pdf",
+  "source_url": "https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2016-17/Database_DELNET.pdf",
+  "bytes": 296775,
+  "sha256": "b443684aee5f1d841a41d5732015074162551f4b4247787f72bafc2a56bf699d",
+  "type": "application/pdf",
+  "pdfinfo_pages": 3,
+  "pypdf_pages": 3,
+  "pages": [
+   {
+    "page": 1,
+    "text_chars": 499,
+    "images": 6,
+    "class": "text_layer"
+   },
+   {
+    "page": 2,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 3,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   }
+  ],
+  "validation": "pdfinfo+pypdf opened; pdftotext exited 0 per page; page class from text_chars>200 and pdfimages count"
+ },
+ {
+  "filename": "lib_2016-17_ejournal.pdf",
+  "source_url": "https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2016-17/e-Journal_Subscription.pdf",
+  "bytes": 1067978,
+  "sha256": "75c482a9f86d2ad337abd303d790834d98755ab5c61aca899f036ee135573f69",
+  "type": "application/pdf",
+  "pdfinfo_pages": 9,
+  "pypdf_pages": 9,
+  "pages": [
+   {
+    "page": 1,
+    "text_chars": 501,
+    "images": 6,
+    "class": "text_layer"
+   },
+   {
+    "page": 2,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 3,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 4,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 5,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 6,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 7,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 8,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 9,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   }
+  ],
+  "validation": "pdfinfo+pypdf opened; pdftotext exited 0 per page; page class from text_chars>200 and pdfimages count"
+ },
+ {
+  "filename": "lib_2017-18_delnet.pdf",
+  "source_url": "https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2017-18/Database_DELNET_merged.pdf",
+  "bytes": 566560,
+  "sha256": "252575986a4d8232503f52373b7073caf40680fd414ed3549ac159d6605402fa",
+  "type": "application/pdf",
+  "pdfinfo_pages": 5,
+  "pypdf_pages": 5,
+  "pages": [
+   {
+    "page": 1,
+    "text_chars": 499,
+    "images": 6,
+    "class": "text_layer"
+   },
+   {
+    "page": 2,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 3,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 4,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 5,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   }
+  ],
+  "validation": "pdfinfo+pypdf opened; pdftotext exited 0 per page; page class from text_chars>200 and pdfimages count"
+ },
+ {
+  "filename": "lib_2017-18_ejournal.pdf",
+  "source_url": "https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2017-18/e-Journal_Subscription.pdf",
+  "bytes": 472642,
+  "sha256": "82a73a1dd4350cf31e5d5967f235a3703d508c6b1cfadaabf74da0538565969f",
+  "type": "application/pdf",
+  "pdfinfo_pages": 4,
+  "pypdf_pages": 4,
+  "pages": [
+   {
+    "page": 1,
+    "text_chars": 501,
+    "images": 6,
+    "class": "text_layer"
+   },
+   {
+    "page": 2,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 3,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 4,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   }
+  ],
+  "validation": "pdfinfo+pypdf opened; pdftotext exited 0 per page; page class from text_chars>200 and pdfimages count"
+ },
+ {
+  "filename": "lib_2018-19_delnet.pdf",
+  "source_url": "https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2018-19/Database-DELNET_subscription.pdf",
+  "bytes": 421123,
+  "sha256": "e0586bf755884808eda739c1609fc5dc96c4d47bd0918d70f6a5b58dfd452477",
+  "type": "application/pdf",
+  "pdfinfo_pages": 4,
+  "pypdf_pages": 4,
+  "pages": [
+   {
+    "page": 1,
+    "text_chars": 499,
+    "images": 6,
+    "class": "text_layer"
+   },
+   {
+    "page": 2,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 3,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 4,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   }
+  ],
+  "validation": "pdfinfo+pypdf opened; pdftotext exited 0 per page; page class from text_chars>200 and pdfimages count"
+ },
+ {
+  "filename": "lib_2018-19_ebooks.pdf",
+  "source_url": "https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2018-19/e-Books_Subscription.pdf",
+  "bytes": 523268,
+  "sha256": "20ec20436316eece4c14e9bf8abaf1f0af1dced0f893d08e922f908458a251a8",
+  "type": "application/pdf",
+  "pdfinfo_pages": 3,
+  "pypdf_pages": 3,
+  "pages": [
+   {
+    "page": 1,
+    "text_chars": 500,
+    "images": 6,
+    "class": "text_layer"
+   },
+   {
+    "page": 2,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 3,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   }
+  ],
+  "validation": "pdfinfo+pypdf opened; pdftotext exited 0 per page; page class from text_chars>200 and pdfimages count"
+ },
+ {
+  "filename": "lib_2019-20_delnet.pdf",
+  "source_url": "https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2019-20/Database-DELNET_subscription.pdf",
+  "bytes": 306787,
+  "sha256": "2fb929fd052c2e2ecfe734e2edf6d11851bd85aad492b95863b5862c2bf70dc7",
+  "type": "application/pdf",
+  "pdfinfo_pages": 7,
+  "pypdf_pages": 7,
+  "pages": [
+   {
+    "page": 1,
+    "text_chars": 499,
+    "images": 6,
+    "class": "text_layer"
+   },
+   {
+    "page": 2,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 3,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 4,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 5,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 6,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 7,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   }
+  ],
+  "validation": "pdfinfo+pypdf opened; pdftotext exited 0 per page; page class from text_chars>200 and pdfimages count"
+ },
+ {
+  "filename": "lib_2019-20_ejournal.pdf",
+  "source_url": "https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2019-20/e-Journal_Subscription.pdf",
+  "bytes": 334598,
+  "sha256": "627f363c2059dbde6f4852d35d7eec89f05270175e996bac198b0818676b265d",
+  "type": "application/pdf",
+  "pdfinfo_pages": 8,
+  "pypdf_pages": 8,
+  "pages": [
+   {
+    "page": 1,
+    "text_chars": 501,
+    "images": 6,
+    "class": "text_layer"
+   },
+   {
+    "page": 2,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 3,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 4,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 5,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 6,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 7,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 8,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   }
+  ],
+  "validation": "pdfinfo+pypdf opened; pdftotext exited 0 per page; page class from text_chars>200 and pdfimages count"
+ },
+ {
+  "filename": "lib_2020-21_books.pdf",
+  "source_url": "https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2020-21/Books_Subscription.pdf",
+  "bytes": 1153425,
+  "sha256": "a3ce08d2c8ee63fe98751c6014eb85333169df4444c712b9bd61eb947795db73",
+  "type": "application/pdf",
+  "pdfinfo_pages": 5,
+  "pypdf_pages": 5,
+  "pages": [
+   {
+    "page": 1,
+    "text_chars": 500,
+    "images": 7,
+    "class": "text_layer"
+   },
+   {
+    "page": 2,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 3,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 4,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 5,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   }
+  ],
+  "validation": "pdfinfo+pypdf opened; pdftotext exited 0 per page; page class from text_chars>200 and pdfimages count"
+ },
+ {
+  "filename": "lib_2020-21_delnet.pdf",
+  "source_url": "https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2020-21/Database-DELNET_subscription.pdf",
+  "bytes": 672568,
+  "sha256": "5e37f92e8597f170787bafcf56a5bfc3c1031a296674d32e88b853226bbbaf4a",
+  "type": "application/pdf",
+  "pdfinfo_pages": 3,
+  "pypdf_pages": 3,
+  "pages": [
+   {
+    "page": 1,
+    "text_chars": 499,
+    "images": 7,
+    "class": "text_layer"
+   },
+   {
+    "page": 2,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 3,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   }
+  ],
+  "validation": "pdfinfo+pypdf opened; pdftotext exited 0 per page; page class from text_chars>200 and pdfimages count"
+ },
+ {
+  "filename": "lib_2020-21_ebooks.pdf",
+  "source_url": "https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2020-21/e-Books_Subscription.pdf",
+  "bytes": 2410601,
+  "sha256": "cf6c4db591e2c12c169e044aba1988a4100740a7f98d226b86ec4f00f7d244a0",
+  "type": "application/pdf",
+  "pdfinfo_pages": 15,
+  "pypdf_pages": 15,
+  "pages": [
+   {
+    "page": 1,
+    "text_chars": 499,
+    "images": 7,
+    "class": "text_layer"
+   },
+   {
+    "page": 2,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 3,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 4,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 5,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 6,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 7,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 8,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 9,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 10,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 11,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 12,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 13,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 14,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 15,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   }
+  ],
+  "validation": "pdfinfo+pypdf opened; pdftotext exited 0 per page; page class from text_chars>200 and pdfimages count"
+ },
+ {
+  "filename": "lib_2020-21_ejournal.pdf",
+  "source_url": "https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2020-21/e-Journal_Subscription.pdf",
+  "bytes": 1265047,
+  "sha256": "b1f605339d382a529ad0ec2b9215981d984b19acde845dcccb25d9647f988fbe",
+  "type": "application/pdf",
+  "pdfinfo_pages": 7,
+  "pypdf_pages": 7,
+  "pages": [
+   {
+    "page": 1,
+    "text_chars": 501,
+    "images": 7,
+    "class": "text_layer"
+   },
+   {
+    "page": 2,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 3,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 4,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 5,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 6,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 7,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   }
+  ],
+  "validation": "pdfinfo+pypdf opened; pdftotext exited 0 per page; page class from text_chars>200 and pdfimages count"
+ },
+ {
+  "filename": "skit_egov_bills.pdf",
+  "source_url": "https://naac.skit.ac.in/QIF/6/6.2/6.2.3/Bills_of_Expenditure.pdf",
+  "bytes": 5769117,
+  "sha256": "4e2c6c9d80ae6def28aec96afbb8a81fdd95fe07990890c31dad9c909e229d7c",
+  "type": "application/pdf",
+  "pdfinfo_pages": 26,
+  "pypdf_pages": 26,
+  "pages": [
+   {
+    "page": 1,
+    "text_chars": 510,
+    "images": 7,
+    "class": "text_layer"
+   },
+   {
+    "page": 2,
+    "text_chars": 14,
+    "images": 0,
+    "class": "blank_or_minimal"
+   },
+   {
+    "page": 3,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 4,
+    "text_chars": 0,
+    "images": 36,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 5,
+    "text_chars": 0,
+    "images": 56,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 6,
+    "text_chars": 0,
+    "images": 2,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 7,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 8,
+    "text_chars": 20,
+    "images": 0,
+    "class": "blank_or_minimal"
+   },
+   {
+    "page": 9,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 10,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 11,
+    "text_chars": 0,
+    "images": 36,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 12,
+    "text_chars": 32,
+    "images": 0,
+    "class": "blank_or_minimal"
+   },
+   {
+    "page": 13,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 14,
+    "text_chars": 0,
+    "images": 36,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 15,
+    "text_chars": 0,
+    "images": 93,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 16,
+    "text_chars": 0,
+    "images": 95,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 17,
+    "text_chars": 6105,
+    "images": 1,
+    "class": "text_layer"
+   },
+   {
+    "page": 18,
+    "text_chars": 3695,
+    "images": 1,
+    "class": "text_layer"
+   },
+   {
+    "page": 19,
+    "text_chars": 929,
+    "images": 1,
+    "class": "text_layer"
+   },
+   {
+    "page": 20,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 21,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 22,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 23,
+    "text_chars": 35,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 24,
+    "text_chars": 11,
+    "images": 0,
+    "class": "blank_or_minimal"
+   },
+   {
+    "page": 25,
+    "text_chars": 0,
+    "images": 1,
+    "class": "image_only_scan"
+   },
+   {
+    "page": 26,
+    "text_chars": 0,
+    "images": 36,
+    "class": "image_only_scan"
+   }
+  ],
+  "validation": "pdfinfo+pypdf opened; pdftotext exited 0 per page; page class from text_chars>200 and pdfimages count"
+ },
+ {
+  "filename": "skit_egov_vendor_years.xlsx",
+  "source_url": "https://naac.skit.ac.in/QIF/6/6.2/6.2.3/1_6.2.3.xlsx",
+  "bytes": 22137,
+  "sha256": "1e9e5fbb389ef77ff2f6272cd050b59218d1c9452cd26127d57ba67f225eed69",
+  "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "sheets": [
+   {
+    "sheet": "6.2.3",
+    "dimensions": "A1:B25",
+    "formula_cells": 0
+   }
+  ],
+  "validation": "openpyxl load_workbook ok (formulas not executed); all non-empty cells dumped with hyperlinks"
+ },
+ {
+  "filename": "skit_library_ledger_2016-21.xlsx",
+  "source_url": "https://naac.skit.ac.in/QIF/4/4.2/4.2.2/4.2.2&4.2.3.xlsx",
+  "bytes": 26046,
+  "sha256": "b1933ed7cc363cc2871897fcff390a63f8e6900d50478f19ed9e917acac2116c",
+  "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "sheets": [
+   {
+    "sheet": "4.2.2 & 4.2.3",
+    "dimensions": "A1:F53",
+    "formula_cells": 0
+   }
+  ],
+  "validation": "openpyxl load_workbook ok (formulas not executed); all non-empty cells dumped with hyperlinks"
+ }
+]

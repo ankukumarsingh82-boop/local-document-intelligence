@@ -1,0 +1,18 @@
+[
+  {
+    "filename": "eupl-1.1.pdf",
+    "url": "https://interoperable-europe.ec.europa.eu/sites/default/files/custom-page/attachment/eupl1.1.-licence-en_0.pdf",
+    "access_date": "2026-11-09 IST",
+    "http_status": 200,
+    "bytes": 34271,
+    "preserved_original": true
+  },
+  {
+    "filename": "eupl-1.2.pdf",
+    "url": "https://interoperable-europe.ec.europa.eu/sites/default/files/custom-page/attachment/eupl_v1.2_en.pdf",
+    "access_date": "2026-11-09 IST",
+    "http_status": 200,
+    "bytes": 340835,
+    "preserved_original": true
+  }
+]

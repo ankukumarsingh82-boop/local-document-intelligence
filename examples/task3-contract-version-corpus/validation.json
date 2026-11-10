@@ -1,0 +1,26 @@
+[
+  {
+    "filename": "eupl-1.1.pdf",
+    "bytes": 34271,
+    "sha256": "641d72f7d261ddf08ceaa5db47a3356e528f1137b42dc796499a1364e7ca8461",
+    "type": "PDF",
+    "parse_open": true,
+    "pages": 7,
+    "validation": "pdfinfo and pdftotext -layout exited 0; every physical page rendered with pdftoppm; all gold quotes checked on exact physical page after whitespace normalization",
+    "parser": "Poppler pdfinfo / pdftotext / pdftoppm",
+    "warnings": "Syntax Warning: Unknown Metadata type: '???'",
+    "source_url": "https://interoperable-europe.ec.europa.eu/sites/default/files/custom-page/attachment/eupl1.1.-licence-en_0.pdf"
+  },
+  {
+    "filename": "eupl-1.2.pdf",
+    "bytes": 340835,
+    "sha256": "31a1874aa5372d462f2f0c386384157360926231d0b31986f3ecfd8af05bd4e3",
+    "type": "PDF",
+    "parse_open": true,
+    "pages": 6,
+    "validation": "pdfinfo and pdftotext -layout exited 0; every physical page rendered with pdftoppm; all gold quotes checked on exact physical page after whitespace normalization",
+    "parser": "Poppler pdfinfo / pdftotext / pdftoppm",
+    "warnings": "",
+    "source_url": "https://interoperable-europe.ec.europa.eu/sites/default/files/custom-page/attachment/eupl_v1.2_en.pdf"
+  }
+]

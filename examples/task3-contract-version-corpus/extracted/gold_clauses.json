@@ -1,0 +1,514 @@
+[
+  {
+    "case": "CVD-001",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 1,
+    "clause": "opening notice",
+    "quote": "Licensed under the EUPL V.1.1"
+  },
+  {
+    "case": "CVD-001",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 2,
+    "clause": "opening notice",
+    "quote": "Licensed under the EUPL"
+  },
+  {
+    "case": "CVD-002",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 1,
+    "clause": "Article 1; Original Work",
+    "quote": "- The Original Work or the Software: the software distributed and/or communicated by the Licensor under this Licence, available as Source Code and also as Executable Code as the case may be."
+  },
+  {
+    "case": "CVD-002",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 2,
+    "clause": "Article 1; Original Work",
+    "quote": "— ‘The Original Work’: the work or software distributed or communicated by the Licensor under this Licence, available as Source Code and also as Executable Code as the case may be."
+  },
+  {
+    "case": "CVD-003",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 2,
+    "clause": "Article 1; Licensee",
+    "quote": "- The Licensee or “You”: any natural or legal person who makes any usage of the Software under the terms of the Licence."
+  },
+  {
+    "case": "CVD-003",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 2,
+    "clause": "Article 1; Licensee",
+    "quote": "— ‘The Licensee’ or ‘You’: any natural or legal person who makes any usage of the Work under the terms of the Licence."
+  },
+  {
+    "case": "CVD-004",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 2,
+    "clause": "Article 2; modification grant",
+    "quote": "modify the Original Work, and make Derivative Works based upon the Work,"
+  },
+  {
+    "case": "CVD-004",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 2,
+    "clause": "Article 2; modification grant",
+    "quote": "modify the Work, and make Derivative Works based upon the Work,"
+  },
+  {
+    "case": "CVD-005",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 3,
+    "clause": "Article 4",
+    "quote": "Nothing in this Licence is intended to deprive the Licensee of the benefits from any exception or limitation to the exclusive rights of the rights owners in the Original Work or Software, of the exhaustion of those rights or of other applicable limitations thereto."
+  },
+  {
+    "case": "CVD-005",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 3,
+    "clause": "Article 4",
+    "quote": "Nothing in this Licence is intended to deprive the Licensee of the benefits from any exception or limitation to the exclusive rights of the rights owners in the Work, of the exhaustion of those rights or of other applicable limitations thereto."
+  },
+  {
+    "case": "CVD-006",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 3,
+    "clause": "Article 5; Copyleft",
+    "quote": "Copyleft clause: If the Licensee distributes and/or communicates copies of the Original Works or Derivative Works based upon the Original Work, this Distribution and/or Communication will be done under the terms of this Licence or of a later version of this Licence unless the Original Work is expressly distributed only under this version of the Licence. The Licensee (becoming Licensor) cannot offer or impose any additional terms or conditions on the Work or Derivative Work that alter or restrict the terms of the Licence."
+  },
+  {
+    "case": "CVD-006",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 3,
+    "clause": "Article 5; Copyleft",
+    "quote": "Copyleft clause: If the Licensee distributes or communicates copies of the Original Works or Derivative Works, this Distribution or Communication will be done under the terms of this Licence or of a later version of this Licence unless the Original Work is expressly distributed only under this version of the Licence — for example by communicating ‘EUPL v. 1.2 only’. The Licensee (becoming Licensor) cannot offer or impose any additional terms or conditions on the Work or Derivative Work that alter or restrict the terms of the Licence."
+  },
+  {
+    "case": "CVD-007",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 3,
+    "clause": "Article 5; Compatibility",
+    "quote": "Compatibility clause: If the Licensee Distributes and/or Communicates Derivative Works or copies thereof based upon both the Original Work and another work licensed under a Compatible Licence, this Distribution and/or Communication can be done under the terms of this Compatible Licence. For the sake of this clause, “Compatible Licence” refers to the licences listed in the appendix attached to this Licence. Should the Licensee’s obligations under the Compatible Licence conflict with his/her obligations under this Licence, the obligations of the Compatible Licence shall prevail."
+  },
+  {
+    "case": "CVD-007",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 3,
+    "clause": "Article 5; Compatibility",
+    "quote": "Compatibility clause: If the Licensee Distributes or Communicates Derivative Works or copies thereof based upon both the Work and another work licensed under a Compatible Licence, this Distribution or Communication can be done under the terms of this Compatible Licence. For the sake of this clause, ‘Compatible Licence’ refers to the licences listed in the appendix attached to this Licence. Should the Licensee's obligations under the Compatible Licence conflict with his/her obligations under this Licence, the obligations of the Compatible Licence shall prevail."
+  },
+  {
+    "case": "CVD-008",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 4,
+    "clause": "Article 9",
+    "quote": "While distributing the Original Work or Derivative Works, You may choose to conclude an additional agreement to offer, and charge a fee for, acceptance of support, warranty, indemnity, or other liability obligations and/or services consistent with this Licence."
+  },
+  {
+    "case": "CVD-008",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 4,
+    "clause": "Article 9",
+    "quote": "While distributing the Work, You may choose to conclude an additional agreement, defining obligations or services consistent with this Licence."
+  },
+  {
+    "case": "CVD-009",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 5,
+    "clause": "Article 13; Commission publication power",
+    "quote": "The European Commission may publish other linguistic versions and/or new versions of this Licence, so far this is required and reasonable, without reducing the scope of the rights granted by the Licence. New versions of the Licence will be published with a unique version number."
+  },
+  {
+    "case": "CVD-009",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 5,
+    "clause": "Article 13; Commission publication power",
+    "quote": "The European Commission may publish other linguistic versions or new versions of this Licence or updated versions of the Appendix, so far this is required and reasonable, without reducing the scope of the rights granted by the Licence. New versions of the Licence will be published with a unique version number."
+  },
+  {
+    "case": "CVD-010",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 6,
+    "clause": "Article 14",
+    "quote": "Any litigation resulting from the interpretation of this License, arising between the European Commission, as a Licensor, and any Licensee, will be subject to the jurisdiction of the Court of Justice of the European Communities, as laid down in article 238 of the Treaty establishing the European Community."
+  },
+  {
+    "case": "CVD-010",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 5,
+    "clause": "Article 14",
+    "quote": "Without prejudice to specific agreement between parties, — any litigation resulting from the interpretation of this License, arising between the European Union institutions, bodies, offices or agencies, as a Licensor, and any Licensee, will be subject to the jurisdiction of the Court of Justice of the European Union,"
+  },
+  {
+    "case": "CVD-011",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 6,
+    "clause": "Article 14; EU licensor limb",
+    "quote": "Any litigation resulting from the interpretation of this License, arising between the European Commission, as a Licensor, and any Licensee, will be subject to the jurisdiction of the Court of Justice of the European Communities, as laid down in article 238 of the Treaty establishing the European Community."
+  },
+  {
+    "case": "CVD-011",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 5,
+    "clause": "Article 14; EU licensor limb",
+    "quote": "any litigation resulting from the interpretation of this License, arising between the European Union institutions, bodies, offices or agencies, as a Licensor, and any Licensee, will be subject to the jurisdiction of the Court of Justice of the European Union,"
+  },
+  {
+    "case": "CVD-012",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 6,
+    "clause": "Article 14; treaty reference",
+    "quote": "jurisdiction of the Court of Justice of the European Communities, as laid down in article 238 of the Treaty establishing the European Community."
+  },
+  {
+    "case": "CVD-012",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 5,
+    "clause": "Article 14; treaty reference",
+    "quote": "jurisdiction of the Court of Justice of the European Union,"
+  },
+  {
+    "case": "CVD-013",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 6,
+    "clause": "Article 15",
+    "quote": "This Licence shall be governed by the law of the European Union country where the Licensor resides or has his registered office."
+  },
+  {
+    "case": "CVD-013",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 5,
+    "clause": "Article 15",
+    "quote": "15. Applicable Law Without prejudice to specific agreement between parties, — this Licence shall be governed by the law of the European Union Member State where the Licensor has his seat, resides or has his registered office,"
+  },
+  {
+    "case": "CVD-014",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 6,
+    "clause": "Article 15; Belgian-law conditions",
+    "quote": "This licence shall be governed by the Belgian law if: - a litigation arises between the European Commission, as a Licensor, and any Licensee; - the Licensor, other than the European Commission, has no residence or registered office inside a European Union country."
+  },
+  {
+    "case": "CVD-014",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 5,
+    "clause": "Article 15; Belgian-law conditions",
+    "quote": "15. Applicable Law Without prejudice to specific agreement between parties, — this Licence shall be governed by the law of the European Union Member State where the Licensor has his seat, resides or has his registered office, — this licence shall be governed by Belgian law if the Licensor has no seat, residence or registered office inside a European Union Member State."
+  },
+  {
+    "case": "CVD-015",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 7,
+    "clause": "Appendix; GPL",
+    "quote": "GNU General Public License (GNU GPL) v. 2"
+  },
+  {
+    "case": "CVD-015",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 6,
+    "clause": "Appendix; GPL",
+    "quote": "GNU General Public License (GPL) v. 2, v. 3"
+  },
+  {
+    "case": "CVD-016",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 7,
+    "clause": "Appendix; CeCILL",
+    "quote": "Cecill v. 2.0"
+  },
+  {
+    "case": "CVD-016",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 6,
+    "clause": "Appendix; CeCILL",
+    "quote": "CeCILL v. 2.0, v. 2.1"
+  },
+  {
+    "case": "CVD-017",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 2,
+    "clause": "Article 2; grant",
+    "quote": "The Licensor hereby grants You a world-wide, royalty-free, non-exclusive, sub- licensable licence to do the following, for the duration of copyright vested in the Original Work:"
+  },
+  {
+    "case": "CVD-017",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 2,
+    "clause": "Article 2; grant",
+    "quote": "The Licensor hereby grants You a worldwide, royalty-free, non-exclusive, sublicensable licence to do the following, for the duration of copyright vested in the Original Work:"
+  },
+  {
+    "case": "CVD-018",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 2,
+    "clause": "Article 2; duration",
+    "quote": "for the duration of copyright vested in the Original Work:"
+  },
+  {
+    "case": "CVD-018",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 2,
+    "clause": "Article 2; duration",
+    "quote": "for the duration of copyright vested in the Original Work:"
+  },
+  {
+    "case": "CVD-019",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 2,
+    "clause": "Article 2; use",
+    "quote": "use the Work in any circumstance and for all usage,"
+  },
+  {
+    "case": "CVD-019",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 2,
+    "clause": "Article 2; use",
+    "quote": "use the Work in any circumstance and for all usage,"
+  },
+  {
+    "case": "CVD-020",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 2,
+    "clause": "Article 2; reproduction",
+    "quote": "reproduce the Work,"
+  },
+  {
+    "case": "CVD-020",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 2,
+    "clause": "Article 2; reproduction",
+    "quote": "reproduce the Work,"
+  },
+  {
+    "case": "CVD-021",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 2,
+    "clause": "Article 2; lending and renting",
+    "quote": "lend and rent the Work or copies thereof,"
+  },
+  {
+    "case": "CVD-021",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 3,
+    "clause": "Article 2; lending and renting",
+    "quote": "lend and rent the Work or copies thereof,"
+  },
+  {
+    "case": "CVD-022",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 2,
+    "clause": "Article 3",
+    "quote": "a repository where the Source Code is easily and freely accessible for as long as the Licensor continues to distribute and/or communicate the Work."
+  },
+  {
+    "case": "CVD-022",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 3,
+    "clause": "Article 3",
+    "quote": "a repository where the Source Code is easily and freely accessible for as long as the Licensor continues to distribute or communicate the Work."
+  },
+  {
+    "case": "CVD-023",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 3,
+    "clause": "Article 5; Attribution notices",
+    "quote": "the Licensee shall keep intact all copyright, patent or trademarks notices and all notices that refer to the Licence and to the disclaimer of warranties."
+  },
+  {
+    "case": "CVD-023",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 3,
+    "clause": "Article 5; Attribution notices",
+    "quote": "The Licensee shall keep intact all copyright, patent or trademarks notices and all notices that refer to the Licence and to the disclaimer of warranties."
+  },
+  {
+    "case": "CVD-024",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 3,
+    "clause": "Article 5; Attribution modification date",
+    "quote": "The Licensee must cause any Derivative Work to carry prominent notices stating that the Work has been modified and the date of modification."
+  },
+  {
+    "case": "CVD-024",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 3,
+    "clause": "Article 5; Attribution modification date",
+    "quote": "The Licensee must cause any Derivative Work to carry prominent notices stating that the Work has been modified and the date of modification."
+  },
+  {
+    "case": "CVD-025",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 3,
+    "clause": "Article 5; additional terms",
+    "quote": "The Licensee (becoming Licensor) cannot offer or impose any additional terms or conditions on the Work or Derivative Work that alter or restrict the terms of the Licence."
+  },
+  {
+    "case": "CVD-025",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 3,
+    "clause": "Article 5; additional terms",
+    "quote": "The Licensee (becoming Licensor) cannot offer or impose any additional terms or conditions on the Work or Derivative Work that alter or restrict the terms of the Licence."
+  },
+  {
+    "case": "CVD-026",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 3,
+    "clause": "Article 5; Legal Protection",
+    "quote": "Legal Protection: This Licence does not grant permission to use the trade names, trademarks, service marks, or names of the Licensor, except as required for reasonable and customary use in describing the origin of the Work and reproducing the content of the copyright notice."
+  },
+  {
+    "case": "CVD-026",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 3,
+    "clause": "Article 5; Legal Protection",
+    "quote": "Legal Protection: This Licence does not grant permission to use the trade names, trademarks, service marks, or names of the Licensor, except as required for reasonable and customary use in describing the origin of the Work and reproducing the content of the copyright notice."
+  },
+  {
+    "case": "CVD-027",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 4,
+    "clause": "Article 6; original Licensor",
+    "quote": "The original Licensor warrants that the copyright in the Original Work granted hereunder is owned by him/her or licensed to him/her and that he/she has the power and authority to grant the Licence."
+  },
+  {
+    "case": "CVD-027",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 4,
+    "clause": "Article 6; original Licensor",
+    "quote": "The original Licensor warrants that the copyright in the Original Work granted hereunder is owned by him/her or licensed to him/her and that he/she has the power and authority to grant the Licence."
+  },
+  {
+    "case": "CVD-028",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 4,
+    "clause": "Article 7",
+    "quote": "For the above reason, the Work is provided under the Licence on an “as is” basis and without warranties of any kind concerning the Work, including without limitation merchantability, fitness for a particular purpose, absence of defects or errors, accuracy, non-infringement of intellectual property rights other than copyright as stated in Article 6 of this Licence."
+  },
+  {
+    "case": "CVD-028",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 4,
+    "clause": "Article 7",
+    "quote": "For the above reason, the Work is provided under the Licence on an ‘as is’ basis and without warranties of any kind concerning the Work, including without limitation merchantability, fitness for a particular purpose, absence of defects or errors, accuracy, non-infringement of intellectual property rights other than copyright as stated in Article 6 of this Licence."
+  },
+  {
+    "case": "CVD-029",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 4,
+    "clause": "Article 8",
+    "quote": "Except in the cases of wilful misconduct or damages directly caused to natural persons,"
+  },
+  {
+    "case": "CVD-029",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 4,
+    "clause": "Article 8",
+    "quote": "Except in the cases of wilful misconduct or damages directly caused to natural persons,"
+  },
+  {
+    "case": "CVD-030",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 4,
+    "clause": "Article 9; indemnity",
+    "quote": "only if You agree to indemnify, defend, and hold each Contributor harmless for any liability incurred by, or claims asserted against such Contributor by the fact You have accepted any such warranty or additional liability."
+  },
+  {
+    "case": "CVD-030",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 4,
+    "clause": "Article 9; indemnity",
+    "quote": "only if You agree to indemnify, defend, and hold each Contributor harmless for any liability incurred by, or claims asserted against such Contributor by the fact You have accepted any warranty or additional liability."
+  },
+  {
+    "case": "CVD-031",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 5,
+    "clause": "Article 12",
+    "quote": "The Licence and the rights granted hereunder will terminate automatically upon any breach by the Licensee of the terms of the Licence."
+  },
+  {
+    "case": "CVD-031",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 5,
+    "clause": "Article 12",
+    "quote": "The Licence and the rights granted hereunder will terminate automatically upon any breach by the Licensee of the terms of the Licence."
+  },
+  {
+    "case": "CVD-032",
+    "side": "old",
+    "file": "eupl-1.1.pdf",
+    "physical_page": 5,
+    "clause": "Article 13; languages",
+    "quote": "All linguistic versions of this Licence, approved by the European Commission, have identical value. Parties can take advantage of the linguistic version of their choice."
+  },
+  {
+    "case": "CVD-032",
+    "side": "new",
+    "file": "eupl-1.2.pdf",
+    "physical_page": 5,
+    "clause": "Article 13; languages",
+    "quote": "All linguistic versions of this Licence, approved by the European Commission, have identical value. Parties can take advantage of the linguistic version of their choice."
+  }
+]

@@ -1,0 +1,150 @@
+4.2.2 & 4.2.3!A1: 'Swami Keshvanand Institute of Technology, \nManagement & Gramothan, Jaipur'
+4.2.2 & 4.2.3!A2: '4.2.2 The institution has subscription for the following e-resources  (6)\n1. e-journals, 2. e-ShodhSindhu, 3. Shodhganga membersip, 4. e-books, 5. Databases, 6. Remote access to e- resources'
+4.2.2 & 4.2.3!A3: '4.2.3 Average annual expenditure for purchase of books/ e-books and subscription to journals/e-journals during the last five years (INR in Lakhs) (5)'
+4.2.2 & 4.2.3!A4: 'Year 5 (2020-21)'
+4.2.2 & 4.2.3!A5: 'Library resources'
+4.2.2 & 4.2.3!B5: 'If yes, details of memberships/subscriptions '
+4.2.2 & 4.2.3!C5: 'Expenditure on subscription to e-journals,  e-books (INR in lakhs)'
+4.2.2 & 4.2.3!D5: 'Expenditure on subscription to other e-resources (INR in lakhs)'
+4.2.2 & 4.2.3!E5: 'Total Library Expenditure'
+4.2.2 & 4.2.3!F5: 'Link to the relevant document'
+4.2.2 & 4.2.3!A6: 'Books'
+4.2.2 & 4.2.3!C6: 0.43144
+4.2.2 & 4.2.3!E6: 16.42204
+4.2.2 & 4.2.3!F6: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2020-21/Books_Subscription.pdf]
+4.2.2 & 4.2.3!A7: 'Journals '
+4.2.2 & 4.2.3!C7: 2.03988
+4.2.2 & 4.2.3!F7: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2020-21/Journals_Subscription.pdf]
+4.2.2 & 4.2.3!A8: 'e – journals '
+4.2.2 & 4.2.3!B8: 'Elsevier and Springer'
+4.2.2 & 4.2.3!C8: 9.37449
+4.2.2 & 4.2.3!F8: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2020-21/e-Journal_Subscription.pdf]
+4.2.2 & 4.2.3!A9: 'e-books'
+4.2.2 & 4.2.3!C9: 4.44053
+4.2.2 & 4.2.3!F9: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2020-21/e-Books_Subscription.pdf]
+4.2.2 & 4.2.3!A10: 'e-ShodhSindhu'
+4.2.2 & 4.2.3!B10: 'Yes'
+4.2.2 & 4.2.3!F10: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2020-21/e-ShodhSindhu_Subscription.pdf]
+4.2.2 & 4.2.3!A11: 'Shodhganga'
+4.2.2 & 4.2.3!A12: 'Databases'
+4.2.2 & 4.2.3!B12: 'DELNET'
+4.2.2 & 4.2.3!D12: 0.1357
+4.2.2 & 4.2.3!F12: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2020-21/Database-DELNET_subscription.pdf]
+4.2.2 & 4.2.3!A13: 'Local and / or Remote access to e- resources (Specify)'
+4.2.2 & 4.2.3!B13: 'Local or Remote'
+4.2.2 & 4.2.3!F13: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2020-21/Remote_access_e-resources_Subscription.pdf]
+4.2.2 & 4.2.3!A14: 'Year 4 (2019-20)'
+4.2.2 & 4.2.3!A15: 'Library resources'
+4.2.2 & 4.2.3!B15: 'If yes, details of memberships/subscriptions '
+4.2.2 & 4.2.3!C15: 'Expenditure on subscription to e-journals,  e-books (INR in lakhs)'
+4.2.2 & 4.2.3!D15: 'Expenditure on subscription to other e-resources (INR in lakhs)'
+4.2.2 & 4.2.3!E15: 'Total Library Expenditure'
+4.2.2 & 4.2.3!F15: 'Link to the relevant document'
+4.2.2 & 4.2.3!A16: 'Books'
+4.2.2 & 4.2.3!C16: 5.23091
+4.2.2 & 4.2.3!E16: 15.30308
+4.2.2 & 4.2.3!F16: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2019-20/Books_Subscription.pdf]
+4.2.2 & 4.2.3!A17: 'Journals '
+4.2.2 & 4.2.3!C17: 2.86806
+4.2.2 & 4.2.3!F17: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2019-20/Journals_Subscription.pdf]
+4.2.2 & 4.2.3!A18: 'e – journals '
+4.2.2 & 4.2.3!B18: 'Elsevier'
+4.2.2 & 4.2.3!C18: 7.06841
+4.2.2 & 4.2.3!F18: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2019-20/e-Journal_Subscription.pdf]
+4.2.2 & 4.2.3!A19: 'e-books'
+4.2.2 & 4.2.3!A20: 'e-ShodhSindhu'
+4.2.2 & 4.2.3!B20: 'Yes'
+4.2.2 & 4.2.3!F20: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2019-20/e-ShodhSindhu_Subscription.pdf]
+4.2.2 & 4.2.3!A21: 'Shodhganga'
+4.2.2 & 4.2.3!A22: 'Databases'
+4.2.2 & 4.2.3!B22: 'DELNET'
+4.2.2 & 4.2.3!D22: 0.1357
+4.2.2 & 4.2.3!F22: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2019-20/Database-DELNET_subscription.pdf]
+4.2.2 & 4.2.3!A23: 'Local and / or Remote access to e- resources (Specify)'
+4.2.2 & 4.2.3!B23: 'Local or Remote'
+4.2.2 & 4.2.3!C23: ' '
+4.2.2 & 4.2.3!F23: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2019-20/Remote_access_e-resources_Subscription.pdf]
+4.2.2 & 4.2.3!A24: 'Year 3 (2018-19)'
+4.2.2 & 4.2.3!A25: 'Library resources'
+4.2.2 & 4.2.3!B25: 'If yes, details of memberships/subscriptions '
+4.2.2 & 4.2.3!C25: 'Expenditure on subscription to e-journals,  e-books (INR in lakhs)'
+4.2.2 & 4.2.3!D25: 'Expenditure on subscription to other e-resources (INR in lakhs)'
+4.2.2 & 4.2.3!E25: 'Total Library Expenditure'
+4.2.2 & 4.2.3!F25: 'Link to the relevant document'
+4.2.2 & 4.2.3!A26: 'Books'
+4.2.2 & 4.2.3!C26: 2.87312
+4.2.2 & 4.2.3!E26: 6.4986
+4.2.2 & 4.2.3!F26: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2018-19/Books_Subscription.pdf]
+4.2.2 & 4.2.3!A27: 'Journals '
+4.2.2 & 4.2.3!C27: 2.80772
+4.2.2 & 4.2.3!F27: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2018-19/Journals_Subscription.pdf]
+4.2.2 & 4.2.3!A28: 'e – journals '
+4.2.2 & 4.2.3!A29: 'e-books'
+4.2.2 & 4.2.3!C29: 0.68206
+4.2.2 & 4.2.3!F29: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2018-19/e-Books_Subscription.pdf]
+4.2.2 & 4.2.3!A30: 'e-ShodhSindhu'
+4.2.2 & 4.2.3!B30: 'Yes'
+4.2.2 & 4.2.3!F30: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2018-19/e-ShodhSindhu_Subscription.pdf]
+4.2.2 & 4.2.3!A31: 'Shodhganga'
+4.2.2 & 4.2.3!A32: 'Databases'
+4.2.2 & 4.2.3!B32: 'DELNET'
+4.2.2 & 4.2.3!D32: 0.1357
+4.2.2 & 4.2.3!F32: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2018-19/Database-DELNET_subscription.pdf]
+4.2.2 & 4.2.3!A33: 'Local and / or Remote access to e- resources (Specify)'
+4.2.2 & 4.2.3!B33: 'Local'
+4.2.2 & 4.2.3!F33: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2018-19/Remote_access_e-resources_Subscription.pdf]
+4.2.2 & 4.2.3!A34: 'Year 2 (2017-18)'
+4.2.2 & 4.2.3!A35: 'Library resources'
+4.2.2 & 4.2.3!B35: 'If yes, details of memberships/\nsubscriptions '
+4.2.2 & 4.2.3!C35: 'Expenditure on subscription to e-journals,  e-books (INR in lakhs)'
+4.2.2 & 4.2.3!D35: 'Expenditure on subscription to other e-resources (INR in lakhs)'
+4.2.2 & 4.2.3!E35: 'Total Library Expenditure'
+4.2.2 & 4.2.3!F35: 'Link to the relevant document'
+4.2.2 & 4.2.3!A36: 'Books'
+4.2.2 & 4.2.3!C36: 5.46125
+4.2.2 & 4.2.3!E36: 13.87607
+4.2.2 & 4.2.3!F36: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2017-18/Books_Subscription.pdf]
+4.2.2 & 4.2.3!A37: 'Journals '
+4.2.2 & 4.2.3!C37: 2.4637
+4.2.2 & 4.2.3!F37: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2017-18/Journals_Subscription.pdf]
+4.2.2 & 4.2.3!A38: 'e – journals '
+4.2.2 & 4.2.3!B38: 'Elsevier'
+4.2.2 & 4.2.3!C38: 5.81542
+4.2.2 & 4.2.3!F38: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2017-18/e-Journal_Subscription.pdf]
+4.2.2 & 4.2.3!A39: 'e-books'
+4.2.2 & 4.2.3!A40: 'e-ShodhSindhu'
+4.2.2 & 4.2.3!A41: 'Shodhganga'
+4.2.2 & 4.2.3!A42: 'Databases'
+4.2.2 & 4.2.3!B42: 'DELNET'
+4.2.2 & 4.2.3!D42: 0.1357
+4.2.2 & 4.2.3!F42: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2017-18/Database_DELNET_merged.pdf]
+4.2.2 & 4.2.3!A43: 'Local and / or Remote access to e- resources (Specify)'
+4.2.2 & 4.2.3!B43: 'Local'
+4.2.2 & 4.2.3!F43: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2017-18/Remote_access_e-resources_Subscription.pdf]
+4.2.2 & 4.2.3!A44: 'Year 1 (2016-17)'
+4.2.2 & 4.2.3!A45: 'Library resources'
+4.2.2 & 4.2.3!B45: 'If yes, details of memberships/subscriptions '
+4.2.2 & 4.2.3!C45: 'Expenditure on subscription to e-journals,  e-books (INR in lakhs)'
+4.2.2 & 4.2.3!D45: 'Expenditure on subscription to other e-resources (INR in lakhs)'
+4.2.2 & 4.2.3!E45: 'Total Library Expenditure'
+4.2.2 & 4.2.3!F45: 'Link to the relevant document'
+4.2.2 & 4.2.3!A46: 'Books'
+4.2.2 & 4.2.3!C46: 5.16571
+4.2.2 & 4.2.3!E46: 19.63689
+4.2.2 & 4.2.3!F46: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2016-17/Books_Subscription.pdf]
+4.2.2 & 4.2.3!A47: 'Journals '
+4.2.2 & 4.2.3!C47: 2.30481
+4.2.2 & 4.2.3!F47: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2016-17/Journals_Subscription.pdf]
+4.2.2 & 4.2.3!A48: 'e – journals '
+4.2.2 & 4.2.3!B48: 'Elsevier,IEEE'
+4.2.2 & 4.2.3!C48: 12.05137
+4.2.2 & 4.2.3!F48: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2016-17/e-Journal_Subscription.pdf]
+4.2.2 & 4.2.3!A49: 'e-books'
+4.2.2 & 4.2.3!A50: 'e-ShodhSindhu'
+4.2.2 & 4.2.3!A51: 'Shodhganga'
+4.2.2 & 4.2.3!A52: 'Databases'
+4.2.2 & 4.2.3!D52: 0.115
+4.2.2 & 4.2.3!F52: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2016-17/Database_DELNET.pdf]
+4.2.2 & 4.2.3!A53: 'Local and / or Remote access to e- resources (Specify)'
+4.2.2 & 4.2.3!B53: 'Local'
+4.2.2 & 4.2.3!F53: 'View Document'  [hyperlink -> https://naac.skit.ac.in/QIF/4/4.2/4.2.2/Subscription_Details/2016-17/Remote_access_e-resources_Subscription.pdf]

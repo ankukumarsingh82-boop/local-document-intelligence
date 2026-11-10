@@ -51,3 +51,42 @@ Start with 3B. Move to 7B when `ldi status` says it fits. The tool will not down
 | `ldi ask "<question>"` | Answer from the passages with the local model |
 
 Put your own files in `documents/` and run `ldi ingest documents` again. Unchanged files are skipped.
+
+## Examples tested
+
+The documents these answers were tested on are in this repo, under [examples/](examples/):
+
+| Folder | What it holds |
+|---|---|
+| [examples/task1-original-public-documents](examples/task1-original-public-documents) | Public government and university documents: dearness-allowance circulars, the DAE allowances order, IIT Kanpur statutes, leave rules and forms, and a travel-claim workbook. |
+| [examples/task2-invoice-ledger-corpus](examples/task2-invoice-ledger-corpus) | SKIT Jaipur library and e-governance invoices with their ledgers, plus `gold.csv`. Most pages are scans, so this is the hard extraction case. See its README. |
+| [examples/task3-contract-version-corpus](examples/task3-contract-version-corpus) | One real version pair, EUPL 1.1 to EUPL 1.2, with `gold.csv` marking what changed and what stayed. See its README. |
+
+Each corpus keeps its own README and sources file describing where the documents came from. They are public documents included here as test material.
+
+## Optional: Gemma meaning check
+
+Version comparison already flags a clause that was replaced. This adds a second, optional check that marks a changed clause whose meaning may have changed, using Google's Gemma 3 270M (instruction-tuned) and a small probe trained on legal and policy text. It only ever adds a "check this: meaning may have changed" badge. It never removes or downgrades a flag the rules already set, it never rewrites a passage, and it never touches a citation.
+
+The weights are not in this repo. Gemma is released under the Gemma Terms of Use, which is not the Apache licence, and this project does not redistribute the weights. You download them yourself:
+
+1. Clone the repo and install the extra libraries:
+
+```bash
+uv sync
+```
+
+That pulls in `torch`, `transformers`, `sentencepiece`, and `huggingface_hub`.
+
+2. Accept the Gemma Terms of Use on the model page at https://huggingface.co/google/gemma-3-270m-it and log in once with `huggingface-cli login`.
+3. Download the weights:
+
+```bash
+python scripts/download_gemma.py
+```
+
+The download is checked against a known sha256 and stored under `models/`, which is gitignored. `GEMMA_DIR` overrides that path. If the gated repo is not an option, `python scripts/download_gemma.py --mirror` uses the same weights from `unsloth/gemma-3-270m-it`.
+
+4. Turn on "Use Gemma meaning check" in the settings on the `ldi ui` page. The toggle stays off, and the rest of the app works as before, until the weights are on disk.
+
+Two limits to keep in mind. The numbers reported for this check so far measure agreement with AI labels, not accuracy against a human-checked set. And it is tuned for legal and policy text: on other document types it adds a false check about 14% of the time.
