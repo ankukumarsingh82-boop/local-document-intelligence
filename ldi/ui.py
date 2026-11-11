@@ -160,6 +160,11 @@ _PAGE = """<!DOCTYPE html>
         </label>
       </div>
       <p id="generation-note">Temperature 0 picks the most likely next word. The model can stop before the output token limit. Top-p, top-k, and min-p apply when temperature is above 0.</p>
+      <label id="meaning-check-label" for="meaning-check">
+        <input id="meaning-check" type="checkbox">
+        Use Gemma meaning check
+      </label>
+      <p id="meaning-check-note"></p>
       <button id="update-generation" type="button">Update generation</button>
       <p id="notice" role="status"></p>
       <form id="talk">
@@ -199,6 +204,7 @@ function render(state) {
   templateNote.textContent = state.template_note;
   kept.textContent = state.kept || "";
   fillGeneration(state.generation);
+  fillMeaningCheck(state.meaning_check);
   renderModels(state);
   renderPassages(state);
   renderLog(state);
@@ -220,6 +226,17 @@ function fillGeneration(settings) {
     const input = document.querySelector("#" + name);
     if (input && document.activeElement !== input) input.value = settings[name];
   }
+}
+
+function fillMeaningCheck(meaning) {
+  const box = document.querySelector("#meaning-check");
+  const note = document.querySelector("#meaning-check-note");
+  if (!meaning) return;
+  box.disabled = !meaning.available;
+  if (document.activeElement !== box) box.checked = meaning.enabled;
+  note.textContent = meaning.available
+    ? "Adds a check to a changed clause whose meaning may have changed. It never removes a flag the rules already set."
+    : "Gemma 3 270M is not on this Mac. Run `python scripts/download_gemma.py` to enable this.";
 }
 
 function generationPayload() {
@@ -402,6 +419,10 @@ document.querySelector("#update-generation").addEventListener("click", () => {
   post("/api/generation", generationPayload()).then(render).catch(fail);
 });
 
+document.querySelector("#meaning-check").addEventListener("change", (event) => {
+  post("/api/meaning-check", {enabled: event.target.checked}).then(render).catch(fail);
+});
+
 document.querySelector("#clear").addEventListener("click", () => {
   post("/api/clear").then(render).catch(fail);
 });
@@ -420,6 +441,17 @@ refresh();
 </body>
 </html>
 """
+
+
+def _set_meaning_check(enabled: bool) -> None:
+    """Switch the meaning check on. Refuses while the weights are not downloaded."""
+    from ldi import config
+
+    if enabled and not config.gemma_available():
+        raise ValueError(
+            "Gemma 3 270M is not on this Mac. Run `python scripts/download_gemma.py` first."
+        )
+    config.GEMMA_MEANING_CHECK = enabled
 
 
 def page() -> str:
@@ -452,6 +484,7 @@ class Handler(BaseHTTPRequestHandler):
             "/api/unload": desk.unload,
             "/api/prompt": lambda: desk.set_prompt(str(payload.get("text", ""))),
             "/api/generation": lambda: desk.set_generation(payload),
+            "/api/meaning-check": lambda: _set_meaning_check(bool(payload.get("enabled"))),
             "/api/attach": lambda: desk.attach_payload(payload),
             "/api/detach": lambda: desk.detach(str(payload.get("name", ""))),
             "/api/clear": desk.clear,

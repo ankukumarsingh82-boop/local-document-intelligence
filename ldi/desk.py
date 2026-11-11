@@ -24,6 +24,7 @@ from ldi.config import (
     gb,
 )
 from ldi.guard import GuardError, load_block_reason, machine_snapshot, pressure_label
+from ldi import config
 from ldi.ingest import read_file, text_from_upload
 from ldi.ocr import recognize
 from ldi.verify import generation_system, verify
@@ -231,6 +232,7 @@ class Desk:
             "generation": self.generation.as_dict(),
             "memory": pressure_label(snap.pressure),
             "retrieval_mode": "" if DENSE_ENABLED else REDUCED_RETRIEVAL_MODE,
+            "meaning_check": config.meaning_check_state(),
             "models": self._models(snap),
         }
 

@@ -1,0 +1,506 @@
+{
+  "scope": "Numeric extracts from the saved Codex records. Paths under data/ are relative to the separate Codex weight-space lab. Paths under eval/ are relative to this Workbench checkout.",
+  "task1_choice_timing": {
+    "Qwen2.5-3B": {
+      "source": {
+        "path": "data/task1-results/qwen-choice.jsonl",
+        "sha256": "93480154a59bdce20c94955316b0d4dd1d26d64244742e733d0c40741e6463a3"
+      },
+      "paired_wall_seconds": [
+        103.764,
+        74.539,
+        79.334,
+        44.235,
+        47.377,
+        46.378,
+        56.311,
+        56.414,
+        55.511,
+        23.717,
+        22.012,
+        22.987,
+        22.314,
+        26.257,
+        34.048,
+        31.713,
+        77.43,
+        51.656,
+        73.293,
+        38.79,
+        68.127,
+        68.022
+      ],
+      "median_seconds": 49.5165
+    },
+    "Granite 4.0 1B": {
+      "source": {
+        "path": "data/task1-results/granite-choice.jsonl",
+        "sha256": "6b56c3422d3dc6fbab27a5c66608a236e5ea734aaef9818dcb2365b73f192c92"
+      },
+      "paired_wall_seconds": [
+        33.65,
+        37.712,
+        40.176,
+        19.756,
+        21.303,
+        20.76,
+        28.289,
+        27.812,
+        27.192,
+        11.281,
+        9.908,
+        10.532,
+        9.865,
+        12.921,
+        17.857,
+        16.548,
+        38.303,
+        28.966,
+        37.351,
+        18.87,
+        34.519,
+        34.781
+      ],
+      "median_seconds": 24.2475
+    }
+  },
+  "task2_qwen_schema_timing": {
+    "sources": [
+      {
+        "path": "data/task2-results/resumed-20261110T123700Z/schema-control/summary.json",
+        "sha256": "e0200ca2bf4744e8cb469ae68f65e0f6c04f69c0e999d57503e80c168f5aca8a"
+      },
+      {
+        "path": "data/task2-results/resumed-20261110T123700Z/schema-control/qwen.jsonl",
+        "sha256": "33c181fa93b1119aeeb54fa8b789bc8bf994d01092044111b6df2aba86c4f3c5"
+      }
+    ],
+    "request_wall_ms": [
+      2726.748,
+      4464.15,
+      3388.693,
+      3602.297,
+      4636.565,
+      2307.938,
+      4670.173,
+      5053.552,
+      3887.035,
+      4536.22,
+      3637.715,
+      3804.732,
+      2639.889,
+      2741.203,
+      3794.964,
+      3410.437,
+      2772.415,
+      4542.976,
+      6506.65,
+      4502.196,
+      4116.417,
+      2610.492,
+      5443.926,
+      3905.952,
+      3153.783,
+      3646.19,
+      2938.46,
+      9083.975,
+      5185.988,
+      3191.948,
+      2359.965,
+      2532.872,
+      4642.943,
+      3314.922,
+      4171.568,
+      4199.083,
+      3413.214,
+      3325.137,
+      3144.954,
+      4454.898,
+      3693.966,
+      3216.941,
+      3340.94,
+      2387.709,
+      4065.634,
+      4133.07,
+      2851.55,
+      3768.082,
+      4093.606,
+      5019.205,
+      3097.745,
+      4163.322,
+      3385.393,
+      3924.204,
+      3078.239,
+      3037.24,
+      4024.106,
+      4705.92,
+      3641.41,
+      3311.204,
+      5339.288,
+      4126.151,
+      3954.458,
+      5029.603,
+      3114.933,
+      3943.487,
+      3784.915,
+      3063.954,
+      4023.937,
+      6576.679,
+      4587.925,
+      4000.921,
+      2615.975,
+      9335.922,
+      9626.903,
+      4261.945,
+      4132.93,
+      4281.19,
+      6137.004,
+      5591.911,
+      2625.911,
+      4728.49,
+      3485.392,
+      3538.969,
+      3149.922,
+      3156.938,
+      4246.939,
+      3977.941,
+      2950.311,
+      3127.833,
+      4010.62,
+      2968.346,
+      3905.544,
+      3491.943,
+      2635.932,
+      4735.961,
+      2656.005,
+      4459.872,
+      3932.935,
+      3530.953,
+      4362.929,
+      3449.512
+    ],
+    "summary_wall_ms": {
+      "p50": 3845.883,
+      "p95": 6137.004
+    }
+  },
+  "task1_granite_open_questions": {
+    "source": {
+      "path": "eval/baseline_counts.json",
+      "sha256": "503d3b45aa9c061b41b65b52681d505871dc8d80fbcd5abf4bba4b7798e95086"
+    },
+    "json_section": "claimed",
+    "correct": 7,
+    "total": 26
+  },
+  "task2_pilot_overlap": {
+    "sources": [
+      {
+        "path": "data/task2-model-upgrade-20261110T1432Z/old-paired.json",
+        "sha256": "ecc3ffd416a5c3623011d0c032167f60672b4e8991dd7cf9c808e4ac3d095a40"
+      },
+      {
+        "path": "data/task2-results/lfm3-20261110/schema/lfm3-scored.json",
+        "sha256": "2f3d87f204ccf51d89ad210d7a50f71129f31875e4a3e2df7b4d46a924518d44"
+      }
+    ],
+    "qwen_2b_decoding": "free output",
+    "lfm3_decoding": "JSON constrained",
+    "pairs": [
+      {
+        "case_id": "TIL-001",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-001",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": false,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-002",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": false,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-002",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-003",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-003",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-004",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-004",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-005",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-005",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-007",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": false,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-007",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-010",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-010",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": false,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-011",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": false,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-011",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-014",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-014",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-017",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-017",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-025",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-025",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-028",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": false,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-028",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": false,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-030",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-030",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-032",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": false,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-032",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": false,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-033",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-033",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-034",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": false,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-034",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": false,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-038",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-038",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": false,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-039",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-039",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-041",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-041",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": true,
+        "lfm3_strict_pass": true
+      },
+      {
+        "case_id": "TIL-050",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": false,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-050",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": false,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-051",
+        "evidence_order": "original",
+        "qwen_2b_strict_pass": false,
+        "lfm3_strict_pass": false
+      },
+      {
+        "case_id": "TIL-051",
+        "evidence_order": "reverse",
+        "qwen_2b_strict_pass": false,
+        "lfm3_strict_pass": false
+      }
+    ]
+  },
+  "chunk_sweep": {
+    "source": {
+      "path": "eval/chunk_sweep.json",
+      "sha256": "ffd780a61139d9681d3f747304c5fc19413ad76eb4779633204a9b4ae5ffa5d9"
+    },
+    "choice": {
+      "target": 1200,
+      "hard_max": 1400,
+      "rule": "Highest dev Recall@10, then Recall@5, then a lower duplicate rate, then fewer prompt tokens."
+    },
+    "heldout": {
+      "cases": 23,
+      "correct_at_5": 17,
+      "correct_at_10": 18,
+      "recall_at_5": 0.7391,
+      "recall_at_10": 0.7826,
+      "duplicate_rate_top5": 0.2522,
+      "mean_prompt_tokens": 836.6
+    }
+  },
+  "repair_replay": {
+    "sources": [
+      {
+        "path": "eval/results/repair-candidate/gate-summary.json",
+        "sha256": "84140fb5d5b34211844d9bf0a3aee5690cb2c4b3e98eb5f92560974bef47eae8"
+      },
+      {
+        "path": "eval/results/repair-candidate/gate-final.jsonl",
+        "sha256": "e927b71024510015d02b1409828a59ecadf8e6aa7335cc68e0a3c5e8b536bec3"
+      },
+      {
+        "path": "eval/results/repair-candidate/fresh-gate.jsonl",
+        "sha256": "ec46abb61a6aff33b529535c9978687a6a44d41b260d1c68e3db883d3a6055ba"
+      }
+    ],
+    "evaluated_replay_cases": 141,
+    "targeted_fresh_reruns": 3,
+    "frozen_regression_passed": 52,
+    "frozen_regression_total": 52,
+    "adversarial_passed": 30,
+    "adversarial_total": 30
+  }
+}

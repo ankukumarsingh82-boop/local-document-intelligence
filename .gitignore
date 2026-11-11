@@ -6,4 +6,6 @@ __pycache__/
 data/
 eval/results/
 models/
+# Downloaded by scripts/download_gemma.py. Never commit these weights.
+models/gemma-3-270m-it/
 .DS_Store

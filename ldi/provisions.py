@@ -488,6 +488,44 @@ def _apply_phrases(rows: list[Provision], spans: list) -> None:
             )
 
 
+def changed_pairs(rows: list[Provision]) -> list[tuple[Provision, Provision]]:
+    """Each superseded row with the row that replaces it. The order follows the rows."""
+    by_id = {row.provision_id: row for row in rows}
+    pairs = []
+    for row in rows:
+        if row.status != "superseded" or not row.superseded_by:
+            continue
+        replacement = by_id.get(row.superseded_by)
+        if replacement is None or replacement.clause_key != row.clause_key:
+            continue
+        pairs.append((row, replacement))
+    return pairs
+
+
+def meaning_checks(rows: list[Provision]) -> dict[str, dict]:
+    """Add a meaning check to each changed pair. Returns nothing when it is off.
+
+    A check can only add a "meaning may have changed" badge. The status,
+    dates, and links already on a row are left as they are.
+    """
+    from ldi import config
+
+    if not config.GEMMA_MEANING_CHECK:
+        return {}
+    pairs = changed_pairs(rows)
+    if not pairs:
+        return {}
+    from gemma_flagger.service import get_flagger
+
+    flagger = get_flagger()
+    if flagger is None:
+        return {}
+    checked = {}
+    for old, new in pairs:
+        checked[old.provision_id] = flagger.check(old.value_text, new.value_text)
+    return checked
+
+
 def _dedupe(rows: list[Provision]) -> list[Provision]:
     kept: list[Provision] = []
     seen: dict[tuple, str] = {}

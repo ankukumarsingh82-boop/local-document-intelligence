@@ -5,11 +5,16 @@ description = "Ask questions about local documents. The model runs on this Mac."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+  "huggingface_hub>=0.26",
   "mlx-lm>=0.32.2",
+  "numpy>=2.0",
   "openpyxl>=3.1.5",
   "pypdf>=5.1.0",
   "pypdfium2>=5.15.1",
   "python-docx>=1.1.2",
+  "sentencepiece>=0.2",
+  "torch>=2.4",
+  "transformers>=4.46",
 ]
 
 [project.scripts]

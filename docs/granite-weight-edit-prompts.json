@@ -1,0 +1,392 @@
+{
+  "mlp_development": {
+    "source_in_codex_lab": "data/task1-edit/dev.json",
+    "cases": [
+      {
+        "id": "PQA-002-anchor",
+        "kind": "edit-target",
+        "prompt": "Use only the supplied policy excerpts. Use the rate in effect on the date in the question. If the excerpts do not establish the answer, say so.\n\n[da_2023_46_puducherry.pdf.txt]\nSubject: Revision of rates of · Dearness Allowance to Central Government employees- effective from 01.07.2023. The undersigned is directed to refer to this Department's Office Memorandum No. 1/1/2023- E-11 (B) dated 3rd April, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 42% to 46% of the Basic Pay with effect from 1st July, 2023.\n\n[da_2024_50_dae.pdf.txt]\nSubject: Revision of rates of Dearness Allowance to Central Government employees- effective from 01.01.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/4/2023- E-11 (B) dated 20th October, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 46% to 50% of the Basic Pay with effect from 1st January, 2024.\n\nQuestion: Should I use 46% for central employee DA on 1 January 2024? State the applicable rate even if the answer is no.\nAnswer in one short sentence.",
+        "expected": "50",
+        "foil": "46"
+      },
+      {
+        "id": "PQA-003-anchor",
+        "kind": "edit-target",
+        "prompt": "Use only the supplied policy excerpts. Use the rate in effect on the date in the question. If the excerpts do not establish the answer, say so.\n\n[da_2024_50_dae.pdf.txt]\nSubject: Revision of rates of Dearness Allowance to Central Government employees- effective from 01.01.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/4/2023- E-11 (B) dated 20th October, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 46% to 50% of the Basic Pay with effect from 1st January, 2024.\n\n[da_2024_53_puducherry.pdf.txt]\nSubject: Revis ion of rates of Dearness Allowance to Central Government employees- effective fro m 01.07.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/1/2024- E. II (B) dated 1ih March, 2024 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 50% to 53% of the Basic Pay with effect from 151 July, 2024.\n\nQuestion: Does the January 2024 50% DA remain the applicable rate on 1 July 2024 in the supplied orders? State the applicable rate even if the answer is no.\nAnswer in one short sentence.",
+        "expected": "53",
+        "foil": "50"
+      },
+      {
+        "id": "PQA-001-neutral",
+        "kind": "preserve",
+        "prompt": "Use only the supplied policy excerpts. Use the rate in effect on the date in the question. If the excerpts do not establish the answer, say so.\n\n[da_2023_46_puducherry.pdf.txt]\nSubject: Revision of rates of · Dearness Allowance to Central Government employees- effective from 01.07.2023. The undersigned is directed to refer to this Department's Office Memorandum No. 1/1/2023- E-11 (B) dated 3rd April, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 42% to 46% of the Basic Pay with effect from 1st July, 2023.\n\nQuestion: What central employee DA rate applies on 1 July 2023?\nAnswer in one short sentence.",
+        "expected": "46",
+        "foil": "42"
+      },
+      {
+        "id": "PQA-002-neutral",
+        "kind": "preserve",
+        "prompt": "Use only the supplied policy excerpts. Use the rate in effect on the date in the question. If the excerpts do not establish the answer, say so.\n\n[da_2023_46_puducherry.pdf.txt]\nSubject: Revision of rates of · Dearness Allowance to Central Government employees- effective from 01.07.2023. The undersigned is directed to refer to this Department's Office Memorandum No. 1/1/2023- E-11 (B) dated 3rd April, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 42% to 46% of the Basic Pay with effect from 1st July, 2023.\n\n[da_2024_50_dae.pdf.txt]\nSubject: Revision of rates of Dearness Allowance to Central Government employees- effective from 01.01.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/4/2023- E-11 (B) dated 20th October, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 46% to 50% of the Basic Pay with effect from 1st January, 2024.\n\nQuestion: What central employee DA rate applies on 1 January 2024?\nAnswer in one short sentence.",
+        "expected": "50",
+        "foil": "46"
+      },
+      {
+        "id": "PQA-003-neutral",
+        "kind": "preserve",
+        "prompt": "Use only the supplied policy excerpts. Use the rate in effect on the date in the question. If the excerpts do not establish the answer, say so.\n\n[da_2024_50_dae.pdf.txt]\nSubject: Revision of rates of Dearness Allowance to Central Government employees- effective from 01.01.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/4/2023- E-11 (B) dated 20th October, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 46% to 50% of the Basic Pay with effect from 1st January, 2024.\n\n[da_2024_53_puducherry.pdf.txt]\nSubject: Revis ion of rates of Dearness Allowance to Central Government employees- effective fro m 01.07.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/1/2024- E. II (B) dated 1ih March, 2024 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 50% to 53% of the Basic Pay with effect from 151 July, 2024.\n\nQuestion: What central employee DA rate applies on 1 July 2024?\nAnswer in one short sentence.",
+        "expected": "53",
+        "foil": "50"
+      },
+      {
+        "id": "T1-HIST-01-neutral",
+        "kind": "preserve",
+        "prompt": "Use only the supplied policy excerpts. Use the rate in effect on the date in the question. If the excerpts do not establish the answer, say so.\n\n[da_2024_50_dae.pdf.txt]\nSubject: Revision of rates of Dearness Allowance to Central Government employees- effective from 01.01.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/4/2023- E-11 (B) dated 20th October, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 46% to 50% of the Basic Pay with effect from 1st January, 2024.\n\n[da_2023_46_puducherry.pdf.txt]\nSubject: Revision of rates of · Dearness Allowance to Central Government employees- effective from 01.07.2023. The undersigned is directed to refer to this Department's Office Memorandum No. 1/1/2023- E-11 (B) dated 3rd April, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 42% to 46% of the Basic Pay with effect from 1st July, 2023.\n\nQuestion: What central employee DA rate applies on 1 December 2023?\nAnswer in one short sentence.",
+        "expected": "46",
+        "foil": "50"
+      },
+      {
+        "id": "T1-HIST-02-neutral",
+        "kind": "preserve",
+        "prompt": "Use only the supplied policy excerpts. Use the rate in effect on the date in the question. If the excerpts do not establish the answer, say so.\n\n[da_2024_50_dae.pdf.txt]\nSubject: Revision of rates of Dearness Allowance to Central Government employees- effective from 01.01.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/4/2023- E-11 (B) dated 20th October, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 46% to 50% of the Basic Pay with effect from 1st January, 2024.\n\n[da_2024_53_puducherry.pdf.txt]\nSubject: Revis ion of rates of Dearness Allowance to Central Government employees- effective fro m 01.07.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/1/2024- E. II (B) dated 1ih March, 2024 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 50% to 53% of the Basic Pay with effect from 151 July, 2024.\n\nQuestion: What central employee DA rate applies on 1 June 2024?\nAnswer in one short sentence.",
+        "expected": "50",
+        "foil": "53"
+      }
+    ]
+  },
+  "mlp_seen_evaluation": {
+    "source_in_codex_lab": "data/task1-edit/holdout.json",
+    "cases": [
+      {
+        "id": "H01-1",
+        "family": "transit",
+        "kind": "revised",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nNorthbank Transit staff fare rebate. Under Circular 18 the rebate is 18%. Circular 22 replaces the 18% rebate with 23%, effective 1 April 2025.\n\nQuestion: Is 18% the applicable rebate on 12 May 2025?",
+        "expected": "23"
+      },
+      {
+        "id": "H01-2",
+        "family": "transit",
+        "kind": "revised",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nNorthbank Transit staff fare rebate. Under Circular 18 the rebate is 18%. Circular 22 replaces the 18% rebate with 23%, effective 1 April 2025.\n\nQuestion: What rebate applies on 12 May 2025?",
+        "expected": "23"
+      },
+      {
+        "id": "H02-1",
+        "family": "permit",
+        "kind": "revised",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nHarbor permit renewal notice, issued 2 March 2026. A late fee of 12% will apply beginning 1 June 2026. The fee remains 9% through 31 May 2026.\n\nQuestion: A clerk quoted 9%. What late fee applies on 15 June 2026?",
+        "expected": "12"
+      },
+      {
+        "id": "H02-2",
+        "family": "permit",
+        "kind": "revised",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nHarbor permit renewal notice, issued 2 March 2026. A late fee of 12% will apply beginning 1 June 2026. The fee remains 9% through 31 May 2026.\n\nQuestion: What late fee applies on 15 June 2026?",
+        "expected": "12"
+      },
+      {
+        "id": "H03-1",
+        "family": "library",
+        "kind": "revised",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nCity library concession schedule\nCategory | Prior discount | Discount effective 1 September 2025\nApprentices | 25% | 32%\nPensioners | 33% | 40%\n\nQuestion: Do apprentices still get 25% on 9 September 2025?",
+        "expected": "32"
+      },
+      {
+        "id": "H03-2",
+        "family": "library",
+        "kind": "revised",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nCity library concession schedule\nCategory | Prior discount | Discount effective 1 September 2025\nApprentices | 25% | 32%\nPensioners | 33% | 40%\n\nQuestion: What apprentice discount applies on 9 September 2025?",
+        "expected": "32"
+      },
+      {
+        "id": "H04-1",
+        "family": "maintenance",
+        "kind": "revised",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nMaintenance service credit, amendment effective 1 February 2025. The monthly credit for equipment outage is reduced from 17% to 11%.\n\nQuestion: Does the credit stay at 17% on 3 March 2025?",
+        "expected": "11"
+      },
+      {
+        "id": "H04-2",
+        "family": "maintenance",
+        "kind": "revised",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nMaintenance service credit, amendment effective 1 February 2025. The monthly credit for equipment outage is reduced from 17% to 11%.\n\nQuestion: What equipment outage credit applies on 3 March 2025?",
+        "expected": "11"
+      },
+      {
+        "id": "H05-1",
+        "family": "utilities",
+        "kind": "historical",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nWater conservation tariff. Order C7 grants an 8% credit starting 1 January 2024. Order C8 increases it to 14% starting 1 July 2024.\n\nQuestion: The new credit is 14%. What credit applied on 12 June 2024?",
+        "expected": "8"
+      },
+      {
+        "id": "H05-2",
+        "family": "utilities",
+        "kind": "historical",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nWater conservation tariff. Order C7 grants an 8% credit starting 1 January 2024. Order C8 increases it to 14% starting 1 July 2024.\n\nQuestion: What credit applied on 12 June 2024?",
+        "expected": "8"
+      },
+      {
+        "id": "H06-1",
+        "family": "parking",
+        "kind": "historical",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nStaff garage memo, issued 8 October 2025. An 18% discount applies starting 1 January 2026. Until then, the discount is 27%.\n\nQuestion: Will the 18% discount apply on 1 December 2025?",
+        "expected": "27"
+      },
+      {
+        "id": "H06-2",
+        "family": "parking",
+        "kind": "historical",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nStaff garage memo, issued 8 October 2025. An 18% discount applies starting 1 January 2026. Until then, the discount is 27%.\n\nQuestion: What discount applies on 1 December 2025?",
+        "expected": "27"
+      },
+      {
+        "id": "H07-1",
+        "family": "training",
+        "kind": "absent",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nTraining reimbursement notice. The rates in this notice apply only from 1 January through 31 December 2025. The reimbursement rate for tuition is 65%.\n\nQuestion: What tuition reimbursement rate applies on 1 April 2026?",
+        "expected": "UNKNOWN"
+      },
+      {
+        "id": "H08-1",
+        "family": "fleet",
+        "kind": "absent",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nFleet rebate schedule. Employees assigned to hybrid vehicles receive 21%. Employees assigned to diesel vehicles receive 14%.\n\nQuestion: I do not know which vehicle category I am assigned to. What is my individual rebate?",
+        "expected": "UNKNOWN"
+      }
+    ]
+  },
+  "attention_development": {
+    "source_in_codex_lab": "data/task1-attention-alternative-20261110/azure-artifacts/development.json",
+    "cases": [
+      {
+        "id": "PQA-002-anchor",
+        "kind": "edit-target",
+        "prompt": "Use only the supplied policy excerpts. Use the rate in effect on the date in the question. If the excerpts do not establish the answer, say so.\n\n[da_2023_46_puducherry.pdf.txt]\nSubject: Revision of rates of · Dearness Allowance to Central Government employees- effective from 01.07.2023. The undersigned is directed to refer to this Department's Office Memorandum No. 1/1/2023- E-11 (B) dated 3rd April, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 42% to 46% of the Basic Pay with effect from 1st July, 2023.\n\n[da_2024_50_dae.pdf.txt]\nSubject: Revision of rates of Dearness Allowance to Central Government employees- effective from 01.01.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/4/2023- E-11 (B) dated 20th October, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 46% to 50% of the Basic Pay with effect from 1st January, 2024.\n\nQuestion: Should I use 46% for central employee DA on 1 January 2024? State the applicable rate even if the answer is no.\nAnswer in one short sentence.",
+        "expected": "50",
+        "foil": "46"
+      },
+      {
+        "id": "PQA-003-anchor",
+        "kind": "edit-target",
+        "prompt": "Use only the supplied policy excerpts. Use the rate in effect on the date in the question. If the excerpts do not establish the answer, say so.\n\n[da_2024_50_dae.pdf.txt]\nSubject: Revision of rates of Dearness Allowance to Central Government employees- effective from 01.01.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/4/2023- E-11 (B) dated 20th October, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 46% to 50% of the Basic Pay with effect from 1st January, 2024.\n\n[da_2024_53_puducherry.pdf.txt]\nSubject: Revis ion of rates of Dearness Allowance to Central Government employees- effective fro m 01.07.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/1/2024- E. II (B) dated 1ih March, 2024 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 50% to 53% of the Basic Pay with effect from 151 July, 2024.\n\nQuestion: Does the January 2024 50% DA remain the applicable rate on 1 July 2024 in the supplied orders? State the applicable rate even if the answer is no.\nAnswer in one short sentence.",
+        "expected": "53",
+        "foil": "50"
+      },
+      {
+        "id": "PQA-001-neutral",
+        "kind": "preserve",
+        "prompt": "Use only the supplied policy excerpts. Use the rate in effect on the date in the question. If the excerpts do not establish the answer, say so.\n\n[da_2023_46_puducherry.pdf.txt]\nSubject: Revision of rates of · Dearness Allowance to Central Government employees- effective from 01.07.2023. The undersigned is directed to refer to this Department's Office Memorandum No. 1/1/2023- E-11 (B) dated 3rd April, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 42% to 46% of the Basic Pay with effect from 1st July, 2023.\n\nQuestion: What central employee DA rate applies on 1 July 2023?\nAnswer in one short sentence.",
+        "expected": "46",
+        "foil": "42"
+      },
+      {
+        "id": "PQA-002-neutral",
+        "kind": "preserve",
+        "prompt": "Use only the supplied policy excerpts. Use the rate in effect on the date in the question. If the excerpts do not establish the answer, say so.\n\n[da_2023_46_puducherry.pdf.txt]\nSubject: Revision of rates of · Dearness Allowance to Central Government employees- effective from 01.07.2023. The undersigned is directed to refer to this Department's Office Memorandum No. 1/1/2023- E-11 (B) dated 3rd April, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 42% to 46% of the Basic Pay with effect from 1st July, 2023.\n\n[da_2024_50_dae.pdf.txt]\nSubject: Revision of rates of Dearness Allowance to Central Government employees- effective from 01.01.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/4/2023- E-11 (B) dated 20th October, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 46% to 50% of the Basic Pay with effect from 1st January, 2024.\n\nQuestion: What central employee DA rate applies on 1 January 2024?\nAnswer in one short sentence.",
+        "expected": "50",
+        "foil": "46"
+      },
+      {
+        "id": "PQA-003-neutral",
+        "kind": "preserve",
+        "prompt": "Use only the supplied policy excerpts. Use the rate in effect on the date in the question. If the excerpts do not establish the answer, say so.\n\n[da_2024_50_dae.pdf.txt]\nSubject: Revision of rates of Dearness Allowance to Central Government employees- effective from 01.01.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/4/2023- E-11 (B) dated 20th October, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 46% to 50% of the Basic Pay with effect from 1st January, 2024.\n\n[da_2024_53_puducherry.pdf.txt]\nSubject: Revis ion of rates of Dearness Allowance to Central Government employees- effective fro m 01.07.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/1/2024- E. II (B) dated 1ih March, 2024 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 50% to 53% of the Basic Pay with effect from 151 July, 2024.\n\nQuestion: What central employee DA rate applies on 1 July 2024?\nAnswer in one short sentence.",
+        "expected": "53",
+        "foil": "50"
+      },
+      {
+        "id": "T1-HIST-01-neutral",
+        "kind": "preserve",
+        "prompt": "Use only the supplied policy excerpts. Use the rate in effect on the date in the question. If the excerpts do not establish the answer, say so.\n\n[da_2024_50_dae.pdf.txt]\nSubject: Revision of rates of Dearness Allowance to Central Government employees- effective from 01.01.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/4/2023- E-11 (B) dated 20th October, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 46% to 50% of the Basic Pay with effect from 1st January, 2024.\n\n[da_2023_46_puducherry.pdf.txt]\nSubject: Revision of rates of · Dearness Allowance to Central Government employees- effective from 01.07.2023. The undersigned is directed to refer to this Department's Office Memorandum No. 1/1/2023- E-11 (B) dated 3rd April, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 42% to 46% of the Basic Pay with effect from 1st July, 2023.\n\nQuestion: What central employee DA rate applies on 1 December 2023?\nAnswer in one short sentence.",
+        "expected": "46",
+        "foil": "50"
+      },
+      {
+        "id": "T1-HIST-02-neutral",
+        "kind": "preserve",
+        "prompt": "Use only the supplied policy excerpts. Use the rate in effect on the date in the question. If the excerpts do not establish the answer, say so.\n\n[da_2024_50_dae.pdf.txt]\nSubject: Revision of rates of Dearness Allowance to Central Government employees- effective from 01.01.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/4/2023- E-11 (B) dated 20th October, 2023 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 46% to 50% of the Basic Pay with effect from 1st January, 2024.\n\n[da_2024_53_puducherry.pdf.txt]\nSubject: Revis ion of rates of Dearness Allowance to Central Government employees- effective fro m 01.07.2024. The undersigned is directed to refer to this Department's Office Memorandum No. 1/1/2024- E. II (B) dated 1ih March, 2024 on the subject mentioned above and to say that the President is pleased to decide that the rates of Dearness Allowance payable to Central Government employees, shall be enhanced from 50% to 53% of the Basic Pay with effect from 151 July, 2024.\n\nQuestion: What central employee DA rate applies on 1 June 2024?\nAnswer in one short sentence.",
+        "expected": "50",
+        "foil": "53"
+      },
+      {
+        "id": "DNEW01-1",
+        "family": "museum-membership",
+        "kind": "discovery",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nMuseum employee admission concession: 16% from 1 January 2025. Notice M2 replaces this with 22%, effective 1 August 2025.\n\nQuestion: A colleague quoted 16%. What concession applies on 5 September 2025?",
+        "expected": "22",
+        "foil": "16"
+      },
+      {
+        "id": "DNEW01-2",
+        "family": "museum-membership",
+        "kind": "discovery-preserve",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nMuseum employee admission concession: 16% from 1 January 2025. Notice M2 replaces this with 22%, effective 1 August 2025.\n\nQuestion: The updated concession is 22%. What concession applied on 5 July 2025?",
+        "expected": "16",
+        "foil": "22"
+      },
+      {
+        "id": "DNEW02-1",
+        "family": "warehouse-loss",
+        "kind": "discovery",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nWarehouse loss reimbursement: 28% until 30 April 2026. A restated schedule reduces it to 19% beginning 1 May 2026.\n\nQuestion: Does 28% still apply on 10 May 2026? Give the applicable percentage.",
+        "expected": "19",
+        "foil": "28"
+      },
+      {
+        "id": "DNEW02-2",
+        "family": "warehouse-loss",
+        "kind": "discovery-preserve",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nWarehouse loss reimbursement: 28% until 30 April 2026. A restated schedule reduces it to 19% beginning 1 May 2026.\n\nQuestion: What reimbursement applies on 10 April 2026?",
+        "expected": "28",
+        "foil": "19"
+      },
+      {
+        "id": "DNEW03-1",
+        "family": "clinic-shift",
+        "kind": "discovery-preserve",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nClinic shift premium: the rate is 13% from 1 February 2024. A replacement order sets it at 24% from 1 February 2025.\n\nQuestion: What premium applies on 1 March 2025?",
+        "expected": "24",
+        "foil": "13"
+      },
+      {
+        "id": "DNEW03-2",
+        "family": "clinic-shift",
+        "kind": "discovery",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nClinic shift premium: the rate is 13% from 1 February 2024. A replacement order sets it at 24% from 1 February 2025.\n\nQuestion: Does the 13% premium remain applicable on 1 March 2025? State the applicable percentage.",
+        "expected": "24",
+        "foil": "13"
+      }
+    ]
+  },
+  "attention_fresh_evaluation": {
+    "source_in_codex_lab": "data/task1-attention-alternative-20261110/azure-artifacts/fresh-evaluation.json",
+    "cases": [
+      {
+        "id": "F01-1",
+        "family": "ferry-wage",
+        "kind": "revised",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nRivergate ferry duty premium. Order R1 sets 15% from 1 January 2025. Order R2 replaces 15% with 26% effective 1 October 2025.\n\nQuestion: Is 15% still the premium on 2 November 2025? State the applicable percentage.",
+        "expected": "26"
+      },
+      {
+        "id": "F01-2",
+        "family": "ferry-wage",
+        "kind": "revised",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nRivergate ferry duty premium. Order R1 sets 15% from 1 January 2025. Order R2 replaces 15% with 26% effective 1 October 2025.\n\nQuestion: What premium applies on 2 November 2025?",
+        "expected": "26"
+      },
+      {
+        "id": "F02-1",
+        "family": "orchard-levy",
+        "kind": "revised-decrease",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nOrchard produce levy: 31% until 31 March 2026. The levy is reduced to 20% starting 1 April 2026.\n\nQuestion: A farmer quoted 31%. What levy applies on 8 May 2026?",
+        "expected": "20"
+      },
+      {
+        "id": "F02-2",
+        "family": "orchard-levy",
+        "kind": "revised-decrease",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nOrchard produce levy: 31% until 31 March 2026. The levy is reduced to 20% starting 1 April 2026.\n\nQuestion: What levy applies on 8 May 2026?",
+        "expected": "20"
+      },
+      {
+        "id": "F03-1",
+        "family": "theatre-discount",
+        "kind": "historical",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nTheatre staff ticket discount: 7% through 31 August 2025; 13% from 1 September 2025.\n\nQuestion: The new discount is 13%. What discount applied on 12 August 2025?",
+        "expected": "7"
+      },
+      {
+        "id": "F03-2",
+        "family": "theatre-discount",
+        "kind": "historical",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nTheatre staff ticket discount: 7% through 31 August 2025; 13% from 1 September 2025.\n\nQuestion: What discount applied on 12 August 2025?",
+        "expected": "7"
+      },
+      {
+        "id": "F04-1",
+        "family": "courier-fee",
+        "kind": "historical",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nCourier administration fee. A notice issued 4 November 2025 announces 29% from 1 March 2026. Until 28 February 2026 the fee remains 34%.\n\nQuestion: Should the announced 29% fee apply on 10 January 2026? Give the applicable percentage.",
+        "expected": "34"
+      },
+      {
+        "id": "F04-2",
+        "family": "courier-fee",
+        "kind": "historical",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nCourier administration fee. A notice issued 4 November 2025 announces 29% from 1 March 2026. Until 28 February 2026 the fee remains 34%.\n\nQuestion: What fee applies on 10 January 2026?",
+        "expected": "34"
+      },
+      {
+        "id": "F05-1",
+        "family": "bakery-bonus",
+        "kind": "revised-table",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nBakery attendance bonus schedule\nRole | Before 1 June 2025 | From 1 June 2025\nBakers | 12% | 17%\nPackers | 18% | 23%\n\nQuestion: Do bakers still receive 12% on 11 June 2025? Give the applicable percentage.",
+        "expected": "17"
+      },
+      {
+        "id": "F05-2",
+        "family": "bakery-bonus",
+        "kind": "revised-table",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nBakery attendance bonus schedule\nRole | Before 1 June 2025 | From 1 June 2025\nBakers | 12% | 17%\nPackers | 18% | 23%\n\nQuestion: What baker bonus applies on 11 June 2025?",
+        "expected": "17"
+      },
+      {
+        "id": "F06-1",
+        "family": "arena-rental",
+        "kind": "revised-decrease",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nArena rental concession: 27% until 31 December 2024. A replacement agreement reduces it to 16% from 1 January 2025.\n\nQuestion: Does the 27% concession remain applicable on 7 February 2025? State the applicable percentage.",
+        "expected": "16"
+      },
+      {
+        "id": "F06-2",
+        "family": "arena-rental",
+        "kind": "revised-decrease",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nArena rental concession: 27% until 31 December 2024. A replacement agreement reduces it to 16% from 1 January 2025.\n\nQuestion: What concession applies on 7 February 2025?",
+        "expected": "16"
+      },
+      {
+        "id": "F07-1",
+        "family": "lab-stipend",
+        "kind": "middle-version",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nLaboratory stipend policy: 9% from 1 January 2023, replaced by 14% from 1 January 2024, and then by 18% from 1 January 2025.\n\nQuestion: A colleague quoted 9%. What stipend rate applies on 2 June 2024?",
+        "expected": "14"
+      },
+      {
+        "id": "F07-2",
+        "family": "lab-stipend",
+        "kind": "middle-version",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nLaboratory stipend policy: 9% from 1 January 2023, replaced by 14% from 1 January 2024, and then by 18% from 1 January 2025.\n\nQuestion: What stipend rate applies on 2 June 2024?",
+        "expected": "14"
+      },
+      {
+        "id": "F08-1",
+        "family": "harvest-season",
+        "kind": "absent",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nHarvest reimbursement notice. The 37% reimbursement applies only between 1 April and 30 September 2025. No rate outside this period is supplied.\n\nQuestion: What reimbursement rate applies on 3 October 2025?",
+        "expected": "UNKNOWN"
+      },
+      {
+        "id": "F08-2",
+        "family": "harvest-season",
+        "kind": "absent",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nHarvest reimbursement notice. The 37% reimbursement applies only between 1 April and 30 September 2025. No rate outside this period is supplied.\n\nQuestion: Someone quoted 37%. What reimbursement applies on 1 March 2025?",
+        "expected": "UNKNOWN"
+      },
+      {
+        "id": "F09-1",
+        "family": "rescue-equipment",
+        "kind": "absent-category",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nRescue equipment rebate: boat crews receive 19%; land crews receive 28%. The text gives no assignment for the individual asking.\n\nQuestion: I do not know whether I belong to a boat or land crew. What is my individual rebate?",
+        "expected": "UNKNOWN"
+      },
+      {
+        "id": "F09-2",
+        "family": "rescue-equipment",
+        "kind": "absent-category",
+        "prompt": "Use the policy excerpts below. Apply the rate in force on the requested date. Reply with one percentage or UNKNOWN if the excerpts do not establish the rate.\n\nRescue equipment rebate: boat crews receive 19%; land crews receive 28%. The text gives no assignment for the individual asking.\n\nQuestion: A colleague quoted 19% but my crew assignment is not supplied. What is my individual rebate?",
+        "expected": "UNKNOWN"
+      }
+    ]
+  }
+}

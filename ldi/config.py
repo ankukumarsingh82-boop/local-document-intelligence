@@ -80,6 +80,9 @@ SUPERSESSION_PHRASES = (
 )
 # A fiscal year written "FY 2024-25" starts in this month.
 FY_START_MONTH = 4
+# The optional Gemma meaning check. Off until a user turns it on, and it stays
+# off while the weights are not on disk.
+GEMMA_MEANING_CHECK = False
 
 # Passage retrieval. ldi ask reads these passages when SOURCE_EVIDENCE is on.
 RETRIEVAL_DEPTH = 40
@@ -320,3 +323,16 @@ def project_root() -> Path:
 
 def index_path() -> Path:
     return project_root() / "data" / "index.sqlite"
+
+
+def gemma_available() -> bool:
+    """True once Gemma has been downloaded. This loads nothing."""
+    from gemma_flagger.service import available
+
+    return available()
+
+
+def meaning_check_state() -> dict:
+    """What the settings page shows for the meaning check."""
+    present = gemma_available()
+    return {"available": present, "enabled": GEMMA_MEANING_CHECK and present}
