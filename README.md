@@ -1,8 +1,8 @@
 # Local document intelligence
 
-Ask questions about text and PDF files on this Mac. Answers are computed here.
+Ask questions about documents on this Mac. PaddleOCR-VL makes scanned PDFs and images searchable alongside digital files.
 
-`ldi setup` is the one command that uses the network, and only to download weights. `ldi ask` loads those weights with the hub offline.
+Model setup downloads the weights. Chat and OCR inference use cached weights with the hub offline.
 
 ## Before the first answer
 
@@ -25,6 +25,17 @@ uv run ldi ask "What is the replacement seal part?"
 ```
 
 `uv sync` installs MLX. It does not download a model.
+
+## PaddleOCR-VL for scanned documents
+
+The workbench uses **PaddleOCR-VL 1.6, 8-bit on MLX** to extract text from scanned PDF pages and images before chunking and indexing. It reads digital PDF text, Word documents and spreadsheets directly. OCR runs in a separate `.venv-ocr` process with a 2 GB Metal cap and exits before the chat model loads.
+
+```bash
+uv run ldi setup --model ocr
+uv run ldi ingest examples/task2-invoice-ledger-corpus/files
+```
+
+**Task 2 invoice results.** On a plugged-in MacBook Air M4 with OCR already installed, indexing **15 invoice and ledger files took 549 s** and produced **150 chunks**. The OCR coverage check found exact matches for **29/33 required invoice answer parts (88%)**. One missing numeric value was handwritten. The 88% measures coverage of the values needed for this task. [Test corpus](examples/task2-invoice-ledger-corpus) · [Measurement and source notes](docs/submission-evidence.md#mac-and-ocr-measurements)
 
 ## Models
 
@@ -89,7 +100,7 @@ Task 1 timed 22 question pairs per model, each with both answer positions. Task 
 ### Workbench evaluation
 
 - **Policy Q&A.** Granite scored 7/26 on separate open questions. [Baseline counts](eval/baseline_counts.json)
-- **Invoice OCR.** The Granite60 report records 29/33 exact matches for required invoice answer parts and 549 s to ingest 15 files with PaddleOCR-VL on the MacBook Air M4. [Mac and OCR measurement notes](docs/submission-evidence.md#mac-and-ocr-measurements)
+- **Invoice OCR.** The Task 2 extraction coverage and Mac ingest timing are reported in [PaddleOCR-VL for scanned documents](#paddleocr-vl-for-scanned-documents).
 - **Contract Q&A.** The Granite 4.0 1B Mac app passed 13/83 questions under strict scoring in v5 and v6. The Gemma experiment separately scored 299 held-out clause pairs against AI labels. Its 75/80 vs 70/80 sealed legal result fell short of the prespecified significance gate. [Contract reports and Gemma family breakdown](docs/submission-evidence.md#contract-qa-and-gemma)
 - **Retrieval and verification.** The 1,200-character chunk sweep found gold evidence in the top 10 on 18/23 held-out questions. A 141-case repair replay and targeted fresh reruns passed 52/52 frozen regression and 30/30 adversarial checks. [Chunk sweep, product retrieval and replay cohorts](docs/submission-evidence.md#retrieval-and-replay)
 
